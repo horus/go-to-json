@@ -15,6 +15,7 @@ import Data.ByteString.Lazy.Char8 (pack)
 import Data.Char
 import qualified Data.HashMap.Strict as HM
 import Data.List (foldl', intersperse)
+import Data.Maybe (fromMaybe, isNothing, listToMaybe, mapMaybe)
 import Data.Text (Text)
 import qualified Data.Text as T
 import Data.Text.Encoding (decodeUtf8)
@@ -37,7 +38,7 @@ data GoStructLine = GoStructLine Text GoTypes [JSONTags] -- Id type tags
 instance Show GoStructLine where
   show (GoStructLine k typ _) = let k' = T.unpack k in k' ++ " " ++ show typ ++ " `json:\"" ++ k' ++ "\"`\n"
 
-data JSONTags = KeyRename Text | KeyOmitEmpty | KeyIgnore deriving (Show, Eq)
+data JSONTags = KeyRename Text | KeyOmitEmpty | KeyIgnore | KeyAsString deriving (Show, Eq)
 
 goStructs = (typedef <|> fmap ("",) goStruct) `sepBy` skipMany1 endOfLine'
 
@@ -144,7 +145,10 @@ goStructTags = do
     tags ts = if T.null x then p1 xs else KeyRename x : p1 xs
       where
         (x : xs) = T.split (== ',') ts
-        p1 ys = [KeyOmitEmpty | "omitempty" `elem` ys]
+        p1 = mapMaybe $ \case
+          "omitempty" -> Just KeyOmitEmpty
+          "string" -> Just KeyAsString
+          _ -> Nothing
 
 genExampleValue :: HM.HashMap Text GoStructDef -> GoTypes -> A.Value
 genExampleValue _ (GoBasic t) = genSimple t
@@ -203,6 +207,18 @@ genSimple GoDouble = Number 3.1415926
 genSimple GoBool = Bool True
 {-# INLINE genSimple #-}
 
+genSimple' :: GoSimpleTypes -> Text
+genSimple' GoInt = "0"
+genSimple' GoInt8 = "1"
+genSimple' GoInt16 = "2"
+genSimple' GoInt32 = "4"
+genSimple' GoInt64 = "8"
+genSimple' GoString = "\"___\""
+genSimple' GoFloat = "2.71828"
+genSimple' GoDouble = "3.1415926"
+genSimple' GoBool = "false"
+{-# INLINE genSimple' #-}
+
 jsonize defs = mconcat $ intersperse "\n" $ map encodePretty $ jsonize' env defs
   where
     env = HM.fromList [d | d@(name, _) <- defs, not (T.null name)]
@@ -215,6 +231,13 @@ jsonize'' env xs = object (foldl' go [] xs)
   where
     go ys (GoStructLine ident t tags)
       | KeyIgnore `elem` tags = ys
-      | otherwise = (foldl' tags2fun id tags ident .= genExampleValue env t) : ys
-    tags2fun f (KeyRename n) = const n . f
-    tags2fun f _ = f
+      | otherwise = (ident' .= example) : ys
+      where
+        ident' = fromMaybe ident $ listToMaybe $ [n | KeyRename n <- tags]
+        example
+          | KeyAsString `elem` tags =
+            case t of
+              GoBasic b -> String (genSimple' b)
+              GoTyVar tv | isNothing (HM.lookup tv env) -> Null
+              _ -> String "expecting: string, floating point, integer, or boolean types"
+          | otherwise = genExampleValue env t
