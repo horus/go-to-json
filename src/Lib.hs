@@ -198,17 +198,3 @@ jsonize (GoStructDef xs) = object $ foldl' go [] xs
       | otherwise = (foldl' tags2fun id tags ident .= genExampleValue t) : ys
     tags2fun f (KeyRename n) = const n . f
     tags2fun f _ = f
-
-dejson :: Value -> [GoStructLine]
-dejson (Object o) = map (\(k, v) -> GoStructLine k (dejson' v) []) $ HM.toList o
-  where
-    dejson' (Array array) = GoArrayLike 0 (typeOf array)
-    dejson' (String _) = GoBasic GoString
-    dejson' (Number n) = GoBasic (if isInteger n then GoInt else GoDouble)
-    dejson' (Bool _) = GoBasic GoBool
-    dejson' Null = GoNil
-    dejson' object' = GoStruct (GoStructDef $ dejson object')
-    typeOf arr
-      | V.length arr == 1 = dejson' (V.head arr)
-      | otherwise = GoInterface
-dejson _ = []
