@@ -116,7 +116,7 @@ goBasicTypeLit =
 
 skipSpace' = skipMany1 (satisfy isHorizontalSpace)
 
-goIdent = P.takeWhile isAlphaNum
+goIdent = P.takeWhile1 isAlphaNum
 
 goStructLine = GoStructLine <$> (skipSpace *> goIdent) <*> (skipSpace' *> goTypeLit) <*> ((skipSpace' *> goStructTags) <|> pure [])
 
