@@ -89,7 +89,7 @@ goBlocky p = begin *> p <* end
     begin = skipSpace >> char '{'
     end = skipSpace >> char '}'
 
-goTypeLit = goInterface <|> fmap GoBasic goBasicTypeLit <|> goArrayLike <|> goMap <|> fmap GoStruct goStruct <|> fmap GoTyVar tyVar
+goTypeLit = goInterface <|> fmap GoBasic goBasicTypeLit <|> goArrayLike <|> goMap <|> fmap GoStruct goStruct <|> goTyVar
   where
     goInterface = string "interface{}" >> pure GoInterface
     goArrayLike = do
@@ -108,7 +108,9 @@ goTypeLit = goInterface <|> fmap GoBasic goBasicTypeLit <|> goArrayLike <|> goMa
       keyType <- goBasicTypeLit
       char ']'
       GoMap keyType <$> goTypeLit
-    tyVar = (char '*' *> goIdent) <|> goIdent
+    goTyVar = do
+      tv <- (char '*' *> goIdent) <|> goIdent -- takeWhile1
+      GoTyVar tv <$ guard (isUpper $ T.head tv)
 
 goBasicTypeLit =
   choice
