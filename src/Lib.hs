@@ -7,15 +7,16 @@
 module Lib (getJson) where
 
 import Control.Applicative (liftA2, (<|>))
-import Control.Monad (guard, (<=<))
+import Control.Monad (guard, liftM2, replicateM, (<=<))
 import Data.Aeson as A
 import Data.Aeson.Encode.Pretty (encodePretty)
 import Data.Attoparsec.Text as P
 import Data.Bifunctor (first)
 import Data.ByteString.Lazy.Char8 (pack)
 import Data.Char (isAlphaNum, isPrint, isSpace, isUpper)
+import Data.Foldable (foldlM)
 import qualified Data.HashMap.Strict as HM
-import Data.List (foldl', intersperse)
+import Data.List (intersperse)
 import Data.Maybe (fromMaybe, isNothing, listToMaybe, mapMaybe)
 import Data.Text (Text)
 import qualified Data.Text as T
@@ -34,10 +35,11 @@ instance Show GoStructDef where
   show (GoStructDef []) = "struct {}"
   show (GoStructDef defs) = "struct {\n" ++ concatMap (\line -> "    " ++ show line) defs ++ "}"
 
-data GoStructLine = GoStructLine Text GoTypes [JSONTags] -- Id type tags
+data GoStructLine = GoStructLine Text GoTypes [JSONTags] | GoEmbedStruct Text [JSONTags] -- Id type tags
 
 instance Show GoStructLine where
   show (GoStructLine k typ _) = let k' = T.unpack k in k' ++ " " ++ show typ ++ " `json:\"" ++ k' ++ "\"`\n"
+  show (GoEmbedStruct t _) = T.unpack t
 
 data JSONTags = KeyRename Text | KeyOmitEmpty | KeyIgnore | KeyAsString deriving (Show, Eq)
 
@@ -92,7 +94,7 @@ goBlocky p = begin *> p <* end
     begin = skipSpace >> char '{'
     end = skipSpace >> char '}'
 
-goTypeLit = goInterface <|> fmap GoBasic goBasicTypeLit <|> goArrayLike <|> goMap <|> fmap GoStruct goStruct <|> goTyVar
+goTypeLit = goInterface <|> fmap GoBasic goBasicTypeLit <|> goArrayLike <|> goMap <|> fmap GoStruct goStruct <|> fmap GoTyVar goTyVar
   where
     goInterface = string "interface{}" >> pure GoInterface
     goArrayLike = do
@@ -111,9 +113,7 @@ goTypeLit = goInterface <|> fmap GoBasic goBasicTypeLit <|> goArrayLike <|> goMa
       keyType <- goBasicTypeLit
       char ']'
       GoMap keyType <$> goTypeLit
-    goTyVar = do
-      tv <- (char '*' *> goIdent) <|> goIdent -- takeWhile1
-      GoTyVar tv <$ guard (isUpper $ T.head tv)
+    goTyVar = (char '*' *> goPublicIdent) <|> goPublicIdent
 
 goBasicTypeLit =
   choice
@@ -133,7 +133,14 @@ skipSpace' = skipMany1 (satisfy isHorizontalSpace)
 
 goIdent = P.takeWhile1 isAlphaNum
 
-goStructLine = GoStructLine <$> (skipSpace *> goIdent) <*> (skipSpace' *> goTypeLit) <*> ((skipSpace' *> goStructTags) <|> pure [])
+goPublicIdent = do
+  i <- goIdent
+  i <$ guard (isUpper $ T.head i)
+
+goStructLine = goPlainStructLine <|> goEmbeddedStructLine
+  where
+    goPlainStructLine = GoStructLine <$> (skipSpace *> goIdent) <*> (skipSpace' *> goTypeLit) <*> ((skipSpace' *> goStructTags) <|> pure [])
+    goEmbeddedStructLine = GoEmbedStruct <$> (skipSpace *> goPublicIdent) <*> ((skipSpace' *> goStructTags) <|> pure [])
 
 goStructTags = do
   (a, b) <- char '`' *> (T.breakOn "json:\"" <$> P.takeWhile (\c -> c /= '`' && isPrint c)) <* char '`'
@@ -153,20 +160,28 @@ goStructTags = do
           "string" -> Just KeyAsString
           _ -> Nothing
 
-genExampleValue :: HM.HashMap Text GoStructDef -> GoTypes -> A.Value
-genExampleValue _ (GoBasic t) = genSimple t
+genExampleValue :: HM.HashMap Text GoStructDef -> GoTypes -> Either String A.Value
+genExampleValue _ (GoBasic t) = return $! genSimple t
 genExampleValue _ (GoArrayLike n (GoBasic t))
-  | n > 0 && n < 10 = Array $ V.take n (genSimpleArrayLike t)
-  | otherwise = Array $ genSimpleArrayLike t
+  | n > 0 && n < 10 = return $! Array $ V.take n (genSimpleArrayLike t)
+  | otherwise = return $! Array $ genSimpleArrayLike t
 genExampleValue env (GoArrayLike n t)
-  | n > 0 && n < 5 = Array $ V.fromList $ replicate n (genExampleValue env t)
-  | otherwise = Array $ V.fromList [genExampleValue env t]
-genExampleValue _ (GoMap t1 t2) | t1 == GoBool = String $ "json: unsupported type: map[bool]" <> T.pack (show t2)
-genExampleValue env (GoMap t1 t2) = Object $ HM.fromList [(showKey t1, genExampleValue env t2)]
+  | n > 0 && n < 5 = do
+    val <- replicateM n (genExampleValue env t)
+    return $! Array $ V.fromList val
+  | otherwise = do
+    val <- genExampleValue env t
+    return $! Array $ V.fromList [val]
+genExampleValue _ (GoMap t1 t2) | t1 == GoBool = Left $! "json: unsupported type: map[bool]" ++ show t2
+genExampleValue env (GoMap t1 t2) = do
+  val <- genExampleValue env t2
+  return $! Object $ HM.fromList [(showKey t1, val)]
 genExampleValue env (GoStruct (GoStructDef defs)) = jsonize'' env defs
-genExampleValue env (GoTyVar t) = maybe Null (\(GoStructDef def) -> jsonize'' (HM.delete t env) def) (HM.lookup t env)
-genExampleValue _ GoInterface = Object HM.empty
-genExampleValue _ GoNil = Null
+genExampleValue env (GoTyVar t) = case HM.lookup t env of
+  Just (GoStructDef def) -> jsonize'' (HM.delete t env) def
+  Nothing -> Left $! "undefined: " ++ T.unpack t
+genExampleValue _ GoInterface = return $! Object HM.empty
+genExampleValue _ GoNil = return Null
 
 {--
   While it's fine to have types like map[bool]int, map[bool]bool
@@ -226,25 +241,46 @@ genSimple' GoBool = "false"
 genSimple' GoTime = "2006-01-02T15:04:05Z"
 {-# INLINE genSimple' #-}
 
-jsonize defs = mconcat $ intersperse "\n" $ map encodePretty $ jsonize' env defs
+jsonize defs = either pack (mconcat . intersperse "\n" . map encodePretty) $ jsonize' env defs
   where
     env = HM.fromList [d | d@(name, _) <- defs, not (T.null name)]
 
-jsonize' _ [] = []
-jsonize' env (("", GoStructDef xs) : defs) = jsonize'' env xs : jsonize' env defs
-jsonize' env ((name, GoStructDef xs) : defs) = jsonize'' (HM.delete name env) xs : jsonize' env defs
-
-jsonize'' env xs = object (foldl' go [] xs)
+jsonize' :: HM.HashMap Text GoStructDef -> [(Text, GoStructDef)] -> Either String [Value]
+jsonize' _ [] = return []
+jsonize' env ((name, GoStructDef xs) : defs) = liftM2 (:) (jsonize'' env' xs) (jsonize' env defs)
   where
-    go ys (GoStructLine ident t tags)
-      | KeyIgnore `elem` tags = ys
-      | otherwise = (ident' .= example) : ys
+    env'
+      | T.null name = env
+      | otherwise = HM.delete name env
+
+jsonize'' :: HM.HashMap Text GoStructDef -> [GoStructLine] -> Either String Value
+jsonize'' env = fmap object . pairize env
+
+pairize environ = foldlM (go environ) []
+  where
+    go env ps (GoEmbedStruct tv tags)
+      | KeyIgnore `elem` tags = return ps
+      | otherwise =
+        case HM.lookup tv env of
+          Just (GoStructDef defs) -> do
+            ps' <- pairize (HM.delete tv env) defs
+            if null ident'
+              then return $! ps' ++ ps
+              else return $! (head ident' .= object ps') : ps
+          Nothing -> Left $! "undefined: " ++ T.unpack tv
+      where
+        ident' = [n | KeyRename n <- tags]
+    go env ps (GoStructLine ident t tags)
+      | KeyIgnore `elem` tags = return ps
+      | otherwise = do
+        eg <- example
+        return $! (ident' .= eg) : ps
       where
         ident' = fromMaybe ident $ listToMaybe $ [n | KeyRename n <- tags]
         example
           | KeyAsString `elem` tags =
             case t of
-              GoBasic b -> String (genSimple' b)
-              GoTyVar tv | isNothing (HM.lookup tv env) -> Null
-              _ -> String "expecting: string, floating point, integer, or boolean types"
+              GoBasic b -> return $! String (genSimple' b)
+              GoTyVar tv | isNothing (HM.lookup tv env) -> Left $! "undefined: " ++ T.unpack tv
+              _ -> Left "json tag \"string\": expecting: string, floating point, integer, or boolean types"
           | otherwise = genExampleValue env t
