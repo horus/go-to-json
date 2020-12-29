@@ -62,7 +62,7 @@ endOfLine' = do
       skipWhile (not . isEndOfLine)
       endOfLine
 
-data GoSimpleTypes = GoInt8 | GoInt16 | GoInt32 | GoInt64 | GoInt | GoString | GoDouble | GoFloat | GoBool deriving (Eq)
+data GoSimpleTypes = GoInt8 | GoInt16 | GoInt32 | GoInt64 | GoInt | GoString | GoDouble | GoFloat | GoBool | GoTime deriving (Eq)
 
 instance Show GoSimpleTypes where
   show GoInt = "int"
@@ -74,6 +74,7 @@ instance Show GoSimpleTypes where
   show GoFloat = "float32"
   show GoDouble = "float64"
   show GoBool = "bool"
+  show GoTime = "time.Time"
 
 data GoTypes = GoBasic GoSimpleTypes | GoArrayLike Int GoTypes | GoMap GoSimpleTypes GoTypes | GoStruct GoStructDef | GoInterface | GoNil | GoTyVar Text
 
@@ -124,7 +125,8 @@ goBasicTypeLit =
       string "string" >> return GoString,
       string "float32" >> return GoFloat,
       string "float64" >> return GoDouble,
-      string "bool" >> return GoBool
+      string "bool" >> return GoBool,
+      string "time.Time" >> return GoTime
     ]
 
 skipSpace' = skipMany1 (satisfy isHorizontalSpace)
@@ -182,6 +184,7 @@ genSimpleArrayLike GoInt64 = V.fromList [Number 9223372036854775800, Number 922,
 genSimpleArrayLike GoFloat = V.fromList [Number 9.5, Number 3.8, Number 1.13, Number 4.79, Number 5.023, Number 6.1, Number 2.7234, Number 1.9, Number 1.02, Number 5.64]
 genSimpleArrayLike GoDouble = V.fromList [Number 8.5397342, Number 4.26986711133, Number 871.0528907127, Number 9.869604, Number 31.00627668, Number 10.24, Number 16.3, Number 12.6, Number 12.0001, Number 564.222]
 genSimpleArrayLike GoString = V.fromList [String "rob pike", String "Robert", String "Pike", String "gopher", String "Gopher", String "Go", String "Golang", String "goroutine", String "interface{}", "struct"]
+genSimpleArrayLike GoTime = V.fromList [String "2011-01-26T19:06:43Z", String "2020-07-16T14:49:50.3269159+08:00", String "2011-01-26T19:01:12Z", String "2011-01-26T19:14:43Z", String "2009-11-10T23:00:00Z", String "2018-09-22T12:42:31Z", String "2020-12-29T14:58:15Z", String "2006-01-02T15:04:05Z", String "2020-12-29T14:58:15.229579703+08:00", String "2017-12-30T11:25:30+09:00"]
 {-# INLINE genSimpleArrayLike #-}
 
 showKey :: GoSimpleTypes -> Text
@@ -194,6 +197,7 @@ showKey GoInt = "1024"
 showKey GoFloat = "1.26"
 showKey GoDouble = "16.3"
 showKey GoBool = "bool as key: not supported by encoding/json"
+showKey GoTime = "2009-11-10T23:00:00Z"
 {-# INLINE showKey #-}
 
 genSimple :: GoSimpleTypes -> Value
@@ -206,6 +210,7 @@ genSimple GoString = String "robpike"
 genSimple GoFloat = Number 2.71828
 genSimple GoDouble = Number 3.1415926
 genSimple GoBool = Bool True
+genSimple GoTime = String "2006-01-02T15:04:05Z"
 {-# INLINE genSimple #-}
 
 genSimple' :: GoSimpleTypes -> Text
@@ -218,6 +223,7 @@ genSimple' GoString = "\"___\""
 genSimple' GoFloat = "2.71828"
 genSimple' GoDouble = "3.1415926"
 genSimple' GoBool = "false"
+genSimple' GoTime = "2006-01-02T15:04:05Z"
 {-# INLINE genSimple' #-}
 
 jsonize defs = mconcat $ intersperse "\n" $ map encodePretty $ jsonize' env defs
