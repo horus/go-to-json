@@ -49,7 +49,7 @@ view model = { title = "import \"encoding/json\""
                             tr []
                               [ td [][textarea [style "display" "block", style "width" "500px"
                                                 , style "height" "300px", style "resize" "none"
-                                                , placeholder "type or paste struct here", onInput Change] []],
+                                                , placeholder notes, onInput Change] []],
                                 td [] [displayResult model]
                               ]
                         ],
@@ -77,6 +77,9 @@ displayResult model =
 
 textAreaStyle : List (Attribute Msg)
 textAreaStyle = [style "display" "block", style "width" "500px", style "height" "300px", style "resize" "none", readonly True ]
+
+notes : String
+notes = "type or paste struct here\n\nnotes:\n- only struct definitions are accepted with the \"type\" keyword\n- undefined types show as null in the resulting JSON\n- fields can contain error messages\n- the whole process is fairly, maybe too permissive"
 
 getJson : String -> Cmd Msg
 getJson str =
