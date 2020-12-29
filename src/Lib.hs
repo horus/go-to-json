@@ -6,14 +6,14 @@
 
 module Lib (getJson) where
 
-import Control.Applicative
+import Control.Applicative (liftA2, (<|>))
 import Control.Monad (guard, (<=<))
 import Data.Aeson as A
 import Data.Aeson.Encode.Pretty (encodePretty)
 import Data.Attoparsec.Text as P
 import Data.Bifunctor (first)
 import Data.ByteString.Lazy.Char8 (pack)
-import Data.Char
+import Data.Char (isAlphaNum, isPrint, isSpace, isUpper)
 import qualified Data.HashMap.Strict as HM
 import Data.List (foldl', intersperse)
 import Data.Maybe (fromMaybe, isNothing, listToMaybe, mapMaybe)
