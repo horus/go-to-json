@@ -7,10 +7,11 @@
 module Lib (getJson) where
 
 import Control.Applicative
-import Control.Monad (guard)
+import Control.Monad (guard, (<=<))
 import Data.Aeson as A
 import Data.Aeson.Encode.Pretty (encodePretty)
 import Data.Attoparsec.Text as P
+import Data.Bifunctor (first)
 import Data.ByteString.Lazy.Char8 (pack)
 import Data.Char
 import qualified Data.HashMap.Strict as HM
@@ -18,11 +19,11 @@ import Data.List (foldl', intersperse)
 import Data.Maybe (fromMaybe, isNothing, listToMaybe, mapMaybe)
 import Data.Text (Text)
 import qualified Data.Text as T
-import Data.Text.Encoding (decodeUtf8)
+import Data.Text.Encoding (decodeUtf8')
 import qualified Data.Vector as V
 import Numeric (showInt)
 
-getJson = either pack jsonize . parseOnly goStructBlock . decodeUtf8
+getJson = either pack jsonize . (parseOnly goStructBlock <=< first show . decodeUtf8')
   where
     goStructBlock = skipMany endOfLine' *> goStructs <* ((comment `sepBy` skipSpace) >> skipSpace >> endOfInput)
     comment = skipSpace >> string "//" >> skipWhile (not . isEndOfLine)
