@@ -17,7 +17,7 @@ import Data.Char (isAlphaNum, isPrint, isSpace, isUpper)
 import Data.Foldable (foldlM)
 import qualified Data.HashMap.Strict as HM
 import Data.List (intersperse)
-import Data.Maybe (fromMaybe, isNothing, listToMaybe, mapMaybe)
+import Data.Maybe (isNothing, mapMaybe)
 import Data.Text (Text)
 import qualified Data.Text as T
 import Data.Text.Encoding (decodeUtf8')
@@ -43,11 +43,11 @@ instance Show GoStructLine where
 
 data JSONTags = KeyRename Text | KeyOmitEmpty | KeyIgnore | KeyAsString deriving (Show, Eq)
 
-goStructs = (typedef <|> fmap ("",) goStruct) `sepBy` skipMany1 endOfLine'
+goStructs = (typedef <|> fmap (Nothing,) goStruct) `sepBy` skipMany1 endOfLine'
 
 typedef = liftA2 (,) name def
   where
-    name = (string "type" >> skipSpace') *> goIdent
+    name = (string "type" >> skipSpace') *> fmap Just goIdent
     def = skipSpace' *> goStruct
 
 goStruct = string "struct" >> goBlocky (withComments definitions)
@@ -179,7 +179,7 @@ genExampleValue env (GoMap t1 t2) = do
 genExampleValue env (GoStruct (GoStructDef defs)) = jsonize'' env defs
 genExampleValue env (GoTyVar t) = case HM.lookup t env of
   Just (GoStructDef def) -> jsonize'' (HM.delete t env) def
-  Nothing -> Left $! "undefined: " ++ T.unpack t
+  Nothing -> Left $! "undefined or invalid: " ++ T.unpack t
 genExampleValue _ GoInterface = return $! Object HM.empty
 genExampleValue _ GoNil = return Null
 
@@ -243,15 +243,13 @@ genSimple' GoTime = "2006-01-02T15:04:05Z"
 
 jsonize defs = either pack (mconcat . intersperse "\n" . map encodePretty) $ jsonize' env defs
   where
-    env = HM.fromList [d | d@(name, _) <- defs, not (T.null name)]
+    env = HM.fromList [(name, val) | (Just name, val) <- defs]
 
-jsonize' :: HM.HashMap Text GoStructDef -> [(Text, GoStructDef)] -> Either String [Value]
+jsonize' :: HM.HashMap Text GoStructDef -> [(Maybe Text, GoStructDef)] -> Either String [Value]
 jsonize' _ [] = return []
 jsonize' env ((name, GoStructDef xs) : defs) = liftM2 (:) (jsonize'' env' xs) (jsonize' env defs)
   where
-    env'
-      | T.null name = env
-      | otherwise = HM.delete name env
+    env' = maybe env (`HM.delete` env) name
 
 jsonize'' :: HM.HashMap Text GoStructDef -> [GoStructLine] -> Either String Value
 jsonize'' env = fmap object . pairize env
@@ -267,7 +265,7 @@ pairize environ = foldlM (go environ) []
             if null ident'
               then return $! ps' ++ ps
               else return $! (head ident' .= object ps') : ps
-          Nothing -> Left $! "undefined: " ++ T.unpack tv
+          Nothing -> Left $! "undefined or invalid: " ++ T.unpack tv
       where
         ident' = [n | KeyRename n <- tags]
     go env ps (GoStructLine ident t tags)
@@ -276,11 +274,11 @@ pairize environ = foldlM (go environ) []
         eg <- example
         return $! (ident' .= eg) : ps
       where
-        ident' = fromMaybe ident $ listToMaybe $ [n | KeyRename n <- tags]
+        ident' = head $ [n | KeyRename n <- tags] <|> [ident]
         example
           | KeyAsString `elem` tags =
             case t of
               GoBasic b -> return $! String (genSimple' b)
-              GoTyVar tv | isNothing (HM.lookup tv env) -> Left $! "undefined: " ++ T.unpack tv
+              GoTyVar tv | isNothing (HM.lookup tv env) -> Left $! "undefined or invalid: " ++ T.unpack tv
               _ -> Left "json tag \"string\": expecting: string, floating point, integer, or boolean types"
           | otherwise = genExampleValue env t
