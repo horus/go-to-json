@@ -190,16 +190,18 @@ genExampleValue _ GoNil = return Null
 --}
 
 genSimpleArrayLike :: GoSimpleTypes -> V.Vector A.Value
-genSimpleArrayLike GoBool = V.fromList [Bool False, Bool True, Bool True, Bool False, Bool True, Bool False, Bool False, Bool False, Bool True, Bool False]
-genSimpleArrayLike GoInt = V.fromList [Number 1, Number 2, Number 3, Number 4, Number 5, Number 6, Number 7, Number 8, Number 9, Number 0]
-genSimpleArrayLike GoInt8 = V.fromList [Number 8, Number 16, Number 32, Number 64, Number 128, Number 0, Number 1, Number 2, Number 4, Number 8]
-genSimpleArrayLike GoInt16 = V.fromList [Number 16, Number 17, Number 18, Number 19, Number 20, Number 21, Number 22, Number 23, Number 24, Number 25]
-genSimpleArrayLike GoInt32 = V.fromList [Number 32, Number 3, Number 3, Number 4, Number 6, Number 4, Number 0, Number 2, Number 5, Number 8]
-genSimpleArrayLike GoInt64 = V.fromList [Number 9223372036854775800, Number 922, Number 10, Number 9223372, Number 9223372036854, Number 1234, Number 56, Number 7, Number 10240, Number 65536]
-genSimpleArrayLike GoFloat = V.fromList [Number 9.5, Number 3.8, Number 1.13, Number 4.79, Number 5.023, Number 6.1, Number 2.7234, Number 1.9, Number 1.02, Number 5.64]
-genSimpleArrayLike GoDouble = V.fromList [Number 8.5397342, Number 4.26986711133, Number 871.0528907127, Number 9.869604, Number 31.00627668, Number 10.24, Number 16.3, Number 12.6, Number 12.0001, Number 564.222]
-genSimpleArrayLike GoString = V.fromList [String "rob pike", String "Robert", String "Pike", String "gopher", String "Gopher", String "Go", String "Golang", String "goroutine", String "interface{}", "struct"]
-genSimpleArrayLike GoTime = V.fromList [String "2011-01-26T19:06:43Z", String "2020-07-16T14:49:50.3269159+08:00", String "2011-01-26T19:01:12Z", String "2011-01-26T19:14:43Z", String "2009-11-10T23:00:00Z", String "2018-09-22T12:42:31Z", String "2020-12-29T14:58:15Z", String "2006-01-02T15:04:05Z", String "2020-12-29T14:58:15.229579703+08:00", String "2017-12-30T11:25:30+09:00"]
+genSimpleArrayLike = V.fromList . go
+  where
+    go GoBool = map Bool [False, True, True, False, True, False, False, False, True, False]
+    go GoInt = map Number [1, 2, 3, 4, 5, 6, 7, 8, 9, 0]
+    go GoInt8 = map Number [8, 16, 32, 64, 128, 0, 1, 2, 4, 8]
+    go GoInt16 = map Number [16, 17, 18, 19, 20, 21, 22, 23, 24, 25]
+    go GoInt32 = map Number [32, 3, 3, 4, 6, 4, 0, 2, 5, 8]
+    go GoInt64 = map Number [9223372036854775800, 922, 10, 9223372, 9223372036854, 1234, 56, 7, 10240, 65536]
+    go GoFloat = map Number [9.5, 3.8, 1.13, 4.79, 5.023, 6.1, 2.7234, 1.9, 1.02, 5.64]
+    go GoDouble = map Number [8.5397342, 4.26986711133, 871.0528907127, 9.869604, 31.00627668, 10.24, 16.3, 12.6, 12.0001, 564.222]
+    go GoString = map String ["rob pike", "Robert", "Pike", "gopher", "Gopher", "Go", "Golang", "goroutine", "interface{}", "struct"]
+    go GoTime = map String ["2011-01-26T19:06:43Z", "2020-07-16T14:49:50.3269159+08:00", "2011-01-26T19:01:12Z", "2011-01-26T19:14:43Z", "2009-11-10T23:00:00Z", "2018-09-22T12:42:31Z", "2020-12-29T14:58:15Z", "2006-01-02T15:04:05Z", "2020-12-29T14:58:15.229579703+08:00", "2017-12-30T11:25:30+09:00"]
 {-# INLINE genSimpleArrayLike #-}
 
 showKey :: GoSimpleTypes -> Text
