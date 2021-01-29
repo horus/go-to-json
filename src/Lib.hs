@@ -14,10 +14,11 @@ import Data.Attoparsec.Text as P
 import Data.Bifunctor (first)
 import Data.ByteString.Lazy.Char8 (pack)
 import Data.Char (isAlphaNum, isPrint, isSpace, isUpper)
+import Data.Either (isLeft)
 import Data.Foldable (foldlM)
 import qualified Data.HashMap.Strict as HM
 import Data.List (intersperse)
-import Data.Maybe (isNothing, mapMaybe)
+import Data.Maybe (mapMaybe)
 import Data.Text (Text)
 import qualified Data.Text as T
 import Data.Text.Encoding (decodeUtf8')
@@ -78,7 +79,7 @@ instance Show GoSimpleTypes where
   show GoBool = "bool"
   show GoTime = "time.Time"
 
-data GoTypes = GoBasic GoSimpleTypes | GoArrayLike Int GoTypes | GoMap GoSimpleTypes GoTypes | GoStruct GoStructDef | GoInterface | GoNil | GoTyVar Text
+data GoTypes = GoBasic GoSimpleTypes | GoArrayLike Int GoTypes | GoMap GoSimpleTypes GoTypes | GoStruct GoStructDef | GoInterface | GoNil | GoTyVar (Either Text Text) -- a bit hackery: Either Pointed Plain
 
 instance Show GoTypes where
   show (GoBasic t) = show t
@@ -113,7 +114,7 @@ goTypeLit = goInterface <|> fmap GoBasic goBasicTypeLit <|> goArrayLike <|> goMa
       keyType <- goBasicTypeLit
       char ']'
       GoMap keyType <$> goTypeLit
-    goTyVar = (char '*' *> goPublicIdent) <|> goPublicIdent
+    goTyVar = (char '*' *> fmap Left goPublicIdent) <|> fmap Right goPublicIdent
 
 goBasicTypeLit =
   choice
@@ -177,9 +178,12 @@ genExampleValue env (GoMap t1 t2) = do
   val <- genExampleValue env t2
   return $! Object $ HM.fromList [(showKey t1, val)]
 genExampleValue env (GoStruct (GoStructDef defs)) = jsonize'' env defs
-genExampleValue env (GoTyVar t) = case HM.lookup t env of
+genExampleValue env (GoTyVar t') = case HM.lookup t env of
   Just (GoStructDef def) -> jsonize'' (HM.delete t env) def
+  Nothing | isLeft t' -> return Null
   Nothing -> Left $! "undefined or invalid: " ++ T.unpack t
+  where
+    t = either id id t'
 genExampleValue _ GoInterface = return $! Object HM.empty
 genExampleValue _ GoNil = return Null
 
@@ -277,10 +281,8 @@ pairize environ = foldlM (go environ) []
         return $! (ident' .= eg) : ps
       where
         ident' = head $ [n | KeyRename n <- tags] <|> [ident]
-        example
-          | KeyAsString `elem` tags =
-            case t of
-              GoBasic b -> return $! String (genSimple' b)
-              GoTyVar tv | isNothing (HM.lookup tv env) -> Left $! "undefined or invalid: " ++ T.unpack tv
-              _ -> Left "json tag \"string\": expecting: string, floating point, integer, or boolean types"
-          | otherwise = genExampleValue env t
+        example = case t of
+          GoBasic b | KeyAsString `elem` tags -> return $! String (genSimple' b)
+          -- json tag "string" expecting: string, floating point, integer, or boolean types
+          -- other types ignore it, just proceed as usual
+          _ -> genExampleValue env t
