@@ -1,3 +1,4 @@
+{-# LANGUAGE BangPatterns #-}
 {-# LANGUAGE LambdaCase #-}
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE TupleSections #-}
@@ -7,14 +8,13 @@
 module Lib (getJson) where
 
 import Control.Applicative (liftA2, (<|>))
-import Control.Monad (guard, liftM2, replicateM, (<=<))
+import Control.Monad (foldM, guard, liftM2, replicateM, (<=<))
 import Data.Aeson as A
 import Data.Aeson.Encode.Pretty (encodePretty)
 import Data.Attoparsec.Text as P
 import Data.Bifunctor (first)
 import Data.ByteString.Lazy.Char8 (pack)
 import Data.Char (isAlphaNum, isPrint, isSpace, isUpper)
-import Data.Either (isLeft)
 import Data.Foldable (foldlM)
 import qualified Data.HashMap.Strict as HM
 import Data.List (intersperse)
@@ -79,7 +79,7 @@ instance Show GoSimpleTypes where
   show GoBool = "bool"
   show GoTime = "time.Time"
 
-data GoTypes = GoBasic GoSimpleTypes | GoArrayLike Int GoTypes | GoMap GoSimpleTypes GoTypes | GoStruct GoStructDef | GoInterface | GoNil | GoTyVar (Either Text Text) -- a bit hackery: Either Pointed Plain
+data GoTypes = GoBasic GoSimpleTypes | GoArrayLike Int GoTypes | GoMap GoTypes GoTypes | GoStruct GoStructDef | GoInterface | GoTyVar Text | GoPointer GoTypes
 
 instance Show GoTypes where
   show (GoBasic t) = show t
@@ -88,15 +88,16 @@ instance Show GoTypes where
   show (GoStruct defs) = show defs
   show GoInterface = "interface{}"
   show (GoTyVar t) = show t
-  show GoNil = "nil"
+  show (GoPointer t) = '*' : show t
 
 goBlocky p = begin *> p <* end
   where
     begin = skipSpace >> char '{'
     end = skipSpace >> char '}'
 
-goTypeLit = goInterface <|> fmap GoBasic goBasicTypeLit <|> goArrayLike <|> goMap <|> fmap GoStruct goStruct <|> fmap GoTyVar goTyVar
+goTypeLit = goPointer <|> goInterface <|> fmap GoBasic goBasicTypeLit <|> goArrayLike <|> goMap <|> fmap GoStruct goStruct <|> goTyVar
   where
+    goPointer = char '*' >> (GoPointer <$> goTypeLit)
     goInterface = string "interface{}" >> pure GoInterface
     goArrayLike = do
       n <- goSlice <|> goArray
@@ -111,10 +112,10 @@ goTypeLit = goInterface <|> fmap GoBasic goBasicTypeLit <|> goArrayLike <|> goMa
           return n
     goMap = do
       string "map["
-      keyType <- goBasicTypeLit
+      keyType <- goTypeLit
       char ']'
       GoMap keyType <$> goTypeLit
-    goTyVar = (char '*' *> fmap Left goPublicIdent) <|> fmap Right goPublicIdent
+    goTyVar = GoTyVar <$> goPublicIdent
 
 goBasicTypeLit =
   choice
@@ -173,19 +174,42 @@ genExampleValue env (GoArrayLike n t)
   | otherwise = do
     val <- genExampleValue env t
     return $! Array $ V.fromList [val]
-genExampleValue _ (GoMap t1 t2) | t1 == GoBool = Left $! "json: unsupported type: map[bool]" ++ show t2
-genExampleValue env (GoMap t1 t2) = do
-  val <- genExampleValue env t2
-  return $! Object $ HM.fromList [(showKey t1, val)]
 genExampleValue env (GoStruct (GoStructDef defs)) = jsonize'' env defs
-genExampleValue env (GoTyVar t') = case HM.lookup t env of
+genExampleValue env (GoTyVar t) = case HM.lookup t env of
   Just (GoStructDef def) -> jsonize'' (HM.delete t env) def
-  Nothing | isLeft t' -> return Null
   Nothing -> Left $! "undefined or invalid: " ++ T.unpack t
-  where
-    t = either id id t'
 genExampleValue _ GoInterface = return $! Object HM.empty
-genExampleValue _ GoNil = return Null
+genExampleValue env (GoPointer p) = deref 1 p
+  where
+    deref :: Int -> GoTypes -> Either String Value
+    deref !i t@(GoPointer ptr)
+      | i < 5 = deref (i + 1) ptr
+      | otherwise = Left $! "deep pointer occurrence: " ++ replicate i '*' ++ show t
+    deref _ (GoTyVar t) = case HM.lookup t env of
+      Just (GoStructDef def) -> jsonize'' (HM.delete t env) def
+      Nothing -> return Null
+    deref _ base = genExampleValue env base
+genExampleValue env (GoMap t1 t2) = do
+  key <- check t1
+  val <- genExampleValue env t2
+  return $! Object $ HM.fromList [(key, val)]
+  where
+    check (GoBasic GoString) = Right "myKey"
+    check (GoBasic GoInt8) = Right "8"
+    check (GoBasic GoInt16) = Right "16"
+    check (GoBasic GoInt32) = Right "32"
+    check (GoBasic GoInt64) = Right "64"
+    check (GoBasic GoInt) = Right "1024"
+    check (GoBasic GoFloat) = Right "1.26"
+    check (GoBasic GoDouble) = Right "16.3"
+    check (GoBasic GoTime) = Right "2009-11-10T23:00:00Z"
+    check (GoBasic GoBool) = Left $! "json: unsupported type: map[bool]" ++ show t2
+    check t@(GoArrayLike _ _) = Left $! "json: unsupported type: map[" ++ show t ++ "]" ++ show t2
+    check t@(GoMap _ _) = Left $! "json: unsupported type: map[" ++ show t ++ "]" ++ show t2
+    check t@(GoStruct _) = Left $! "json: unsupported type: map[" ++ show t ++ "]" ++ show t2
+    check GoInterface = Left $! "json: unsupported type: map[interface{}]" ++ show t2
+    check (GoTyVar t) = Left $! "json: unsupported type: map[main." ++ T.unpack t ++ "]" ++ show t2
+    check (GoPointer t) = Left $! "json: unsupported type: map[*" ++ show t ++ "]" ++ show t2
 
 {--
   While it's fine to have types like map[bool]int, map[bool]bool
@@ -207,19 +231,6 @@ genSimpleArrayLike = V.fromList . go
     go GoString = map String ["rob pike", "Robert", "Pike", "gopher", "Gopher", "Go", "Golang", "goroutine", "interface{}", "struct"]
     go GoTime = map String ["2011-01-26T19:06:43Z", "2020-07-16T14:49:50.3269159+08:00", "2011-01-26T19:01:12Z", "2011-01-26T19:14:43Z", "2009-11-10T23:00:00Z", "2018-09-22T12:42:31Z", "2020-12-29T14:58:15Z", "2006-01-02T15:04:05Z", "2020-12-29T14:58:15.229579703+08:00", "2017-12-30T11:25:30+09:00"]
 {-# INLINE genSimpleArrayLike #-}
-
-showKey :: GoSimpleTypes -> Text
-showKey GoString = "myKey"
-showKey GoInt8 = "8"
-showKey GoInt16 = "16"
-showKey GoInt32 = "32"
-showKey GoInt64 = "64"
-showKey GoInt = "1024"
-showKey GoFloat = "1.26"
-showKey GoDouble = "16.3"
-showKey GoBool = "bool as key: not supported by encoding/json"
-showKey GoTime = "2009-11-10T23:00:00Z"
-{-# INLINE showKey #-}
 
 genSimple :: GoSimpleTypes -> Value
 genSimple GoInt = Number 1
@@ -247,13 +258,18 @@ genSimple' GoBool = "false"
 genSimple' GoTime = "2006-01-02T15:04:05Z"
 {-# INLINE genSimple' #-}
 
-jsonize defs = either pack (mconcat . intersperse "\n" . map encodePretty) $ jsonize' env defs
+jsonize defs = either pack prettyJson (prepareEnv >>= jsonize' defs)
   where
-    env = HM.fromList [(name, val) | (Just name, val) <- defs]
+    prettyJson = mconcat . intersperse "\n" . map encodePretty
+    prepareEnv = foldM g HM.empty [(name, val) | (Just name, val) <- defs]
+      where
+        g m (k, v)
+          | k `HM.member` m = Left $! T.unpack k ++ " redeclared in this block"
+          | otherwise = Right (HM.insert k v m)
 
-jsonize' :: HM.HashMap Text GoStructDef -> [(Maybe Text, GoStructDef)] -> Either String [Value]
-jsonize' _ [] = return []
-jsonize' env ((name, GoStructDef xs) : defs) = liftM2 (:) (jsonize'' env' xs) (jsonize' env defs)
+jsonize' :: [(Maybe Text, GoStructDef)] -> HM.HashMap Text GoStructDef -> Either String [Value]
+jsonize' [] _ = return []
+jsonize' ((name, GoStructDef xs) : defs) env = liftM2 (:) (jsonize'' env' xs) (jsonize' defs env)
   where
     env' = maybe env (`HM.delete` env) name
 
