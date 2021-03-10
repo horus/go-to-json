@@ -65,7 +65,7 @@ endOfLine' = do
       skipWhile (not . isEndOfLine)
       endOfLine
 
-data GoSimpleTypes = GoInt8 | GoInt16 | GoInt32 | GoInt64 | GoInt | GoString | GoDouble | GoFloat | GoBool | GoTime deriving (Eq)
+data GoSimpleTypes = GoInt8 | GoInt16 | GoInt32 | GoInt64 | GoInt | GoUInt8 | GoUInt16 | GoUInt32 | GoUInt64 | GoUInt | GoString | GoDouble | GoFloat | GoBool | GoTime deriving (Eq)
 
 instance Show GoSimpleTypes where
   show GoInt = "int"
@@ -73,6 +73,11 @@ instance Show GoSimpleTypes where
   show GoInt16 = "int16"
   show GoInt32 = "int32"
   show GoInt64 = "int64"
+  show GoUInt = "uint"
+  show GoUInt8 = "uint8"
+  show GoUInt16 = "uint16"
+  show GoUInt32 = "uint32"
+  show GoUInt64 = "uint64"
   show GoString = "string"
   show GoFloat = "float32"
   show GoDouble = "float64"
@@ -124,6 +129,11 @@ goBasicTypeLit =
       string "int32" >> return GoInt32,
       string "int64" >> return GoInt64,
       string "int" >> return GoInt,
+      string "uint8" >> return GoUInt8,
+      string "uint16" >> return GoUInt16,
+      string "uint32" >> return GoUInt32,
+      string "uint64" >> return GoUInt64,
+      string "uint" >> return GoUInt,
       string "string" >> return GoString,
       string "float32" >> return GoFloat,
       string "float64" >> return GoDouble,
@@ -197,9 +207,14 @@ genExampleValue env (GoMap t1 t2) = do
     check (GoBasic GoString) = Right "myKey"
     check (GoBasic GoInt8) = Right "8"
     check (GoBasic GoInt16) = Right "16"
-    check (GoBasic GoInt32) = Right "32"
+    check (GoBasic GoInt32) = Right "-32"
     check (GoBasic GoInt64) = Right "64"
-    check (GoBasic GoInt) = Right "1024"
+    check (GoBasic GoInt) = Right "-1024"
+    check (GoBasic GoUInt8) = Right "8"
+    check (GoBasic GoUInt16) = Right "1616"
+    check (GoBasic GoUInt32) = Right "323232"
+    check (GoBasic GoUInt64) = Right "646464646464"
+    check (GoBasic GoUInt) = Right "1024"
     check (GoBasic GoFloat) = Right "1.26"
     check (GoBasic GoDouble) = Right "16.3"
     check (GoBasic GoTime) = Right "2009-11-10T23:00:00Z"
@@ -221,11 +236,16 @@ genSimpleArrayLike :: GoSimpleTypes -> V.Vector A.Value
 genSimpleArrayLike = V.fromList . go
   where
     go GoBool = map Bool [False, True, True, False, True, False, False, False, True, False]
-    go GoInt = map Number [1, 2, 3, 4, 5, 6, 7, 8, 9, 0]
-    go GoInt8 = map Number [8, 16, 32, 64, 128, 0, 1, 2, 4, 8]
-    go GoInt16 = map Number [16, 17, 18, 19, 20, 21, 22, 23, 24, 25]
-    go GoInt32 = map Number [32, 3, 3, 4, 6, 4, 0, 2, 5, 8]
-    go GoInt64 = map Number [9223372036854775800, 922, 10, 9223372, 9223372036854, 1234, 56, 7, 10240, 65536]
+    go GoInt = map Number [1, -2, 3, -4, 5, -6, 7, -8, 9, 0]
+    go GoInt8 = map Number [-8, 16, 32, -64, -128, 0, 1, 2, 4, 8]
+    go GoInt16 = map Number [16, 17, 18, 19, -20, 21, 22, 23, -24, -25]
+    go GoInt32 = map Number [32, 3, -3, 4, 6, -4, 0, 2, -5, 8]
+    go GoInt64 = map Number [9223372036854775800, 922, 10, -9223372, 9223372036854, -1234, 56, -7, 10240, 65536]
+    go GoUInt = map Number [1, 2, 3, 4, 5, 6, 7, 8, 9, 0]
+    go GoUInt8 = map Number [8, 16, 32, 64, 128, 0, 1, 2, 4, 8]
+    go GoUInt16 = map Number [16, 17, 18, 19, 20, 21, 22, 23, 24, 25]
+    go GoUInt32 = map Number [32, 3, 3, 4, 6, 4, 0, 2, 5, 8]
+    go GoUInt64 = map Number [9223372036854775800, 922, 10, 9223372, 9223372036854, 1234, 56, 7, 10240, 65536]
     go GoFloat = map Number [9.5, 3.8, 1.13, 4.79, 5.023, 6.1, 2.7234, 1.9, 1.02, 5.64]
     go GoDouble = map Number [8.5397342, 4.26986711133, 871.0528907127, 9.869604, 31.00627668, 10.24, 16.3, 12.6, 12.0001, 564.222]
     go GoString = map String ["rob pike", "Robert", "Pike", "gopher", "Gopher", "Go", "Golang", "goroutine", "interface{}", "struct"]
@@ -235,9 +255,14 @@ genSimpleArrayLike = V.fromList . go
 genSimple :: GoSimpleTypes -> Value
 genSimple GoInt = Number 1
 genSimple GoInt8 = Number 127
-genSimple GoInt16 = Number 1616
+genSimple GoInt16 = Number (-1616)
 genSimple GoInt32 = Number 60000
 genSimple GoInt64 = Number 64
+genSimple GoUInt = Number 1
+genSimple GoUInt8 = Number 255
+genSimple GoUInt16 = Number 1616
+genSimple GoUInt32 = Number 323232
+genSimple GoUInt64 = Number 646464646464
 genSimple GoString = String "robpike"
 genSimple GoFloat = Number 2.71828
 genSimple GoDouble = Number 3.1415926
@@ -251,6 +276,11 @@ genSimple' GoInt8 = "1"
 genSimple' GoInt16 = "2"
 genSimple' GoInt32 = "4"
 genSimple' GoInt64 = "8"
+genSimple' GoUInt = "0"
+genSimple' GoUInt8 = "255"
+genSimple' GoUInt16 = "65535"
+genSimple' GoUInt32 = "4294967295"
+genSimple' GoUInt64 = "18446744073709551615"
 genSimple' GoString = "\"___\""
 genSimple' GoFloat = "2.71828"
 genSimple' GoDouble = "3.1415926"
