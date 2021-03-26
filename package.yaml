@@ -25,6 +25,8 @@ dependencies:
 - aeson-pretty
 - attoparsec
 - bytestring
+- ekg
+- ekg-core
 - http-types
 - pretty
 - scientific
