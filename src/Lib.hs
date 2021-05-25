@@ -120,7 +120,7 @@ goTypeLit = goPointer <|> goInterface <|> fmap GoBasic goBasicTypeLit <|> goArra
       keyType <- goTypeLit
       char ']'
       GoMap keyType <$> goTypeLit
-    goTyVar = GoTyVar <$> goPublicIdent
+    goTyVar = GoTyVar <$> goIdent
 
 goBasicTypeLit =
   choice
@@ -145,14 +145,10 @@ skipSpace' = skipMany1 (satisfy isHorizontalSpace)
 
 goIdent = P.takeWhile1 isAlphaNum
 
-goPublicIdent = do
-  i <- goIdent
-  i <$ guard (isUpper $ T.head i)
-
 goStructLine = goPlainStructLine <|> goEmbeddedStructLine
   where
     goPlainStructLine = GoStructLine <$> (skipSpace *> goIdent) <*> (skipSpace' *> goTypeLit) <*> ((skipSpace' *> goStructTags) <|> pure [])
-    goEmbeddedStructLine = GoEmbedStruct <$> (skipSpace *> goPublicIdent) <*> ((skipSpace' *> goStructTags) <|> pure [])
+    goEmbeddedStructLine = GoEmbedStruct <$> (skipSpace *> goIdent) <*> ((skipSpace' *> goStructTags) <|> pure [])
 
 goStructTags = do
   (a, b) <- char '`' *> (T.breakOn "json:\"" <$> P.takeWhile (\c -> c /= '`' && isPrint c)) <* char '`'
