@@ -8,7 +8,7 @@
 module Lib (getJson) where
 
 import Control.Applicative (liftA2, (<|>))
-import Control.Monad (foldM, guard, liftM2, replicateM, (<=<))
+import Control.Monad (foldM, guard, liftM2, (<=<))
 import Data.Aeson as A
 import Data.Aeson.Encode.Pretty (encodePretty)
 import Data.Attoparsec.Text as P
@@ -169,36 +169,36 @@ goStructTags = do
           _ -> Nothing
 
 genExampleValue :: HM.HashMap Text GoStructDef -> GoTypes -> Either String A.Value
-genExampleValue _ (GoBasic t) = return $! genSimple t
+genExampleValue _ (GoBasic t) = pure $ genSimple t
 genExampleValue _ (GoArrayLike n (GoBasic t))
-  | n > 0 && n < 10 = return $! Array $ V.take n (genSimpleArrayLike t)
-  | otherwise = return $! Array $ genSimpleArrayLike t
+  | n > 0 && n < 10 = pure $ Array $ V.take n (genSimpleArrayLike t)
+  | otherwise = pure $ Array $ genSimpleArrayLike t
 genExampleValue env (GoArrayLike n t)
-  | n > 0 && n < 5 = do
-    val <- replicateM n (genExampleValue env t)
-    return $! Array $ V.fromList val
+  | n > 0 && n < 6 = do
+    val <- genExampleValue env t
+    pure $ Array $ V.replicate n val
   | otherwise = do
     val <- genExampleValue env t
-    return $! Array $ V.fromList [val]
+    pure $ Array $ V.fromList [val]
 genExampleValue env (GoStruct (GoStructDef defs)) = jsonize'' env defs
 genExampleValue env (GoTyVar t) = case HM.lookup t env of
   Just (GoStructDef def) -> jsonize'' (HM.delete t env) def
-  Nothing -> Left $! "undefined or invalid: " ++ T.unpack t
-genExampleValue _ GoInterface = return $! Object HM.empty
+  Nothing -> Left $ "undefined or invalid: " ++ T.unpack t
+genExampleValue _ GoInterface = pure $ Object HM.empty
 genExampleValue env (GoPointer p) = deref 1 p
   where
     deref :: Int -> GoTypes -> Either String Value
     deref !i t@(GoPointer ptr)
       | i < 5 = deref (i + 1) ptr
-      | otherwise = Left $! "deep pointer occurrence: " ++ replicate i '*' ++ show t
+      | otherwise = Left $ "deep pointer occurrence: " ++ replicate i '*' ++ show t
     deref _ (GoTyVar t) = case HM.lookup t env of
       Just (GoStructDef def) -> jsonize'' (HM.delete t env) def
-      Nothing -> return Null
+      Nothing -> pure Null
     deref _ base = genExampleValue env base
 genExampleValue env (GoMap t1 t2) = do
   key <- check t1
   val <- genExampleValue env t2
-  return $! Object $ HM.fromList [(key, val)]
+  pure $ Object $ HM.fromList [(key, val)]
   where
     check (GoBasic GoString) = Right "myKey"
     check (GoBasic GoInt8) = Right "8"
@@ -214,13 +214,13 @@ genExampleValue env (GoMap t1 t2) = do
     check (GoBasic GoFloat) = Right "1.26"
     check (GoBasic GoDouble) = Right "16.3"
     check (GoBasic GoTime) = Right "2009-11-10T23:00:00Z"
-    check (GoBasic GoBool) = Left $! "json: unsupported type: map[bool]" ++ show t2
-    check t@(GoArrayLike _ _) = Left $! "json: unsupported type: map[" ++ show t ++ "]" ++ show t2
-    check t@(GoMap _ _) = Left $! "json: unsupported type: map[" ++ show t ++ "]" ++ show t2
-    check t@(GoStruct _) = Left $! "json: unsupported type: map[" ++ show t ++ "]" ++ show t2
-    check GoInterface = Left $! "json: unsupported type: map[interface{}]" ++ show t2
-    check (GoTyVar t) = Left $! "json: unsupported type: map[main." ++ T.unpack t ++ "]" ++ show t2
-    check (GoPointer t) = Left $! "json: unsupported type: map[*" ++ show t ++ "]" ++ show t2
+    check (GoBasic GoBool) = Left $ "json: unsupported type: map[bool]" ++ show t2
+    check t@(GoArrayLike _ _) = Left $ "json: unsupported type: map[" ++ show t ++ "]" ++ show t2
+    check t@(GoMap _ _) = Left $ "json: unsupported type: map[" ++ show t ++ "]" ++ show t2
+    check t@(GoStruct _) = Left $ "json: unsupported type: map[" ++ show t ++ "]" ++ show t2
+    check GoInterface = Left $ "json: unsupported type: map[interface{}]" ++ show t2
+    check (GoTyVar t) = Left $ "json: unsupported type: map[main." ++ T.unpack t ++ "]" ++ show t2
+    check (GoPointer t) = Left $ "json: unsupported type: map[*" ++ show t ++ "]" ++ show t2
 
 {--
   While it's fine to have types like map[bool]int, map[bool]bool
@@ -327,7 +327,7 @@ pairize environ = foldlM (go environ) []
         notExported = not $ isUpper $ T.head ident
         ident' = head $ [n | KeyRename n <- tags] <|> [ident]
         example = case t of
-          GoBasic b | KeyAsString `elem` tags -> return $! String (genSimple' b)
+          GoBasic b | KeyAsString `elem` tags -> pure $ String (genSimple' b)
           -- json tag "string" expecting: string, floating point, integer, or boolean types
           -- other types ignore it, just proceed as usual
           _ -> genExampleValue env t
