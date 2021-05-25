@@ -317,9 +317,9 @@ pairize environ = foldlM (go environ) []
       where
         ident' = [n | KeyRename n <- tags]
     go env ps (GoStructLine ident t tags)
-      | KeyIgnore `elem` tags = return ps
+      | KeyIgnore `elem` tags = example >> return ps
       | notExported && not (null tags) = Left $! "struct field " ++ T.unpack ident ++ " has json tag but is not exported"
-      | notExported = return ps
+      | notExported = example >> return ps
       | otherwise = do
         eg <- example
         return $! (ident' .= eg) : ps
