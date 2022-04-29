@@ -10,6 +10,8 @@ module Lib (getJson) where
 import Control.Applicative (liftA2, (<|>))
 import Control.Monad (foldM, guard, liftM2, (<=<))
 import Data.Aeson as A
+import qualified Data.Aeson.Key as A
+import qualified Data.Aeson.KeyMap as A
 import Data.Aeson.Encode.Pretty (encodePretty)
 import Data.Attoparsec.Text as P
 import Data.Bifunctor (first)
@@ -184,7 +186,7 @@ genExampleValue env (GoStruct (GoStructDef defs)) = jsonize'' env defs
 genExampleValue env (GoTyVar t) = case HM.lookup t env of
   Just (GoStructDef def) -> jsonize'' (HM.delete t env) def
   Nothing -> Left $ "undefined or invalid: " ++ T.unpack t
-genExampleValue _ GoInterface = pure $ Object HM.empty
+genExampleValue _ GoInterface = pure $ Object A.empty
 genExampleValue env (GoPointer p) = deref 1 p
   where
     deref :: Int -> GoTypes -> Either String Value
@@ -198,7 +200,7 @@ genExampleValue env (GoPointer p) = deref 1 p
 genExampleValue env (GoMap t1 t2) = do
   key <- check t1
   val <- genExampleValue env t2
-  pure $ Object $ HM.fromList [(key, val)]
+  pure $ Object $ A.fromList [(key, val)]
   where
     check (GoBasic GoString) = Right "myKey"
     check (GoBasic GoInt8) = Right "8"
@@ -312,7 +314,7 @@ pairize environ = foldlM (go environ) []
             ps' <- pairize (HM.delete tv env) defs
             if null ident'
               then return $! ps' ++ ps
-              else return $! (head ident' .= object ps') : ps
+              else return $! (A.fromText (head ident') .= object ps') : ps
           Nothing -> Left $! "undefined or invalid: " ++ T.unpack tv
       where
         ident' = [n | KeyRename n <- tags]
@@ -322,7 +324,7 @@ pairize environ = foldlM (go environ) []
       | notExported = example >> return ps
       | otherwise = do
         eg <- example
-        return $! (ident' .= eg) : ps
+        return $! (A.fromText ident' .= eg) : ps
       where
         notExported = not $ isUpper $ T.head ident
         ident' = head $ [n | KeyRename n <- tags] <|> [ident]
