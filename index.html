@@ -5427,24 +5427,6 @@ var $author$project$P$deadEndsToString = function (deadEnds) {
 			'; ',
 			A2($elm$core$List$map, $author$project$P$deadEndToString, deadEnds)));
 };
-var $elm$core$List$maybeCons = F3(
-	function (f, mx, xs) {
-		var _v0 = f(mx);
-		if (_v0.$ === 'Just') {
-			var x = _v0.a;
-			return A2($elm$core$List$cons, x, xs);
-		} else {
-			return xs;
-		}
-	});
-var $elm$core$List$filterMap = F2(
-	function (f, xs) {
-		return A3(
-			$elm$core$List$foldr,
-			$elm$core$List$maybeCons(f),
-			_List_Nil,
-			xs);
-	});
 var $elm$core$Dict$RBEmpty_elm_builtin = {$: 'RBEmpty_elm_builtin'};
 var $elm$core$Dict$empty = $elm$core$Dict$RBEmpty_elm_builtin;
 var $elm$core$Dict$Black = {$: 'Black'};
@@ -5556,35 +5538,6 @@ var $elm$core$Dict$insert = F3(
 			return x;
 		}
 	});
-var $elm$core$Dict$fromList = function (assocs) {
-	return A3(
-		$elm$core$List$foldl,
-		F2(
-			function (_v0, dict) {
-				var key = _v0.a;
-				var value = _v0.b;
-				return A3($elm$core$Dict$insert, key, value, dict);
-			}),
-		$elm$core$Dict$empty,
-		assocs);
-};
-var $author$project$Gen$fromParserResult = function (xs) {
-	var pick = function (_v1) {
-		var name_ = _v1.a;
-		var def = _v1.b;
-		if (name_.$ === 'Just') {
-			var name = name_.a;
-			return $elm$core$Maybe$Just(
-				_Utils_Tuple2(name, def));
-		} else {
-			return $elm$core$Maybe$Nothing;
-		}
-	};
-	return $elm$core$Dict$fromList(
-		A2($elm$core$List$filterMap, pick, xs));
-};
-var $author$project$P$KeyAsString = {$: 'KeyAsString'};
-var $author$project$P$KeyIgnore = {$: 'KeyIgnore'};
 var $elm$core$Dict$get = F2(
 	function (targetKey, dict) {
 		get:
@@ -5616,6 +5569,168 @@ var $elm$core$Dict$get = F2(
 			}
 		}
 	});
+var $elm$core$Dict$member = F2(
+	function (key, dict) {
+		var _v0 = A2($elm$core$Dict$get, key, dict);
+		if (_v0.$ === 'Just') {
+			return true;
+		} else {
+			return false;
+		}
+	});
+var $author$project$Gen$fromParserResult = function (xs) {
+	var folder = F2(
+		function (_v2, dict_) {
+			var name_ = _v2.a;
+			var def = _v2.b;
+			if (dict_.$ === 'Ok') {
+				var dict = dict_.a;
+				if (name_.$ === 'Just') {
+					var name = name_.a;
+					return A2($elm$core$Dict$member, name, dict) ? $elm$core$Result$Err(name + ' redeclared in this block') : $elm$core$Result$Ok(
+						A3($elm$core$Dict$insert, name, def, dict));
+				} else {
+					return dict_;
+				}
+			} else {
+				var err = dict_;
+				return err;
+			}
+		});
+	return A3(
+		$elm$core$List$foldl,
+		folder,
+		$elm$core$Result$Ok($elm$core$Dict$empty),
+		xs);
+};
+var $author$project$P$KeyAsString = {$: 'KeyAsString'};
+var $author$project$P$KeyIgnore = {$: 'KeyIgnore'};
+var $elm$core$Bitwise$and = _Bitwise_and;
+var $elm$core$Bitwise$shiftRightBy = _Bitwise_shiftRightBy;
+var $elm$core$String$repeatHelp = F3(
+	function (n, chunk, result) {
+		return (n <= 0) ? result : A3(
+			$elm$core$String$repeatHelp,
+			n >> 1,
+			_Utils_ap(chunk, chunk),
+			(!(n & 1)) ? result : _Utils_ap(result, chunk));
+	});
+var $elm$core$String$repeat = F2(
+	function (n, chunk) {
+		return A3($elm$core$String$repeatHelp, n, chunk, '');
+	});
+var $author$project$Gen$show = function (typ) {
+	switch (typ.$) {
+		case 'GoBasic':
+			switch (typ.a.$) {
+				case 'GoInt8':
+					var _v1 = typ.a;
+					return 'int8';
+				case 'GoInt16':
+					var _v2 = typ.a;
+					return 'int16';
+				case 'GoInt32':
+					var _v3 = typ.a;
+					return 'int32';
+				case 'GoInt64':
+					var _v4 = typ.a;
+					return 'int64';
+				case 'GoInt':
+					var _v5 = typ.a;
+					return 'int';
+				case 'GoUInt8':
+					var _v6 = typ.a;
+					return 'uint8';
+				case 'GoUInt16':
+					var _v7 = typ.a;
+					return 'uint16';
+				case 'GoUInt32':
+					var _v8 = typ.a;
+					return 'uint32';
+				case 'GoUInt64':
+					var _v9 = typ.a;
+					return 'uint64';
+				case 'GoUInt':
+					var _v10 = typ.a;
+					return 'uint';
+				case 'GoString':
+					var _v11 = typ.a;
+					return 'string';
+				case 'GoFloat':
+					var _v12 = typ.a;
+					return 'float32';
+				case 'GoDouble':
+					var _v13 = typ.a;
+					return 'float64';
+				case 'GoBool':
+					var _v14 = typ.a;
+					return 'bool';
+				default:
+					var _v15 = typ.a;
+					return 'time.Time';
+			}
+		case 'GoArrayLike':
+			var n = typ.a;
+			var t = typ.b;
+			return _Utils_ap(
+				(!n) ? '[]' : ('[' + ($elm$core$String$fromInt(n) + ']')),
+				$author$project$Gen$show(t));
+		case 'GoMap':
+			var t1 = typ.a;
+			var t2 = typ.b;
+			return 'map[' + ($author$project$Gen$show(t1) + (']' + $author$project$Gen$show(t2)));
+		case 'GoStruct':
+			return 'struct{...}';
+		case 'GoInterface':
+			return 'interface{}';
+		case 'GoTyVar':
+			var t = typ.a;
+			return 'main.' + t;
+		default:
+			var t = typ.a;
+			return '*' + $author$project$Gen$show(t);
+	}
+};
+var $author$project$Gen$deref = F2(
+	function (i, typ) {
+		deref:
+		while (true) {
+			if (typ.$ === 'GoPointer') {
+				var p = typ.a;
+				if (i < 5) {
+					var $temp$i = i + 1,
+						$temp$typ = p;
+					i = $temp$i;
+					typ = $temp$typ;
+					continue deref;
+				} else {
+					return $elm$core$Result$Err(
+						'deep pointer occurrence: ' + (A2($elm$core$String$repeat, i, '*') + $author$project$Gen$show(typ)));
+				}
+			} else {
+				var base = typ;
+				return $elm$core$Result$Ok(base);
+			}
+		}
+	});
+var $elm$core$List$maybeCons = F3(
+	function (f, mx, xs) {
+		var _v0 = f(mx);
+		if (_v0.$ === 'Just') {
+			var x = _v0.a;
+			return A2($elm$core$List$cons, x, xs);
+		} else {
+			return xs;
+		}
+	});
+var $elm$core$List$filterMap = F2(
+	function (f, xs) {
+		return A3(
+			$elm$core$List$foldr,
+			$elm$core$List$maybeCons(f),
+			_List_Nil,
+			xs);
+	});
 var $elm$core$List$head = function (list) {
 	if (list.b) {
 		var x = list.a;
@@ -5645,59 +5760,6 @@ var $elm$core$Result$map = F2(
 			return $elm$core$Result$Err(e);
 		}
 	});
-var $author$project$Gen$show = function (typ) {
-	if (typ.$ === 'GoBasic') {
-		switch (typ.a.$) {
-			case 'GoInt8':
-				var _v1 = typ.a;
-				return 'int8';
-			case 'GoInt16':
-				var _v2 = typ.a;
-				return 'int16';
-			case 'GoInt32':
-				var _v3 = typ.a;
-				return 'int32';
-			case 'GoInt64':
-				var _v4 = typ.a;
-				return 'int64';
-			case 'GoInt':
-				var _v5 = typ.a;
-				return 'int';
-			case 'GoUInt8':
-				var _v6 = typ.a;
-				return 'uint8';
-			case 'GoUInt16':
-				var _v7 = typ.a;
-				return 'uint16';
-			case 'GoUInt32':
-				var _v8 = typ.a;
-				return 'uint32';
-			case 'GoUInt64':
-				var _v9 = typ.a;
-				return 'uint64';
-			case 'GoUInt':
-				var _v10 = typ.a;
-				return 'uint';
-			case 'GoString':
-				var _v11 = typ.a;
-				return 'string';
-			case 'GoFloat':
-				var _v12 = typ.a;
-				return 'float32';
-			case 'GoDouble':
-				var _v13 = typ.a;
-				return 'float64';
-			case 'GoBool':
-				var _v14 = typ.a;
-				return 'bool';
-			default:
-				var _v15 = typ.a;
-				return 'time.Time';
-		}
-	} else {
-		return 'someGoType';
-	}
-};
 var $author$project$Gen$mapKey = F2(
 	function (keyType, valueType) {
 		switch (keyType.$) {
@@ -6199,20 +6261,6 @@ var $elm$core$List$repeat = F2(
 	function (n, value) {
 		return A3($elm$core$List$repeatHelp, _List_Nil, n, value);
 	});
-var $elm$core$Bitwise$and = _Bitwise_and;
-var $elm$core$Bitwise$shiftRightBy = _Bitwise_shiftRightBy;
-var $elm$core$String$repeatHelp = F3(
-	function (n, chunk, result) {
-		return (n <= 0) ? result : A3(
-			$elm$core$String$repeatHelp,
-			n >> 1,
-			_Utils_ap(chunk, chunk),
-			(!(n & 1)) ? result : _Utils_ap(result, chunk));
-	});
-var $elm$core$String$repeat = F2(
-	function (n, chunk) {
-		return A3($elm$core$String$repeatHelp, n, chunk, '');
-	});
 var $elm$json$Json$Encode$bool = _Json_wrap;
 var $elm$json$Json$Encode$float = _Json_wrap;
 var $elm$json$Json$Encode$int = _Json_wrap;
@@ -6527,7 +6575,6 @@ var $author$project$Gen$simpleValueAsString = function (typ) {
 			return $elm$json$Json$Encode$string('2006-01-02T15:04:05Z');
 	}
 };
-var $elm$core$Debug$toString = _Debug_toString;
 var $elm$core$Maybe$withDefault = F2(
 	function (_default, maybe) {
 		if (maybe.$ === 'Just') {
@@ -6537,116 +6584,107 @@ var $elm$core$Maybe$withDefault = F2(
 			return _default;
 		}
 	});
-var $author$project$Gen$deref = F3(
-	function (env, i, typ) {
-		deref:
+var $author$project$Gen$exampleValue = F2(
+	function (env, typ) {
+		exampleValue:
 		while (true) {
 			switch (typ.$) {
-				case 'GoPointer':
-					var p = typ.a;
-					if (i < 5) {
-						var $temp$env = env,
-							$temp$i = i + 1,
-							$temp$typ = p;
-						env = $temp$env;
-						i = $temp$i;
-						typ = $temp$typ;
-						continue deref;
+				case 'GoBasic':
+					var t = typ.a;
+					return $elm$core$Result$Ok(
+						$author$project$Gen$simpleValue(t));
+				case 'GoArrayLike':
+					if (typ.b.$ === 'GoBasic') {
+						var n = typ.a;
+						var t = typ.b.a;
+						return $elm$core$Result$Ok(
+							A2($author$project$Gen$simpleArrayLike, n, t));
 					} else {
-						return $elm$core$Result$Err(
-							'deep pointer occurrence: ' + (A2($elm$core$String$repeat, i, '*') + $elm$core$Debug$toString(typ)));
+						var n = typ.a;
+						var t = typ.b;
+						var _v10 = A2($author$project$Gen$exampleValue, env, t);
+						if (_v10.$ === 'Ok') {
+							var v = _v10.a;
+							return $elm$core$Result$Ok(
+								A2(
+									$elm$json$Json$Encode$list,
+									$elm$core$Basics$identity,
+									A2($elm$core$List$repeat, n, v)));
+						} else {
+							var e = _v10.a;
+							return $elm$core$Result$Err(e);
+						}
 					}
+				case 'GoStruct':
+					var defs = typ.a.a;
+					return A2($author$project$Gen$json, env, defs);
 				case 'GoTyVar':
 					var t = typ.a;
-					var _v14 = A2($elm$core$Dict$get, t, env);
-					if (_v14.$ === 'Just') {
-						var def = _v14.a.a;
+					var _v11 = A2($elm$core$Dict$get, t, env);
+					if (_v11.$ === 'Just') {
+						var def = _v11.a.a;
 						return A2(
 							$author$project$Gen$json,
 							A2($elm$core$Dict$remove, t, env),
 							def);
 					} else {
-						return $elm$core$Result$Ok($elm$json$Json$Encode$null);
+						return $elm$core$Result$Err('undefined or invalid: ' + t);
 					}
-				default:
-					var base = typ;
-					return A2($author$project$Gen$exampleValue, env, base);
-			}
-		}
-	});
-var $author$project$Gen$exampleValue = F2(
-	function (env, typ) {
-		switch (typ.$) {
-			case 'GoBasic':
-				var t = typ.a;
-				return $elm$core$Result$Ok(
-					$author$project$Gen$simpleValue(t));
-			case 'GoArrayLike':
-				if (typ.b.$ === 'GoBasic') {
-					var n = typ.a;
-					var t = typ.b.a;
+				case 'GoInterface':
 					return $elm$core$Result$Ok(
-						A2($author$project$Gen$simpleArrayLike, n, t));
-				} else {
-					var n = typ.a;
-					var t = typ.b;
-					var _v9 = A2($author$project$Gen$exampleValue, env, t);
-					if (_v9.$ === 'Ok') {
-						var v = _v9.a;
-						return $elm$core$Result$Ok(
-							A2(
-								$elm$json$Json$Encode$list,
-								$elm$core$Basics$identity,
-								A2($elm$core$List$repeat, n, v)));
+						$elm$json$Json$Encode$object(_List_Nil));
+				case 'GoPointer':
+					var p = typ.a;
+					var _v12 = A2($author$project$Gen$deref, 1, p);
+					if (_v12.$ === 'Ok') {
+						if (_v12.a.$ === 'GoTyVar') {
+							var t = _v12.a.a;
+							var _v13 = A2($elm$core$Dict$get, t, env);
+							if (_v13.$ === 'Just') {
+								var def = _v13.a.a;
+								return A2(
+									$author$project$Gen$json,
+									A2($elm$core$Dict$remove, t, env),
+									def);
+							} else {
+								return $elm$core$Result$Ok($elm$json$Json$Encode$null);
+							}
+						} else {
+							var t = _v12.a;
+							var $temp$env = env,
+								$temp$typ = t;
+							env = $temp$env;
+							typ = $temp$typ;
+							continue exampleValue;
+						}
 					} else {
-						var e = _v9.a;
-						return $elm$core$Result$Err(e);
-					}
-				}
-			case 'GoStruct':
-				var defs = typ.a.a;
-				return A2($author$project$Gen$json, env, defs);
-			case 'GoTyVar':
-				var t = typ.a;
-				var _v10 = A2($elm$core$Dict$get, t, env);
-				if (_v10.$ === 'Just') {
-					var def = _v10.a.a;
-					return A2(
-						$author$project$Gen$json,
-						A2($elm$core$Dict$remove, t, env),
-						def);
-				} else {
-					return $elm$core$Result$Err('undefined or invalid: ' + t);
-				}
-			case 'GoInterface':
-				return $elm$core$Result$Ok(
-					$elm$json$Json$Encode$object(_List_Nil));
-			case 'GoPointer':
-				var p = typ.a;
-				return A3($author$project$Gen$deref, env, 1, p);
-			default:
-				var t1 = typ.a;
-				var t2 = typ.b;
-				var _v11 = A2($author$project$Gen$mapKey, t1, t2);
-				if (_v11.$ === 'Err') {
-					var e = _v11.a;
-					return $elm$core$Result$Err(e);
-				} else {
-					var key = _v11.a;
-					var _v12 = A2($author$project$Gen$exampleValue, env, t2);
-					if (_v12.$ === 'Err') {
 						var e = _v12.a;
 						return $elm$core$Result$Err(e);
-					} else {
-						var value = _v12.a;
-						return $elm$core$Result$Ok(
-							$elm$json$Json$Encode$object(
-								_List_fromArray(
-									[
-										_Utils_Tuple2(key, value)
-									])));
 					}
-				}
+				default:
+					var t1 = typ.a;
+					var t2 = typ.b;
+					var _v14 = A2($author$project$Gen$mapKey, t1, t2);
+					if (_v14.$ === 'Err') {
+						var e = _v14.a;
+						return $elm$core$Result$Err(e);
+					} else {
+						var key = _v14.a;
+						var _v15 = A2($author$project$Gen$exampleValue, env, t2);
+						if (_v15.$ === 'Err') {
+							var e = _v15.a;
+							return $elm$core$Result$Err(e);
+						} else {
+							var value = _v15.a;
+							return $elm$core$Result$Ok(
+								$elm$json$Json$Encode$object(
+									_List_fromArray(
+										[
+											_Utils_Tuple2(key, value)
+										])));
+						}
+					}
+			}
 		}
 	});
 var $author$project$Gen$json = F2(
@@ -6682,12 +6720,30 @@ var $author$project$Gen$json_ = F2(
 		};
 		var example = F2(
 			function (typ, asString_) {
-				if (typ.$ === 'GoBasic') {
-					var b = typ.a;
-					return asString_ ? $elm$core$Result$Ok(
-						$author$project$Gen$simpleValueAsString(b)) : A2($author$project$Gen$exampleValue, env, typ);
-				} else {
-					return A2($author$project$Gen$exampleValue, env, typ);
+				example:
+				while (true) {
+					switch (typ.$) {
+						case 'GoBasic':
+							var b = typ.a;
+							return asString_ ? $elm$core$Result$Ok(
+								$author$project$Gen$simpleValueAsString(b)) : A2($author$project$Gen$exampleValue, env, typ);
+						case 'GoPointer':
+							var p = typ.a;
+							var _v1 = A2($author$project$Gen$deref, 1, p);
+							if (_v1.$ === 'Ok') {
+								var t = _v1.a;
+								var $temp$typ = t,
+									$temp$asString_ = asString_;
+								typ = $temp$typ;
+								asString_ = $temp$asString_;
+								continue example;
+							} else {
+								var e = _v1.a;
+								return $elm$core$Result$Err(e);
+							}
+						default:
+							return A2($author$project$Gen$exampleValue, env, typ);
+					}
 				}
 			});
 		var asString = function (tags) {
@@ -6706,21 +6762,21 @@ var $author$project$Gen$json_ = F2(
 						if (ignored(tags)) {
 							return pairs_;
 						} else {
-							var _v2 = A2($elm$core$Dict$get, tvar, env);
-							if (_v2.$ === 'Just') {
-								var def = _v2.a.a;
-								var _v3 = A2(
+							var _v4 = A2($elm$core$Dict$get, tvar, env);
+							if (_v4.$ === 'Just') {
+								var def = _v4.a.a;
+								var _v5 = A2(
 									$author$project$Gen$json_,
 									A2($elm$core$Dict$remove, tvar, env),
 									def);
-								if (_v3.$ === 'Err') {
-									var e = _v3.a;
+								if (_v5.$ === 'Err') {
+									var e = _v5.a;
 									return $elm$core$Result$Err(e);
 								} else {
-									var pairs__ = _v3.a;
-									var _v4 = rename(tags);
-									if (_v4.$ === 'Just') {
-										var name_ = _v4.a;
+									var pairs__ = _v5.a;
+									var _v6 = rename(tags);
+									if (_v6.$ === 'Just') {
+										var name_ = _v6.a;
 										return $elm$core$Result$Ok(
 											A2(
 												$elm$core$List$cons,
@@ -6744,12 +6800,12 @@ var $author$project$Gen$json_ = F2(
 						if (ignored(tags)) {
 							return pairs_;
 						} else {
-							var _v5 = A2(
+							var _v7 = A2(
 								example,
 								typ,
 								asString(tags));
-							if (_v5.$ === 'Ok') {
-								var value = _v5.a;
+							if (_v7.$ === 'Ok') {
+								var value = _v7.a;
 								return $elm$core$Result$Ok(
 									A2(
 										$elm$core$List$cons,
@@ -6758,7 +6814,7 @@ var $author$project$Gen$json_ = F2(
 											value),
 										pairs));
 							} else {
-								var e = _v5.a;
+								var e = _v7.a;
 								return $elm$core$Result$Err(e);
 							}
 						}
@@ -6788,13 +6844,13 @@ var $elm$core$Result$map2 = F3(
 			}
 		}
 	});
-var $author$project$Gen$fromParsed = function (xs) {
-	if (xs.$ === 'Err') {
-		var e = xs.a;
+var $author$project$Gen$fromParsed = function (result) {
+	if (result.$ === 'Err') {
+		var e = result.a;
 		return $elm$core$Result$Err(
 			$author$project$P$deadEndsToString(e));
 	} else {
-		var lines = xs.a;
+		var lines = result.a;
 		var jsonize = F2(
 			function (env_, ls_) {
 				if (!ls_.b) {
@@ -6819,23 +6875,29 @@ var $author$project$Gen$fromParsed = function (xs) {
 						A2(jsonize, env_, ls));
 				}
 			});
-		var env = $author$project$Gen$fromParserResult(lines);
-		var _v4 = A2(jsonize, env, lines);
-		if (_v4.$ === 'Err') {
+		var _v4 = $author$project$Gen$fromParserResult(lines);
+		if (_v4.$ === 'Ok') {
+			var env = _v4.a;
+			var _v5 = A2(jsonize, env, lines);
+			if (_v5.$ === 'Err') {
+				var e = _v5.a;
+				return $elm$core$Result$Err(e);
+			} else {
+				var values = _v5.a;
+				return $elm$core$Result$Ok(
+					A2(
+						$elm$core$String$join,
+						'\n',
+						A2(
+							$elm$core$List$map,
+							function (value) {
+								return A2($elm$json$Json$Encode$encode, 4, value);
+							},
+							values)));
+			}
+		} else {
 			var e = _v4.a;
 			return $elm$core$Result$Err(e);
-		} else {
-			var values = _v4.a;
-			return $elm$core$Result$Ok(
-				A2(
-					$elm$core$String$join,
-					'\n',
-					A2(
-						$elm$core$List$map,
-						function (value) {
-							return A2($elm$json$Json$Encode$encode, 4, value);
-						},
-						values)));
 		}
 	}
 };

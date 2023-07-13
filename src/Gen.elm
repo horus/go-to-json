@@ -1,24 +1,32 @@
 module Gen exposing (..)
 
 import P exposing (..)
-import Dict exposing (fromList, Dict)
+import Dict exposing (Dict)
 import Json.Encode exposing (..)
+import Parser exposing (DeadEnd)
 
-fromParserResult xs = 
+buildEnv : List (Maybe String, GoStructDef) -> Result String (Dict String GoStructDef)
+buildEnv xs =
     let
-        pick (name_, def) = case name_ of
-            Just name -> Just (name, def)
-            _         -> Nothing
+        folder (name_, def) dict_ =
+            case dict_ of
+                Ok dict ->
+                    case name_ of
+                        Just name ->
+                            if Dict.member name dict
+                                then Err (name ++ " redeclared in this block")
+                                else Ok (Dict.insert name def dict)
+                        Nothing -> dict_
+                err -> err
     in
-        Dict.fromList <| List.filterMap pick xs
+        List.foldl folder (Ok Dict.empty) xs
 
-
-fromParsed xs =
-    case xs of
+fromParsed : Result (List DeadEnd) (List (Maybe String, GoStructDef)) -> Result String String
+fromParsed result =
+    case result of
         Err e -> Err (deadEndsToString e)
         Ok lines ->
             let
-                env = fromParserResult lines
                 jsonize env_ ls_ =
                     case ls_ of
                         [] -> Ok []
@@ -31,29 +39,37 @@ fromParsed xs =
                             in
                                 Result.map2 (::) (json env__ def) (jsonize env_ ls)
              in
-                case jsonize env lines of
+                case buildEnv lines of
+                    Ok env ->
+                        case jsonize env lines of
+                            Err e -> Err e
+                            Ok values -> Ok (String.join "\n" <| List.map (\value -> encode 4 value) values)
                     Err e -> Err e
-                    Ok values -> Ok (String.join "\n" <| List.map (\value -> encode 4 value) values)
 
 show : GoTypes -> String
 show typ =
     case typ of
-      GoBasic GoInt8 -> "int8"
-      GoBasic GoInt16 -> "int16"
-      GoBasic GoInt32 -> "int32"
-      GoBasic GoInt64 -> "int64"
-      GoBasic GoInt -> "int"
-      GoBasic GoUInt8 -> "uint8"
-      GoBasic GoUInt16 -> "uint16"
-      GoBasic GoUInt32 -> "uint32"
-      GoBasic GoUInt64 -> "uint64"
-      GoBasic GoUInt -> "uint"
-      GoBasic GoString -> "string"
-      GoBasic GoFloat -> "float32"
-      GoBasic GoDouble -> "float64"
-      GoBasic GoBool -> "bool"
-      GoBasic GoTime -> "time.Time" 
-      _ -> "someGoType"
+        GoBasic GoInt8 -> "int8"
+        GoBasic GoInt16 -> "int16"
+        GoBasic GoInt32 -> "int32"
+        GoBasic GoInt64 -> "int64"
+        GoBasic GoInt -> "int"
+        GoBasic GoUInt8 -> "uint8"
+        GoBasic GoUInt16 -> "uint16"
+        GoBasic GoUInt32 -> "uint32"
+        GoBasic GoUInt64 -> "uint64"
+        GoBasic GoUInt -> "uint"
+        GoBasic GoString -> "string"
+        GoBasic GoFloat -> "float32"
+        GoBasic GoDouble -> "float64"
+        GoBasic GoBool -> "bool"
+        GoBasic GoTime -> "time.Time"
+        GoArrayLike n t -> (if n == 0 then "[]" else "[" ++  String.fromInt n ++ "]") ++ show t
+        GoMap t1 t2 -> "map[" ++ show t1 ++ "]" ++ show t2
+        GoStruct _ -> "struct{...}"
+        GoInterface -> "interface{}"
+        GoTyVar t -> "main." ++ t
+        GoPointer t -> "*" ++ show t
         
 exampleValue : Dict String GoStructDef -> GoTypes -> Result String Json.Encode.Value
 exampleValue env typ =
@@ -70,7 +86,14 @@ exampleValue env typ =
                 Just (GoStructDef def) -> json (Dict.remove t env) def
                 Nothing -> Err ("undefined or invalid: " ++ t)
         GoInterface -> Ok (object [])
-        GoPointer p -> deref env 1 p
+        GoPointer p ->
+            case deref 1 p of
+                Ok (GoTyVar t) ->
+                    case Dict.get t env of
+                        Just (GoStructDef def) -> json (Dict.remove t env) def
+                        Nothing -> Ok Json.Encode.null -- special case
+                Ok t -> exampleValue env t
+                Err e -> Err e
         GoMap t1 t2 ->
             case mapKey t1 t2 of
                 Err e -> Err e
@@ -99,6 +122,14 @@ json_ env structfields =
         example typ asString_ =
             case typ of
                 GoBasic b -> if asString_ then Ok (simpleValueAsString b) else exampleValue env typ
+                GoPointer p ->
+                -- json tag "string" expecting: string, floating point, integer, or boolean types
+                -- other types ignore it, just proceed as usual
+                -- which I seemed to misunderstand in the original Haskell version
+                -- "Pointer values encode as the value pointed to."
+                    case deref 1 p of
+                        Ok t -> example t asString_
+                        Err e -> Err e
                 _ -> exampleValue env typ
         folder structfield pairs_ =
             case pairs_ of
@@ -154,19 +185,14 @@ mapKey keyType valueType =
         GoTyVar t -> Err ("json: unsupported type: map[main." ++ t ++ "]" ++ (show valueType))
         GoPointer t -> Err ("json: unsupported type: map[*" ++ (show t) ++ "]" ++ (show valueType))
 
-deref : Dict String GoStructDef -> Int -> GoTypes -> Result String Json.Encode.Value
-deref env i typ =
+deref : Int -> GoTypes -> Result String GoTypes
+deref i typ =
     case typ of
         GoPointer p ->
             if i < 5
-                then deref env (i+1) p
-                else Err ("deep pointer occurrence: " ++ String.repeat i "*" ++ Debug.toString typ)
-        GoTyVar t ->
-            case Dict.get t env of
-                Just (GoStructDef def) -> json (Dict.remove t env) def
-                Nothing -> Ok Json.Encode.null
-        base -> exampleValue env base
-
+                then deref (i+1) p
+                else Err ("deep pointer occurrence: " ++ String.repeat i "*" ++ show typ)
+        base -> Ok base
 
 simpleArrayLike : Int -> GoSimpleTypes -> Json.Encode.Value
 simpleArrayLike n typ =
