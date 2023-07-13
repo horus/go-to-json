@@ -182,7 +182,7 @@ mapKey keyType valueType =
         GoBasic GoFloat -> Ok "1.26"
         GoBasic GoDouble -> Ok "16.3"
         GoBasic GoTime -> Ok "2009-11-10T23:00:00Z"
-        GoBasic GoBool -> Err ("json: unsupported type: map[bool]" ++ (show keyType))
+        GoBasic GoBool -> Err ("json: unsupported type: map[bool]" ++ (show valueType))
         GoArrayLike _ _ -> Err ("json: unsupported type: map[" ++ (show keyType) ++ "]" ++ (show valueType))
         GoMap _ _ -> Err ("json: unsupported type: map[" ++ (show keyType) ++ "]" ++ (show valueType))
         GoStruct _ -> Err ("json: unsupported type: map[" ++ (show keyType) ++ "]" ++ (show valueType))
