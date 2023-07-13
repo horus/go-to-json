@@ -40,9 +40,9 @@ goTypeLit =
         goBasic = succeed GoBasic |= goBasicTypeLit
         goPointer = succeed GoPointer |. symbol "*" |= lazy (\_ -> goTypeLit)
         goInterface = succeed GoInterface |. oneOf [ keyword "interface" |. symbol "{" |. symbol "}", keyword "any" ]
-        goArrayLike = succeed GoArrayLike |= oneOf [ goSlice, goArray ] |= lazy (\_ -> goTypeLit)
-        goSlice = succeed 0 |. symbol "[" |. symbol "]"
-        goArray = succeed identity |. symbol "[" |= int |. symbol "]"
+        goArrayLike = succeed GoArrayLike |. symbol "[" |= oneOf [ goSlice, goArray ] |= lazy (\_ -> goTypeLit)
+        goSlice = succeed 0 |. symbol "]"
+        goArray = succeed identity |= int |. symbol "]"
         goMap = succeed GoMap |. keyword "map" |. symbol "[" |= lazy (\_ -> goTypeLit) |. symbol "]" |= lazy (\_ -> goTypeLit)
         goStruct = succeed GoStruct |= goStructDef
         goTyVar = succeed GoTyVar |= goIdent
