@@ -105,7 +105,7 @@ goBlocky p = begin *> p <* end
 goTypeLit = goPointer <|> goInterface <|> fmap GoBasic goBasicTypeLit <|> goArrayLike <|> goMap <|> fmap GoStruct goStruct <|> goTyVar
   where
     goPointer = char '*' >> (GoPointer <$> goTypeLit)
-    goInterface = string "interface{}" >> pure GoInterface
+    goInterface = (string "interface{}" <|> string "any") >> pure GoInterface
     goArrayLike = do
       n <- goSlice <|> goArray
       GoArrayLike n <$> goTypeLit
