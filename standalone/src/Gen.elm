@@ -110,6 +110,7 @@ json_ env structfields =
     let
         ignored tags = List.member KeyIgnore tags
         asString tags = List.member KeyAsString tags
+        notExported id = Maybe.withDefault True << Maybe.map (\(c, _) -> not <| Char.isUpper <| c) <| String.uncons <| id
         rename tags =
             let
                 keyRename t =
@@ -153,9 +154,13 @@ json_ env structfields =
                             if ignored tags
                                 then pairs_
                                 else
-                                    case example typ (asString tags) of
-                                        Ok value -> Ok ((rename_ id tags, value) :: pairs)
-                                        Err e -> Err e
+                                    if notExported id
+                                        -- XXX: what to do with an JSON empty tag?
+                                        then if not (List.isEmpty tags) then Err ("struct field " ++ id ++ " has json tag but is not exported") else pairs_
+                                    else
+                                        case example typ (asString tags) of
+                                            Ok value -> Ok ((rename_ id tags, value) :: pairs)
+                                            Err e -> Err e
     in
         List.foldl folder (Ok []) structfields
 

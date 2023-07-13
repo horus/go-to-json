@@ -5360,73 +5360,6 @@ var $author$project$Main$Success = function (a) {
 var $author$project$Main$GotText = function (a) {
 	return {$: 'GotText', a: a};
 };
-var $elm$core$String$concat = function (strings) {
-	return A2($elm$core$String$join, '', strings);
-};
-var $author$project$P$problemToString = function (p) {
-	switch (p.$) {
-		case 'Expecting':
-			var s = p.a;
-			return 'expecting \'' + (s + '\'');
-		case 'ExpectingInt':
-			return 'expecting int';
-		case 'ExpectingHex':
-			return 'expecting hex';
-		case 'ExpectingOctal':
-			return 'expecting octal';
-		case 'ExpectingBinary':
-			return 'expecting binary';
-		case 'ExpectingFloat':
-			return 'expecting float';
-		case 'ExpectingNumber':
-			return 'expecting number';
-		case 'ExpectingVariable':
-			return 'expecting variable';
-		case 'ExpectingSymbol':
-			var s = p.a;
-			return 'expecting symbol \'' + (s + '\'');
-		case 'ExpectingKeyword':
-			var s = p.a;
-			return 'expecting keyword \'' + (s + '\'');
-		case 'ExpectingEnd':
-			return 'expecting end';
-		case 'UnexpectedChar':
-			return 'unexpected char';
-		case 'Problem':
-			var s = p.a;
-			return 'problem: ' + s;
-		default:
-			return 'bad repeat';
-	}
-};
-var $author$project$P$deadEndToString = function (deadend) {
-	return $author$project$P$problemToString(deadend.problem) + (' at row ' + ($elm$core$String$fromInt(deadend.row) + (', col ' + $elm$core$String$fromInt(deadend.col))));
-};
-var $elm$core$List$intersperse = F2(
-	function (sep, xs) {
-		if (!xs.b) {
-			return _List_Nil;
-		} else {
-			var hd = xs.a;
-			var tl = xs.b;
-			var step = F2(
-				function (x, rest) {
-					return A2(
-						$elm$core$List$cons,
-						sep,
-						A2($elm$core$List$cons, x, rest));
-				});
-			var spersed = A3($elm$core$List$foldr, step, _List_Nil, tl);
-			return A2($elm$core$List$cons, hd, spersed);
-		}
-	});
-var $author$project$P$deadEndsToString = function (deadEnds) {
-	return $elm$core$String$concat(
-		A2(
-			$elm$core$List$intersperse,
-			'; ',
-			A2($elm$core$List$map, $author$project$P$deadEndToString, deadEnds)));
-};
 var $elm$core$Dict$RBEmpty_elm_builtin = {$: 'RBEmpty_elm_builtin'};
 var $elm$core$Dict$empty = $elm$core$Dict$RBEmpty_elm_builtin;
 var $elm$core$Dict$Black = {$: 'Black'};
@@ -5578,7 +5511,7 @@ var $elm$core$Dict$member = F2(
 			return false;
 		}
 	});
-var $author$project$Gen$fromParserResult = function (xs) {
+var $author$project$Gen$buildEnv = function (xs) {
 	var folder = F2(
 		function (_v2, dict_) {
 			var name_ = _v2.a;
@@ -5603,8 +5536,80 @@ var $author$project$Gen$fromParserResult = function (xs) {
 		$elm$core$Result$Ok($elm$core$Dict$empty),
 		xs);
 };
+var $elm$core$String$concat = function (strings) {
+	return A2($elm$core$String$join, '', strings);
+};
+var $author$project$P$problemToString = function (p) {
+	switch (p.$) {
+		case 'Expecting':
+			var s = p.a;
+			return 'expecting \'' + (s + '\'');
+		case 'ExpectingInt':
+			return 'expecting int';
+		case 'ExpectingHex':
+			return 'expecting hex';
+		case 'ExpectingOctal':
+			return 'expecting octal';
+		case 'ExpectingBinary':
+			return 'expecting binary';
+		case 'ExpectingFloat':
+			return 'expecting float';
+		case 'ExpectingNumber':
+			return 'expecting number';
+		case 'ExpectingVariable':
+			return 'expecting variable';
+		case 'ExpectingSymbol':
+			var s = p.a;
+			return 'expecting symbol \'' + (s + '\'');
+		case 'ExpectingKeyword':
+			var s = p.a;
+			return 'expecting keyword \'' + (s + '\'');
+		case 'ExpectingEnd':
+			return 'expecting end';
+		case 'UnexpectedChar':
+			return 'unexpected char';
+		case 'Problem':
+			var s = p.a;
+			return 'problem: ' + s;
+		default:
+			return 'bad repeat';
+	}
+};
+var $author$project$P$deadEndToString = function (deadend) {
+	return $author$project$P$problemToString(deadend.problem) + (' at row ' + ($elm$core$String$fromInt(deadend.row) + (', col ' + $elm$core$String$fromInt(deadend.col))));
+};
+var $elm$core$List$intersperse = F2(
+	function (sep, xs) {
+		if (!xs.b) {
+			return _List_Nil;
+		} else {
+			var hd = xs.a;
+			var tl = xs.b;
+			var step = F2(
+				function (x, rest) {
+					return A2(
+						$elm$core$List$cons,
+						sep,
+						A2($elm$core$List$cons, x, rest));
+				});
+			var spersed = A3($elm$core$List$foldr, step, _List_Nil, tl);
+			return A2($elm$core$List$cons, hd, spersed);
+		}
+	});
+var $author$project$P$deadEndsToString = function (deadEnds) {
+	return $elm$core$String$concat(
+		A2(
+			$elm$core$List$intersperse,
+			'; ',
+			A2($elm$core$List$map, $author$project$P$deadEndToString, deadEnds)));
+};
 var $author$project$P$KeyAsString = {$: 'KeyAsString'};
 var $author$project$P$KeyIgnore = {$: 'KeyIgnore'};
+var $elm$core$Basics$composeL = F3(
+	function (g, f, x) {
+		return g(
+			f(x));
+	});
 var $elm$core$Bitwise$and = _Bitwise_and;
 var $elm$core$Bitwise$shiftRightBy = _Bitwise_shiftRightBy;
 var $elm$core$String$repeatHelp = F3(
@@ -5740,6 +5745,13 @@ var $elm$core$List$head = function (list) {
 		return $elm$core$Maybe$Nothing;
 	}
 };
+var $elm$core$List$isEmpty = function (xs) {
+	if (!xs.b) {
+		return true;
+	} else {
+		return false;
+	}
+};
 var $elm$json$Json$Encode$list = F2(
 	function (func, entries) {
 		return _Json_wrap(
@@ -5748,6 +5760,16 @@ var $elm$json$Json$Encode$list = F2(
 				_Json_addEntry(func),
 				_Json_emptyArray(_Utils_Tuple0),
 				entries));
+	});
+var $elm$core$Maybe$map = F2(
+	function (f, maybe) {
+		if (maybe.$ === 'Just') {
+			var value = maybe.a;
+			return $elm$core$Maybe$Just(
+				f(value));
+		} else {
+			return $elm$core$Maybe$Nothing;
+		}
 	});
 var $elm$core$Result$map = F2(
 	function (func, ra) {
@@ -5864,6 +5886,7 @@ var $elm$core$List$member = F2(
 			},
 			xs);
 	});
+var $elm$core$Basics$not = _Basics_not;
 var $elm$json$Json$Encode$null = _Json_encodeNull;
 var $elm$json$Json$Encode$object = function (pairs) {
 	return _Json_wrap(
@@ -6602,16 +6625,16 @@ var $author$project$Gen$exampleValue = F2(
 					} else {
 						var n = typ.a;
 						var t = typ.b;
-						var _v10 = A2($author$project$Gen$exampleValue, env, t);
-						if (_v10.$ === 'Ok') {
-							var v = _v10.a;
+						var _v11 = A2($author$project$Gen$exampleValue, env, t);
+						if (_v11.$ === 'Ok') {
+							var v = _v11.a;
 							return $elm$core$Result$Ok(
 								A2(
 									$elm$json$Json$Encode$list,
 									$elm$core$Basics$identity,
 									A2($elm$core$List$repeat, n, v)));
 						} else {
-							var e = _v10.a;
+							var e = _v11.a;
 							return $elm$core$Result$Err(e);
 						}
 					}
@@ -6620,9 +6643,9 @@ var $author$project$Gen$exampleValue = F2(
 					return A2($author$project$Gen$json, env, defs);
 				case 'GoTyVar':
 					var t = typ.a;
-					var _v11 = A2($elm$core$Dict$get, t, env);
-					if (_v11.$ === 'Just') {
-						var def = _v11.a.a;
+					var _v12 = A2($elm$core$Dict$get, t, env);
+					if (_v12.$ === 'Just') {
+						var def = _v12.a.a;
 						return A2(
 							$author$project$Gen$json,
 							A2($elm$core$Dict$remove, t, env),
@@ -6635,13 +6658,13 @@ var $author$project$Gen$exampleValue = F2(
 						$elm$json$Json$Encode$object(_List_Nil));
 				case 'GoPointer':
 					var p = typ.a;
-					var _v12 = A2($author$project$Gen$deref, 1, p);
-					if (_v12.$ === 'Ok') {
-						if (_v12.a.$ === 'GoTyVar') {
-							var t = _v12.a.a;
-							var _v13 = A2($elm$core$Dict$get, t, env);
-							if (_v13.$ === 'Just') {
-								var def = _v13.a.a;
+					var _v13 = A2($author$project$Gen$deref, 1, p);
+					if (_v13.$ === 'Ok') {
+						if (_v13.a.$ === 'GoTyVar') {
+							var t = _v13.a.a;
+							var _v14 = A2($elm$core$Dict$get, t, env);
+							if (_v14.$ === 'Just') {
+								var def = _v14.a.a;
 								return A2(
 									$author$project$Gen$json,
 									A2($elm$core$Dict$remove, t, env),
@@ -6650,7 +6673,7 @@ var $author$project$Gen$exampleValue = F2(
 								return $elm$core$Result$Ok($elm$json$Json$Encode$null);
 							}
 						} else {
-							var t = _v12.a;
+							var t = _v13.a;
 							var $temp$env = env,
 								$temp$typ = t;
 							env = $temp$env;
@@ -6658,24 +6681,24 @@ var $author$project$Gen$exampleValue = F2(
 							continue exampleValue;
 						}
 					} else {
-						var e = _v12.a;
+						var e = _v13.a;
 						return $elm$core$Result$Err(e);
 					}
 				default:
 					var t1 = typ.a;
 					var t2 = typ.b;
-					var _v14 = A2($author$project$Gen$mapKey, t1, t2);
-					if (_v14.$ === 'Err') {
-						var e = _v14.a;
+					var _v15 = A2($author$project$Gen$mapKey, t1, t2);
+					if (_v15.$ === 'Err') {
+						var e = _v15.a;
 						return $elm$core$Result$Err(e);
 					} else {
-						var key = _v14.a;
-						var _v15 = A2($author$project$Gen$exampleValue, env, t2);
-						if (_v15.$ === 'Err') {
-							var e = _v15.a;
+						var key = _v15.a;
+						var _v16 = A2($author$project$Gen$exampleValue, env, t2);
+						if (_v16.$ === 'Err') {
+							var e = _v16.a;
 							return $elm$core$Result$Err(e);
 						} else {
-							var value = _v15.a;
+							var value = _v16.a;
 							return $elm$core$Result$Ok(
 								$elm$json$Json$Encode$object(
 									_List_fromArray(
@@ -6715,6 +6738,17 @@ var $author$project$Gen$json_ = F2(
 					name,
 					rename(tags));
 			});
+		var notExported = function (id) {
+			return A3(
+				$elm$core$Basics$composeL,
+				$elm$core$Maybe$withDefault(true),
+				$elm$core$Maybe$map(
+					function (_v8) {
+						var c = _v8.a;
+						return !$elm$core$Char$isUpper(c);
+					}),
+				$elm$core$String$uncons(id));
+		};
 		var ignored = function (tags) {
 			return A2($elm$core$List$member, $author$project$P$KeyIgnore, tags);
 		};
@@ -6800,22 +6834,26 @@ var $author$project$Gen$json_ = F2(
 						if (ignored(tags)) {
 							return pairs_;
 						} else {
-							var _v7 = A2(
-								example,
-								typ,
-								asString(tags));
-							if (_v7.$ === 'Ok') {
-								var value = _v7.a;
-								return $elm$core$Result$Ok(
-									A2(
-										$elm$core$List$cons,
-										_Utils_Tuple2(
-											A2(rename_, id, tags),
-											value),
-										pairs));
+							if (notExported(id)) {
+								return (!$elm$core$List$isEmpty(tags)) ? $elm$core$Result$Err('struct field ' + (id + ' has json tag but is not exported')) : pairs_;
 							} else {
-								var e = _v7.a;
-								return $elm$core$Result$Err(e);
+								var _v7 = A2(
+									example,
+									typ,
+									asString(tags));
+								if (_v7.$ === 'Ok') {
+									var value = _v7.a;
+									return $elm$core$Result$Ok(
+										A2(
+											$elm$core$List$cons,
+											_Utils_Tuple2(
+												A2(rename_, id, tags),
+												value),
+											pairs));
+								} else {
+									var e = _v7.a;
+									return $elm$core$Result$Err(e);
+								}
 							}
 						}
 					}
@@ -6875,7 +6913,7 @@ var $author$project$Gen$fromParsed = function (result) {
 						A2(jsonize, env_, ls));
 				}
 			});
-		var _v4 = $author$project$Gen$fromParserResult(lines);
+		var _v4 = $author$project$Gen$buildEnv(lines);
 		if (_v4.$ === 'Ok') {
 			var env = _v4.a;
 			var _v5 = A2(jsonize, env, lines);
@@ -7157,7 +7195,6 @@ var $elm$parser$Parser$ExpectingKeyword = function (a) {
 };
 var $elm$parser$Parser$Advanced$isSubChar = _Parser_isSubChar;
 var $elm$parser$Parser$Advanced$isSubString = _Parser_isSubString;
-var $elm$core$Basics$not = _Basics_not;
 var $elm$parser$Parser$Advanced$keyword = function (_v0) {
 	var kwd = _v0.a;
 	var expecting = _v0.b;
@@ -8128,10 +8165,7 @@ function $author$project$P$cyclic$goTypeLit() {
 		$author$project$P$cyclic$goStructDef());
 	var goSlice = A2(
 		$elm$parser$Parser$ignorer,
-		A2(
-			$elm$parser$Parser$ignorer,
-			$elm$parser$Parser$succeed(0),
-			$elm$parser$Parser$symbol('[')),
+		$elm$parser$Parser$succeed(0),
 		$elm$parser$Parser$symbol(']'));
 	var goPointer = A2(
 		$elm$parser$Parser$keeper,
@@ -8186,10 +8220,7 @@ function $author$project$P$cyclic$goTypeLit() {
 		$author$project$P$goBasicTypeLit);
 	var goArray = A2(
 		$elm$parser$Parser$keeper,
-		A2(
-			$elm$parser$Parser$ignorer,
-			$elm$parser$Parser$succeed($elm$core$Basics$identity),
-			$elm$parser$Parser$symbol('[')),
+		$elm$parser$Parser$succeed($elm$core$Basics$identity),
 		A2(
 			$elm$parser$Parser$ignorer,
 			$elm$parser$Parser$int,
@@ -8198,7 +8229,10 @@ function $author$project$P$cyclic$goTypeLit() {
 		$elm$parser$Parser$keeper,
 		A2(
 			$elm$parser$Parser$keeper,
-			$elm$parser$Parser$succeed($author$project$P$GoArrayLike),
+			A2(
+				$elm$parser$Parser$ignorer,
+				$elm$parser$Parser$succeed($author$project$P$GoArrayLike),
+				$elm$parser$Parser$symbol('[')),
 			$elm$parser$Parser$oneOf(
 				_List_fromArray(
 					[goSlice, goArray]))),
