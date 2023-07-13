@@ -81,7 +81,7 @@ textAreaStyle = [style "display" "block", style "width" "500px", style "height" 
 getJson : String -> Cmd Msg
 getJson str =
   Http.post
-    { url = "http://10.246.139.26:31338/svc/hw-struct"
+    { url = "http://127.0.0.1:1983/"
     , body = Http.stringBody "text/plain" str
     , expect = Http.expectString GotText
     }
