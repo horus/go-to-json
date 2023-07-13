@@ -6,7 +6,7 @@ type GoStructDef = GoStructDef (List GoStructLine)
 type GoStructLine = GoStructLine String GoTypes (List JSONTags) | GoEmbedStruct String (List JSONTags)
 type JSONTags = KeyRename String | KeyOmitEmpty | KeyIgnore | KeyAsString
 type GoSimpleTypes = GoInt8 | GoInt16 | GoInt32 | GoInt64 | GoInt | GoUInt8 | GoUInt16 | GoUInt32 | GoUInt64 | GoUInt | GoString | GoDouble | GoFloat | GoBool | GoTime
-type GoTypes = GoBasic GoSimpleTypes | GoArrayLike Int GoTypes | GoMap GoTypes GoTypes | GoStruct GoStructDef | GoInterface | GoTyVar String | GoPointer GoTypes
+type GoTypes = GoBasic GoSimpleTypes | GoArrayLike (Maybe Int) GoTypes | GoMap GoTypes GoTypes | GoStruct GoStructDef | GoInterface | GoTyVar String | GoPointer GoTypes
 
 goStructs : Parser (List (Maybe String, GoStructDef))
 goStructs = lineEnding |> andThen (\_ -> goStructs_ |. end)
@@ -41,8 +41,8 @@ goTypeLit =
         goPointer = succeed GoPointer |. symbol "*" |= lazy (\_ -> goTypeLit)
         goInterface = succeed GoInterface |. oneOf [ keyword "interface" |. symbol "{" |. symbol "}", keyword "any" ]
         goArrayLike = succeed GoArrayLike |. symbol "[" |= oneOf [ goSlice, goArray ] |= lazy (\_ -> goTypeLit)
-        goSlice = succeed 0 |. symbol "]"
-        goArray = succeed identity |= int |. symbol "]"
+        goSlice = succeed Nothing |. symbol "]"
+        goArray = succeed Just |= int |. symbol "]"
         goMap = succeed GoMap |. keyword "map" |. symbol "[" |= lazy (\_ -> goTypeLit) |. symbol "]" |= lazy (\_ -> goTypeLit)
         goStruct = succeed GoStruct |= goStructDef
         goTyVar = succeed GoTyVar |= goIdent

@@ -64,7 +64,8 @@ show typ =
         GoBasic GoDouble -> "float64"
         GoBasic GoBool -> "bool"
         GoBasic GoTime -> "time.Time"
-        GoArrayLike n t -> (if n == 0 then "[]" else "[" ++  String.fromInt n ++ "]") ++ show t
+        GoArrayLike Nothing t -> "[]" ++ show t
+        GoArrayLike (Just n) t -> "[" ++ String.fromInt n ++ "]" ++ show t
         GoMap t1 t2 -> "map[" ++ show t1 ++ "]" ++ show t2
         GoStruct _ -> "struct{...}"
         GoInterface -> "interface{}"
@@ -75,10 +76,10 @@ exampleValue : Dict String GoStructDef -> GoTypes -> Result String Json.Encode.V
 exampleValue env typ =
     case typ of
         GoBasic t -> Ok (simpleValue t)
-        GoArrayLike n (GoBasic t) -> Ok (simpleArrayLike n t)
+        GoArrayLike n (GoBasic t) -> Ok (simpleArrayLike (Maybe.withDefault 3 n) t)
         GoArrayLike n t ->
             case exampleValue env t of
-                Ok v -> Ok (list identity <| List.repeat n v)
+                Ok v -> Ok (list identity <| List.repeat (Maybe.withDefault 3 n) v)
                 Err e -> Err e
         GoStruct (GoStructDef defs) -> json env defs
         GoTyVar t ->
@@ -201,25 +202,22 @@ deref i typ =
 
 simpleArrayLike : Int -> GoSimpleTypes -> Json.Encode.Value
 simpleArrayLike n typ =
-    let
-        taken = if n > 0 && n < 10 then (\xs -> List.take n xs) else identity
-    in
-        case typ of
-            GoBool -> list bool <| taken [False, True, True, False, True, False, False, False, True, False]
-            GoInt -> list int <| taken [1, -2, 3, -4, 5, -6, 7, -8, 9, 0]
-            GoInt8 -> list int <| taken [-8, 16, 32, -64, -128, 0, 1, 2, 4, 8]
-            GoInt16 -> list int <| taken [16, 17, 18, 19, -20, 21, 22, 23, -24, -25]
-            GoInt32 -> list int <| taken [32, 3, -3, 4, 6, -4, 0, 2, -5, 8]
-            GoInt64 -> list int <| taken [9223372036854775800, 922, 10, -9223372, 9223372036854, -1234, 56, -7, 10240, 65536]
-            GoUInt -> list int <| taken [1, 2, 3, 4, 5, 6, 7, 8, 9, 0]
-            GoUInt8 -> list int <| taken [8, 16, 32, 64, 128, 0, 1, 2, 4, 8]
-            GoUInt16 -> list int <| taken [16, 17, 18, 19, 20, 21, 22, 23, 24, 25]
-            GoUInt32 -> list int <| taken [32, 3, 3, 4, 6, 4, 0, 2, 5, 8]
-            GoUInt64 -> list int <| taken [9223372036854775800, 922, 10, 9223372, 9223372036854, 1234, 56, 7, 10240, 65536]
-            GoFloat -> list float <| taken [9.5, 3.8, 1.13, 4.79, 5.023, 6.1, 2.7234, 1.9, 1.02, 5.64]
-            GoDouble -> list float <| taken [8.5397342, 4.26986711133, 871.0528907127, 9.869604, 31.00627668, 10.24, 16.3, 12.6, 12.0001, 564.222]
-            GoString -> list string <| taken ["rob pike", "Robert", "Pike", "gopher", "Gopher", "Go", "Golang", "goroutine", "interface{}", "struct"]
-            GoTime -> list string  <| taken ["2011-01-26T19:06:43Z", "2020-07-16T14:49:50.3269159+08:00", "2011-01-26T19:01:12Z", "2011-01-26T19:14:43Z", "2009-11-10T23:00:00Z", "2018-09-22T12:42:31Z", "2020-12-29T14:58:15Z", "2006-01-02T15:04:05Z", "2020-12-29T14:58:15.229579703+08:00", "2017-12-30T11:25:30+09:00"]
+    case typ of
+        GoBool -> list bool <| List.take n <| [False, True, True, False, True, False, False, False, True, False]
+        GoInt -> list int <| List.take n [1, -2, 3, -4, 5, -6, 7, -8, 9, 0]
+        GoInt8 -> list int <| List.take n [-8, 16, 32, -64, -128, 0, 1, 2, 4, 8]
+        GoInt16 -> list int <| List.take n [16, 17, 18, 19, -20, 21, 22, 23, -24, -25]
+        GoInt32 -> list int <| List.take n [32, 3, -3, 4, 6, -4, 0, 2, -5, 8]
+        GoInt64 -> list int <| List.take n [9223372036854775800, 922, 10, -9223372, 9223372036854, -1234, 56, -7, 10240, 65536]
+        GoUInt -> list int <| List.take n [1, 2, 3, 4, 5, 6, 7, 8, 9, 0]
+        GoUInt8 -> list int <| List.take n [8, 16, 32, 64, 128, 0, 1, 2, 4, 8]
+        GoUInt16 -> list int <| List.take n [16, 17, 18, 19, 20, 21, 22, 23, 24, 25]
+        GoUInt32 -> list int <| List.take n [32, 3, 3, 4, 6, 4, 0, 2, 5, 8]
+        GoUInt64 -> list int <| List.take n [9223372036854775800, 922, 10, 9223372, 9223372036854, 1234, 56, 7, 10240, 65536]
+        GoFloat -> list float <| List.take n [9.5, 3.8, 1.13, 4.79, 5.023, 6.1, 2.7234, 1.9, 1.02, 5.64]
+        GoDouble -> list float <| List.take n [8.5397342, 4.26986711133, 871.0528907127, 9.869604, 31.00627668, 10.24, 16.3, 12.6, 12.0001, 564.222]
+        GoString -> list string <| List.take n ["rob pike", "Robert", "Pike", "gopher", "Gopher", "Go", "Golang", "goroutine", "interface{}", "struct"]
+        GoTime -> list string  <| List.take n ["2011-01-26T19:06:43Z", "2020-07-16T14:49:50.3269159+08:00", "2011-01-26T19:01:12Z", "2011-01-26T19:14:43Z", "2009-11-10T23:00:00Z", "2018-09-22T12:42:31Z", "2020-12-29T14:58:15Z", "2006-01-02T15:04:05Z", "2020-12-29T14:58:15.229579703+08:00", "2017-12-30T11:25:30+09:00"]
 
 simpleValue : GoSimpleTypes -> Json.Encode.Value
 simpleValue typ =
