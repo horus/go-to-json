@@ -6659,9 +6659,9 @@ var $author$project$Gen$exampleValue = F2(
 					} else {
 						var n = typ.a;
 						var t = typ.b;
-						var _v11 = A2($author$project$Gen$exampleValue, env, t);
-						if (_v11.$ === 'Ok') {
-							var v = _v11.a;
+						var _v12 = A2($author$project$Gen$exampleValue, env, t);
+						if (_v12.$ === 'Ok') {
+							var v = _v12.a;
 							return $elm$core$Result$Ok(
 								A2(
 									$elm$json$Json$Encode$list,
@@ -6671,7 +6671,7 @@ var $author$project$Gen$exampleValue = F2(
 										A2($elm$core$Maybe$withDefault, 3, n),
 										v)));
 						} else {
-							var e = _v11.a;
+							var e = _v12.a;
 							return $elm$core$Result$Err(e);
 						}
 					}
@@ -6680,9 +6680,9 @@ var $author$project$Gen$exampleValue = F2(
 					return A2($author$project$Gen$json, env, defs);
 				case 'GoTyVar':
 					var t = typ.a;
-					var _v12 = A2($elm$core$Dict$get, t, env);
-					if (_v12.$ === 'Just') {
-						var def = _v12.a.a;
+					var _v13 = A2($elm$core$Dict$get, t, env);
+					if (_v13.$ === 'Just') {
+						var def = _v13.a.a;
 						return A2(
 							$author$project$Gen$json,
 							A2($elm$core$Dict$remove, t, env),
@@ -6695,30 +6695,16 @@ var $author$project$Gen$exampleValue = F2(
 						$elm$json$Json$Encode$object(_List_Nil));
 				case 'GoPointer':
 					var p = typ.a;
-					var _v13 = A2($author$project$Gen$deref, 1, p);
-					if (_v13.$ === 'Ok') {
-						if (_v13.a.$ === 'GoTyVar') {
-							var t = _v13.a.a;
-							var _v14 = A2($elm$core$Dict$get, t, env);
-							if (_v14.$ === 'Just') {
-								var def = _v14.a.a;
-								return A2(
-									$author$project$Gen$json,
-									A2($elm$core$Dict$remove, t, env),
-									def);
-							} else {
-								return $elm$core$Result$Ok($elm$json$Json$Encode$null);
-							}
-						} else {
-							var t = _v13.a;
-							var $temp$env = env,
-								$temp$typ = t;
-							env = $temp$env;
-							typ = $temp$typ;
-							continue exampleValue;
-						}
+					var _v14 = A2($author$project$Gen$deref, 1, p);
+					if (_v14.$ === 'Ok') {
+						var t = _v14.a;
+						var $temp$env = env,
+							$temp$typ = t;
+						env = $temp$env;
+						typ = $temp$typ;
+						continue exampleValue;
 					} else {
-						var e = _v13.a;
+						var e = _v14.a;
 						return $elm$core$Result$Err(e);
 					}
 				default:
@@ -6780,8 +6766,8 @@ var $author$project$Gen$json_ = F2(
 				$elm$core$Basics$composeL,
 				$elm$core$Maybe$withDefault(true),
 				$elm$core$Maybe$map(
-					function (_v8) {
-						var c = _v8.a;
+					function (_v9) {
+						var c = _v9.a;
 						return !$elm$core$Char$isUpper(c);
 					}),
 				$elm$core$String$uncons(id));
@@ -6791,30 +6777,37 @@ var $author$project$Gen$json_ = F2(
 		};
 		var example = F2(
 			function (typ, asString_) {
-				example:
-				while (true) {
-					switch (typ.$) {
-						case 'GoBasic':
-							var b = typ.a;
-							return asString_ ? $elm$core$Result$Ok(
-								$author$project$Gen$simpleValueAsString(b)) : A2($author$project$Gen$exampleValue, env, typ);
-						case 'GoPointer':
-							var p = typ.a;
-							var _v1 = A2($author$project$Gen$deref, 1, p);
-							if (_v1.$ === 'Ok') {
-								var t = _v1.a;
-								var $temp$typ = t,
-									$temp$asString_ = asString_;
-								typ = $temp$typ;
-								asString_ = $temp$asString_;
-								continue example;
+				switch (typ.$) {
+					case 'GoBasic':
+						var b = typ.a;
+						return asString_ ? $elm$core$Result$Ok(
+							$author$project$Gen$simpleValueAsString(b)) : A2($author$project$Gen$exampleValue, env, typ);
+					case 'GoPointer':
+						var p = typ.a;
+						var _v7 = A2($author$project$Gen$deref, 1, p);
+						if (_v7.$ === 'Ok') {
+							if (_v7.a.$ === 'GoTyVar') {
+								var t = _v7.a.a;
+								var _v8 = A2($elm$core$Dict$get, t, env);
+								if (_v8.$ === 'Just') {
+									var def = _v8.a.a;
+									return A2(
+										$author$project$Gen$json,
+										A2($elm$core$Dict$remove, t, env),
+										def);
+								} else {
+									return $elm$core$Result$Ok($elm$json$Json$Encode$null);
+								}
 							} else {
-								var e = _v1.a;
-								return $elm$core$Result$Err(e);
+								var t = _v7.a;
+								return A2($author$project$Gen$exampleValue, env, t);
 							}
-						default:
-							return A2($author$project$Gen$exampleValue, env, typ);
-					}
+						} else {
+							var e = _v7.a;
+							return $elm$core$Result$Err(e);
+						}
+					default:
+						return A2($author$project$Gen$exampleValue, env, typ);
 				}
 			});
 		var asString = function (tags) {
@@ -6833,21 +6826,21 @@ var $author$project$Gen$json_ = F2(
 						if (ignored(tags)) {
 							return pairs_;
 						} else {
-							var _v4 = A2($elm$core$Dict$get, tvar, env);
-							if (_v4.$ === 'Just') {
-								var def = _v4.a.a;
-								var _v5 = A2(
+							var _v2 = A2($elm$core$Dict$get, tvar, env);
+							if (_v2.$ === 'Just') {
+								var def = _v2.a.a;
+								var _v3 = A2(
 									$author$project$Gen$json_,
 									A2($elm$core$Dict$remove, tvar, env),
 									def);
-								if (_v5.$ === 'Err') {
-									var e = _v5.a;
+								if (_v3.$ === 'Err') {
+									var e = _v3.a;
 									return $elm$core$Result$Err(e);
 								} else {
-									var pairs__ = _v5.a;
-									var _v6 = rename(tags);
-									if (_v6.$ === 'Just') {
-										var name_ = _v6.a;
+									var pairs__ = _v3.a;
+									var _v4 = rename(tags);
+									if (_v4.$ === 'Just') {
+										var name_ = _v4.a;
 										return $elm$core$Result$Ok(
 											A2(
 												$elm$core$List$cons,
@@ -6874,12 +6867,12 @@ var $author$project$Gen$json_ = F2(
 							if (notExported(id)) {
 								return (!$elm$core$List$isEmpty(tags)) ? $elm$core$Result$Err('struct field ' + (id + ' has json tag but is not exported')) : pairs_;
 							} else {
-								var _v7 = A2(
+								var _v5 = A2(
 									example,
 									typ,
 									asString(tags));
-								if (_v7.$ === 'Ok') {
-									var value = _v7.a;
+								if (_v5.$ === 'Ok') {
+									var value = _v5.a;
 									return $elm$core$Result$Ok(
 										A2(
 											$elm$core$List$cons,
@@ -6888,7 +6881,7 @@ var $author$project$Gen$json_ = F2(
 												value),
 											pairs));
 								} else {
-									var e = _v7.a;
+									var e = _v5.a;
 									return $elm$core$Result$Err(e);
 								}
 							}

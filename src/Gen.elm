@@ -89,10 +89,6 @@ exampleValue env typ =
         GoInterface -> Ok (object [])
         GoPointer p ->
             case deref 1 p of
-                Ok (GoTyVar t) ->
-                    case Dict.get t env of
-                        Just (GoStructDef def) -> json (Dict.remove t env) def
-                        Nothing -> Ok Json.Encode.null -- special case
                 Ok t -> exampleValue env t
                 Err e -> Err e
         GoMap t1 t2 ->
@@ -130,7 +126,11 @@ json_ env structfields =
                 -- which I seemed to misunderstand in the original Haskell version
                 -- "Pointer values encode as the value pointed to."
                     case deref 1 p of
-                        Ok t -> example t asString_
+                        Ok (GoTyVar t) ->
+                            case Dict.get t env of
+                                Just (GoStructDef def) -> json (Dict.remove t env) def
+                                Nothing -> Ok Json.Encode.null -- special case
+                        Ok t -> exampleValue env t
                         Err e -> Err e
                 _ -> exampleValue env typ
         folder structfield pairs_ =
