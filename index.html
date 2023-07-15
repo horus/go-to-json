@@ -4424,6 +4424,52 @@ var _Bitwise_shiftRightZfBy = F2(function(offset, a)
 
 
 
+function _Time_now(millisToPosix)
+{
+	return _Scheduler_binding(function(callback)
+	{
+		callback(_Scheduler_succeed(millisToPosix(Date.now())));
+	});
+}
+
+var _Time_setInterval = F2(function(interval, task)
+{
+	return _Scheduler_binding(function(callback)
+	{
+		var id = setInterval(function() { _Scheduler_rawSpawn(task); }, interval);
+		return function() { clearInterval(id); };
+	});
+});
+
+function _Time_here()
+{
+	return _Scheduler_binding(function(callback)
+	{
+		callback(_Scheduler_succeed(
+			A2($elm$time$Time$customZone, -(new Date().getTimezoneOffset()), _List_Nil)
+		));
+	});
+}
+
+
+function _Time_getZoneName()
+{
+	return _Scheduler_binding(function(callback)
+	{
+		try
+		{
+			var name = $elm$time$Time$Name(Intl.DateTimeFormat().resolvedOptions().timeZone);
+		}
+		catch (e)
+		{
+			var name = $elm$time$Time$Offset(new Date().getTimezoneOffset());
+		}
+		callback(_Scheduler_succeed(name));
+	});
+}
+
+
+
 
 // STRINGS
 
@@ -5536,6 +5582,20 @@ var $author$project$Gen$buildEnv = function (xs) {
 		$elm$core$Result$Ok($elm$core$Dict$empty),
 		xs);
 };
+var $elm$core$Basics$composeL = F3(
+	function (g, f, x) {
+		return g(
+			f(x));
+	});
+var $elm$random$Random$Generator = function (a) {
+	return {$: 'Generator', a: a};
+};
+var $elm$random$Random$constant = function (value) {
+	return $elm$random$Random$Generator(
+		function (seed) {
+			return _Utils_Tuple2(value, seed);
+		});
+};
 var $elm$core$String$concat = function (strings) {
 	return A2($elm$core$String$join, '', strings);
 };
@@ -5605,11 +5665,6 @@ var $author$project$P$deadEndsToString = function (deadEnds) {
 };
 var $author$project$P$KeyAsString = {$: 'KeyAsString'};
 var $author$project$P$KeyIgnore = {$: 'KeyIgnore'};
-var $elm$core$Basics$composeL = F3(
-	function (g, f, x) {
-		return g(
-			f(x));
-	});
 var $elm$core$Bitwise$and = _Bitwise_and;
 var $elm$core$Bitwise$shiftRightBy = _Bitwise_shiftRightBy;
 var $elm$core$String$repeatHelp = F3(
@@ -5722,6 +5777,47 @@ var $author$project$Gen$deref = F2(
 			}
 		}
 	});
+var $elm$core$Dict$foldl = F3(
+	function (func, acc, dict) {
+		foldl:
+		while (true) {
+			if (dict.$ === 'RBEmpty_elm_builtin') {
+				return acc;
+			} else {
+				var key = dict.b;
+				var value = dict.c;
+				var left = dict.d;
+				var right = dict.e;
+				var $temp$func = func,
+					$temp$acc = A3(
+					func,
+					key,
+					value,
+					A3($elm$core$Dict$foldl, func, acc, left)),
+					$temp$dict = right;
+				func = $temp$func;
+				acc = $temp$acc;
+				dict = $temp$dict;
+				continue foldl;
+			}
+		}
+	});
+var $elm$json$Json$Encode$dict = F3(
+	function (toKey, toValue, dictionary) {
+		return _Json_wrap(
+			A3(
+				$elm$core$Dict$foldl,
+				F3(
+					function (key, value, obj) {
+						return A3(
+							_Json_addField,
+							toKey(key),
+							toValue(value),
+							obj);
+					}),
+				_Json_emptyObject(_Utils_Tuple0),
+				dictionary));
+	});
 var $elm$core$List$maybeCons = F3(
 	function (f, mx, xs) {
 		var _v0 = f(mx);
@@ -5775,6 +5871,19 @@ var $elm$core$Maybe$map = F2(
 			return $elm$core$Maybe$Nothing;
 		}
 	});
+var $elm$random$Random$map = F2(
+	function (func, _v0) {
+		var genA = _v0.a;
+		return $elm$random$Random$Generator(
+			function (seed0) {
+				var _v1 = genA(seed0);
+				var a = _v1.a;
+				var seed1 = _v1.b;
+				return _Utils_Tuple2(
+					func(a),
+					seed1);
+			});
+	});
 var $elm$core$Result$map = F2(
 	function (func, ra) {
 		if (ra.$ === 'Ok') {
@@ -5786,6 +5895,179 @@ var $elm$core$Result$map = F2(
 			return $elm$core$Result$Err(e);
 		}
 	});
+var $elm$random$Random$map2 = F3(
+	function (func, _v0, _v1) {
+		var genA = _v0.a;
+		var genB = _v1.a;
+		return $elm$random$Random$Generator(
+			function (seed0) {
+				var _v2 = genA(seed0);
+				var a = _v2.a;
+				var seed1 = _v2.b;
+				var _v3 = genB(seed1);
+				var b = _v3.a;
+				var seed2 = _v3.b;
+				return _Utils_Tuple2(
+					A2(func, a, b),
+					seed2);
+			});
+	});
+var $elm$core$Basics$negate = function (n) {
+	return -n;
+};
+var $elm$core$Basics$abs = function (n) {
+	return (n < 0) ? (-n) : n;
+};
+var $elm$random$Random$Seed = F2(
+	function (a, b) {
+		return {$: 'Seed', a: a, b: b};
+	});
+var $elm$core$Bitwise$shiftRightZfBy = _Bitwise_shiftRightZfBy;
+var $elm$random$Random$next = function (_v0) {
+	var state0 = _v0.a;
+	var incr = _v0.b;
+	return A2($elm$random$Random$Seed, ((state0 * 1664525) + incr) >>> 0, incr);
+};
+var $elm$core$Bitwise$xor = _Bitwise_xor;
+var $elm$random$Random$peel = function (_v0) {
+	var state = _v0.a;
+	var word = (state ^ (state >>> ((state >>> 28) + 4))) * 277803737;
+	return ((word >>> 22) ^ word) >>> 0;
+};
+var $elm$random$Random$float = F2(
+	function (a, b) {
+		return $elm$random$Random$Generator(
+			function (seed0) {
+				var seed1 = $elm$random$Random$next(seed0);
+				var range = $elm$core$Basics$abs(b - a);
+				var n1 = $elm$random$Random$peel(seed1);
+				var n0 = $elm$random$Random$peel(seed0);
+				var lo = (134217727 & n1) * 1.0;
+				var hi = (67108863 & n0) * 1.0;
+				var val = ((hi * 134217728.0) + lo) / 9007199254740992.0;
+				var scaled = (val * range) + a;
+				return _Utils_Tuple2(
+					scaled,
+					$elm$random$Random$next(seed1));
+			});
+	});
+var $elm$random$Random$maxInt = 2147483647;
+var $elm$random$Random$minInt = -2147483648;
+var $elm_community$random_extra$Random$Float$anyFloat = A2($elm$random$Random$float, $elm$random$Random$minInt, $elm$random$Random$maxInt);
+var $elm$core$String$fromFloat = _String_fromNumber;
+var $elm$random$Random$int = F2(
+	function (a, b) {
+		return $elm$random$Random$Generator(
+			function (seed0) {
+				var _v0 = (_Utils_cmp(a, b) < 0) ? _Utils_Tuple2(a, b) : _Utils_Tuple2(b, a);
+				var lo = _v0.a;
+				var hi = _v0.b;
+				var range = (hi - lo) + 1;
+				if (!((range - 1) & range)) {
+					return _Utils_Tuple2(
+						(((range - 1) & $elm$random$Random$peel(seed0)) >>> 0) + lo,
+						$elm$random$Random$next(seed0));
+				} else {
+					var threshhold = (((-range) >>> 0) % range) >>> 0;
+					var accountForBias = function (seed) {
+						accountForBias:
+						while (true) {
+							var x = $elm$random$Random$peel(seed);
+							var seedN = $elm$random$Random$next(seed);
+							if (_Utils_cmp(x, threshhold) < 0) {
+								var $temp$seed = seedN;
+								seed = $temp$seed;
+								continue accountForBias;
+							} else {
+								return _Utils_Tuple2((x % range) + lo, seedN);
+							}
+						}
+					};
+					return accountForBias(seed0);
+				}
+			});
+	});
+var $elm_community$random_extra$Random$Int$anyInt = A2($elm$random$Random$int, $elm$random$Random$minInt, $elm$random$Random$maxInt);
+var $author$project$Gen$goInt = $elm_community$random_extra$Random$Int$anyInt;
+var $author$project$Gen$goInt16 = A2($elm$random$Random$int, -32768, 32767);
+var $author$project$Gen$goInt32 = A2($elm$random$Random$int, -323232, 323232);
+var $author$project$Gen$goInt64 = $elm_community$random_extra$Random$Int$anyInt;
+var $author$project$Gen$goInt8 = A2($elm$random$Random$int, -128, 127);
+var $elm_community$random_extra$Random$Int$positiveInt = A2($elm$random$Random$int, 1, $elm$random$Random$maxInt);
+var $author$project$Gen$goUInt = $elm_community$random_extra$Random$Int$positiveInt;
+var $author$project$Gen$goUInt16 = A2($elm$random$Random$int, 0, 65535);
+var $author$project$Gen$goUInt32 = A2($elm$random$Random$int, 0, 323232);
+var $author$project$Gen$goUInt64 = A2($elm$random$Random$int, 0, 646464646464);
+var $author$project$Gen$goUInt8 = A2($elm$random$Random$int, 0, 255);
+var $elm$core$Char$fromCode = _Char_fromCode;
+var $elm_community$random_extra$Random$Char$char = F2(
+	function (start, end) {
+		return A2(
+			$elm$random$Random$map,
+			$elm$core$Char$fromCode,
+			A2($elm$random$Random$int, start, end));
+	});
+var $elm_community$random_extra$Random$Char$lowerCaseLatin = A2($elm_community$random_extra$Random$Char$char, 97, 122);
+var $elm$random$Random$andThen = F2(
+	function (callback, _v0) {
+		var genA = _v0.a;
+		return $elm$random$Random$Generator(
+			function (seed) {
+				var _v1 = genA(seed);
+				var result = _v1.a;
+				var newSeed = _v1.b;
+				var _v2 = callback(result);
+				var genB = _v2.a;
+				return genB(newSeed);
+			});
+	});
+var $elm$core$String$fromList = _String_fromList;
+var $elm$random$Random$listHelp = F4(
+	function (revList, n, gen, seed) {
+		listHelp:
+		while (true) {
+			if (n < 1) {
+				return _Utils_Tuple2(revList, seed);
+			} else {
+				var _v0 = gen(seed);
+				var value = _v0.a;
+				var newSeed = _v0.b;
+				var $temp$revList = A2($elm$core$List$cons, value, revList),
+					$temp$n = n - 1,
+					$temp$gen = gen,
+					$temp$seed = newSeed;
+				revList = $temp$revList;
+				n = $temp$n;
+				gen = $temp$gen;
+				seed = $temp$seed;
+				continue listHelp;
+			}
+		}
+	});
+var $elm$random$Random$list = F2(
+	function (n, _v0) {
+		var gen = _v0.a;
+		return $elm$random$Random$Generator(
+			function (seed) {
+				return A4($elm$random$Random$listHelp, _List_Nil, n, gen, seed);
+			});
+	});
+var $elm_community$random_extra$Random$String$string = F2(
+	function (stringLength, charGenerator) {
+		return A2(
+			$elm$random$Random$map,
+			$elm$core$String$fromList,
+			A2($elm$random$Random$list, stringLength, charGenerator));
+	});
+var $elm_community$random_extra$Random$String$rangeLengthString = F3(
+	function (minLength, maxLength, charGenerator) {
+		return A2(
+			$elm$random$Random$andThen,
+			function (len) {
+				return A2($elm_community$random_extra$Random$String$string, len, charGenerator);
+			},
+			A2($elm$random$Random$int, minLength, maxLength));
+	});
 var $author$project$Gen$mapKey = F2(
 	function (keyType, valueType) {
 		switch (keyType.$) {
@@ -5793,46 +6075,60 @@ var $author$project$Gen$mapKey = F2(
 				switch (keyType.a.$) {
 					case 'GoString':
 						var _v1 = keyType.a;
-						return $elm$core$Result$Ok('myKey');
+						return $elm$core$Result$Ok(
+							A3($elm_community$random_extra$Random$String$rangeLengthString, 1, 5, $elm_community$random_extra$Random$Char$lowerCaseLatin));
 					case 'GoInt8':
 						var _v2 = keyType.a;
-						return $elm$core$Result$Ok('8');
+						return $elm$core$Result$Ok(
+							A2($elm$random$Random$map, $elm$core$String$fromInt, $author$project$Gen$goInt8));
 					case 'GoInt16':
 						var _v3 = keyType.a;
-						return $elm$core$Result$Ok('16');
+						return $elm$core$Result$Ok(
+							A2($elm$random$Random$map, $elm$core$String$fromInt, $author$project$Gen$goInt16));
 					case 'GoInt32':
 						var _v4 = keyType.a;
-						return $elm$core$Result$Ok('-32');
+						return $elm$core$Result$Ok(
+							A2($elm$random$Random$map, $elm$core$String$fromInt, $author$project$Gen$goInt32));
 					case 'GoInt64':
 						var _v5 = keyType.a;
-						return $elm$core$Result$Ok('64');
+						return $elm$core$Result$Ok(
+							A2($elm$random$Random$map, $elm$core$String$fromInt, $author$project$Gen$goInt64));
 					case 'GoInt':
 						var _v6 = keyType.a;
-						return $elm$core$Result$Ok('-1024');
+						return $elm$core$Result$Ok(
+							A2($elm$random$Random$map, $elm$core$String$fromInt, $author$project$Gen$goInt));
 					case 'GoUInt8':
 						var _v7 = keyType.a;
-						return $elm$core$Result$Ok('8');
+						return $elm$core$Result$Ok(
+							A2($elm$random$Random$map, $elm$core$String$fromInt, $author$project$Gen$goUInt8));
 					case 'GoUInt16':
 						var _v8 = keyType.a;
-						return $elm$core$Result$Ok('1616');
+						return $elm$core$Result$Ok(
+							A2($elm$random$Random$map, $elm$core$String$fromInt, $author$project$Gen$goUInt16));
 					case 'GoUInt32':
 						var _v9 = keyType.a;
-						return $elm$core$Result$Ok('323232');
+						return $elm$core$Result$Ok(
+							A2($elm$random$Random$map, $elm$core$String$fromInt, $author$project$Gen$goUInt32));
 					case 'GoUInt64':
 						var _v10 = keyType.a;
-						return $elm$core$Result$Ok('646464646464');
+						return $elm$core$Result$Ok(
+							A2($elm$random$Random$map, $elm$core$String$fromInt, $author$project$Gen$goUInt64));
 					case 'GoUInt':
 						var _v11 = keyType.a;
-						return $elm$core$Result$Ok('1024');
+						return $elm$core$Result$Ok(
+							A2($elm$random$Random$map, $elm$core$String$fromInt, $author$project$Gen$goUInt));
 					case 'GoFloat':
 						var _v12 = keyType.a;
-						return $elm$core$Result$Ok('1.26');
+						return $elm$core$Result$Ok(
+							A2($elm$random$Random$map, $elm$core$String$fromFloat, $elm_community$random_extra$Random$Float$anyFloat));
 					case 'GoDouble':
 						var _v13 = keyType.a;
-						return $elm$core$Result$Ok('16.3');
+						return $elm$core$Result$Ok(
+							A2($elm$random$Random$map, $elm$core$String$fromFloat, $elm_community$random_extra$Random$Float$anyFloat));
 					case 'GoTime':
 						var _v14 = keyType.a;
-						return $elm$core$Result$Ok('2009-11-10T23:00:00Z');
+						return $elm$core$Result$Ok(
+							$elm$random$Random$constant('2009-11-10T23:00:00Z'));
 					default:
 						var _v15 = keyType.a;
 						return $elm$core$Result$Err(
@@ -5905,6 +6201,48 @@ var $elm$json$Json$Encode$object = function (pairs) {
 			_Json_emptyObject(_Utils_Tuple0),
 			pairs));
 };
+var $elm$core$Dict$fromList = function (assocs) {
+	return A3(
+		$elm$core$List$foldl,
+		F2(
+			function (_v0, dict) {
+				var key = _v0.a;
+				var value = _v0.b;
+				return A3($elm$core$Dict$insert, key, value, dict);
+			}),
+		$elm$core$Dict$empty,
+		assocs);
+};
+var $elm$random$Random$pair = F2(
+	function (genA, genB) {
+		return A3(
+			$elm$random$Random$map2,
+			F2(
+				function (a, b) {
+					return _Utils_Tuple2(a, b);
+				}),
+			genA,
+			genB);
+	});
+var $elm_community$random_extra$Random$Dict$dict = F3(
+	function (dictLength, keyGenerator, valueGenerator) {
+		return A2(
+			$elm$random$Random$map,
+			$elm$core$Dict$fromList,
+			A2(
+				$elm$random$Random$list,
+				dictLength,
+				A2($elm$random$Random$pair, keyGenerator, valueGenerator)));
+	});
+var $elm_community$random_extra$Random$Dict$rangeLengthDict = F4(
+	function (minLength, maxLength, keyGenerator, valueGenerator) {
+		return A2(
+			$elm$random$Random$andThen,
+			function (len) {
+				return A3($elm_community$random_extra$Random$Dict$dict, len, keyGenerator, valueGenerator);
+			},
+			A2($elm$random$Random$int, minLength, maxLength));
+	});
 var $elm$core$Dict$getMin = function (dict) {
 	getMin:
 	while (true) {
@@ -6289,10 +6627,142 @@ var $elm$core$List$repeat = F2(
 		return A3($elm$core$List$repeatHelp, _List_Nil, n, value);
 	});
 var $elm$json$Json$Encode$bool = _Json_wrap;
+var $elm$random$Random$addOne = function (value) {
+	return _Utils_Tuple2(1, value);
+};
+var $elm$random$Random$getByWeight = F3(
+	function (_v0, others, countdown) {
+		getByWeight:
+		while (true) {
+			var weight = _v0.a;
+			var value = _v0.b;
+			if (!others.b) {
+				return value;
+			} else {
+				var second = others.a;
+				var otherOthers = others.b;
+				if (_Utils_cmp(
+					countdown,
+					$elm$core$Basics$abs(weight)) < 1) {
+					return value;
+				} else {
+					var $temp$_v0 = second,
+						$temp$others = otherOthers,
+						$temp$countdown = countdown - $elm$core$Basics$abs(weight);
+					_v0 = $temp$_v0;
+					others = $temp$others;
+					countdown = $temp$countdown;
+					continue getByWeight;
+				}
+			}
+		}
+	});
+var $elm$core$List$sum = function (numbers) {
+	return A3($elm$core$List$foldl, $elm$core$Basics$add, 0, numbers);
+};
+var $elm$random$Random$weighted = F2(
+	function (first, others) {
+		var normalize = function (_v0) {
+			var weight = _v0.a;
+			return $elm$core$Basics$abs(weight);
+		};
+		var total = normalize(first) + $elm$core$List$sum(
+			A2($elm$core$List$map, normalize, others));
+		return A2(
+			$elm$random$Random$map,
+			A2($elm$random$Random$getByWeight, first, others),
+			A2($elm$random$Random$float, 0, total));
+	});
+var $elm$random$Random$uniform = F2(
+	function (value, valueList) {
+		return A2(
+			$elm$random$Random$weighted,
+			$elm$random$Random$addOne(value),
+			A2($elm$core$List$map, $elm$random$Random$addOne, valueList));
+	});
+var $elm_community$random_extra$Random$Extra$bool = A2(
+	$elm$random$Random$uniform,
+	true,
+	_List_fromArray(
+		[false]));
 var $elm$json$Json$Encode$float = _Json_wrap;
 var $elm$json$Json$Encode$int = _Json_wrap;
-var $elm$core$Basics$negate = function (n) {
-	return -n;
+var $elm_community$random_extra$Random$List$anyInt = A2($elm$random$Random$int, $elm$random$Random$minInt, $elm$random$Random$maxInt);
+var $elm$random$Random$map3 = F4(
+	function (func, _v0, _v1, _v2) {
+		var genA = _v0.a;
+		var genB = _v1.a;
+		var genC = _v2.a;
+		return $elm$random$Random$Generator(
+			function (seed0) {
+				var _v3 = genA(seed0);
+				var a = _v3.a;
+				var seed1 = _v3.b;
+				var _v4 = genB(seed1);
+				var b = _v4.a;
+				var seed2 = _v4.b;
+				var _v5 = genC(seed2);
+				var c = _v5.a;
+				var seed3 = _v5.b;
+				return _Utils_Tuple2(
+					A3(func, a, b, c),
+					seed3);
+			});
+	});
+var $elm$core$Bitwise$or = _Bitwise_or;
+var $elm$random$Random$step = F2(
+	function (_v0, seed) {
+		var generator = _v0.a;
+		return generator(seed);
+	});
+var $elm$random$Random$independentSeed = $elm$random$Random$Generator(
+	function (seed0) {
+		var makeIndependentSeed = F3(
+			function (state, b, c) {
+				return $elm$random$Random$next(
+					A2($elm$random$Random$Seed, state, (1 | (b ^ c)) >>> 0));
+			});
+		var gen = A2($elm$random$Random$int, 0, 4294967295);
+		return A2(
+			$elm$random$Random$step,
+			A4($elm$random$Random$map3, makeIndependentSeed, gen, gen, gen),
+			seed0);
+	});
+var $elm$core$Tuple$second = function (_v0) {
+	var y = _v0.b;
+	return y;
+};
+var $elm$core$List$sortBy = _List_sortBy;
+var $elm_community$random_extra$Random$List$shuffle = function (list) {
+	return A2(
+		$elm$random$Random$map,
+		function (independentSeed) {
+			return A2(
+				$elm$core$List$map,
+				$elm$core$Tuple$first,
+				A2(
+					$elm$core$List$sortBy,
+					$elm$core$Tuple$second,
+					A3(
+						$elm$core$List$foldl,
+						F2(
+							function (item, _v0) {
+								var acc = _v0.a;
+								var seed = _v0.b;
+								var _v1 = A2($elm$random$Random$step, $elm_community$random_extra$Random$List$anyInt, seed);
+								var tag = _v1.a;
+								var nextSeed = _v1.b;
+								return _Utils_Tuple2(
+									A2(
+										$elm$core$List$cons,
+										_Utils_Tuple2(item, tag),
+										acc),
+									nextSeed);
+							}),
+						_Utils_Tuple2(_List_Nil, independentSeed),
+						list).a));
+		},
+		$elm$random$Random$independentSeed);
 };
 var $elm$json$Json$Encode$string = _Json_wrap;
 var $elm$core$List$takeReverse = F3(
@@ -6423,210 +6893,259 @@ var $elm$core$List$take = F2(
 	});
 var $author$project$Gen$simpleArrayLike = F2(
 	function (n, typ) {
+		var value = F2(
+			function (f, g) {
+				return A2(
+					$elm$random$Random$map,
+					function (xs) {
+						return A2($elm$json$Json$Encode$list, f, xs);
+					},
+					g);
+			});
+		var randomTake = F2(
+			function (f, xs) {
+				return A2(
+					$elm$random$Random$map,
+					function (ys) {
+						return A2(
+							$elm$json$Json$Encode$list,
+							f,
+							A2($elm$core$List$take, n, ys));
+					},
+					$elm_community$random_extra$Random$List$shuffle(xs));
+			});
 		switch (typ.$) {
 			case 'GoBool':
 				return A2(
-					$elm$json$Json$Encode$list,
+					value,
 					$elm$json$Json$Encode$bool,
-					A2(
-						$elm$core$List$take,
-						n,
-						_List_fromArray(
-							[false, true, true, false, true, false, false, false, true, false])));
+					A2($elm$random$Random$list, n, $elm_community$random_extra$Random$Extra$bool));
 			case 'GoInt':
 				return A2(
-					$elm$json$Json$Encode$list,
+					value,
 					$elm$json$Json$Encode$int,
-					A2(
-						$elm$core$List$take,
-						n,
-						_List_fromArray(
-							[1, -2, 3, -4, 5, -6, 7, -8, 9, 0])));
+					A2($elm$random$Random$list, n, $elm_community$random_extra$Random$Int$anyInt));
 			case 'GoInt8':
 				return A2(
-					$elm$json$Json$Encode$list,
+					value,
 					$elm$json$Json$Encode$int,
-					A2(
-						$elm$core$List$take,
-						n,
-						_List_fromArray(
-							[-8, 16, 32, -64, -128, 0, 1, 2, 4, 8])));
+					A2($elm$random$Random$list, n, $author$project$Gen$goInt8));
 			case 'GoInt16':
 				return A2(
-					$elm$json$Json$Encode$list,
+					value,
 					$elm$json$Json$Encode$int,
-					A2(
-						$elm$core$List$take,
-						n,
-						_List_fromArray(
-							[16, 17, 18, 19, -20, 21, 22, 23, -24, -25])));
+					A2($elm$random$Random$list, n, $author$project$Gen$goInt16));
 			case 'GoInt32':
 				return A2(
-					$elm$json$Json$Encode$list,
+					value,
 					$elm$json$Json$Encode$int,
-					A2(
-						$elm$core$List$take,
-						n,
-						_List_fromArray(
-							[32, 3, -3, 4, 6, -4, 0, 2, -5, 8])));
+					A2($elm$random$Random$list, n, $author$project$Gen$goInt32));
 			case 'GoInt64':
 				return A2(
-					$elm$json$Json$Encode$list,
+					value,
 					$elm$json$Json$Encode$int,
-					A2(
-						$elm$core$List$take,
-						n,
-						_List_fromArray(
-							[9223372036854775800, 922, 10, -9223372, 9223372036854, -1234, 56, -7, 10240, 65536])));
+					A2($elm$random$Random$list, n, $elm_community$random_extra$Random$Int$anyInt));
 			case 'GoUInt':
 				return A2(
-					$elm$json$Json$Encode$list,
+					value,
 					$elm$json$Json$Encode$int,
-					A2(
-						$elm$core$List$take,
-						n,
-						_List_fromArray(
-							[1, 2, 3, 4, 5, 6, 7, 8, 9, 0])));
+					A2($elm$random$Random$list, n, $elm_community$random_extra$Random$Int$positiveInt));
 			case 'GoUInt8':
 				return A2(
-					$elm$json$Json$Encode$list,
+					value,
 					$elm$json$Json$Encode$int,
-					A2(
-						$elm$core$List$take,
-						n,
-						_List_fromArray(
-							[8, 16, 32, 64, 128, 0, 1, 2, 4, 8])));
+					A2($elm$random$Random$list, n, $author$project$Gen$goUInt8));
 			case 'GoUInt16':
 				return A2(
-					$elm$json$Json$Encode$list,
+					value,
 					$elm$json$Json$Encode$int,
-					A2(
-						$elm$core$List$take,
-						n,
-						_List_fromArray(
-							[16, 17, 18, 19, 20, 21, 22, 23, 24, 25])));
+					A2($elm$random$Random$list, n, $author$project$Gen$goUInt16));
 			case 'GoUInt32':
 				return A2(
-					$elm$json$Json$Encode$list,
+					value,
 					$elm$json$Json$Encode$int,
-					A2(
-						$elm$core$List$take,
-						n,
-						_List_fromArray(
-							[32, 3, 3, 4, 6, 4, 0, 2, 5, 8])));
+					A2($elm$random$Random$list, n, $author$project$Gen$goUInt32));
 			case 'GoUInt64':
 				return A2(
-					$elm$json$Json$Encode$list,
+					value,
 					$elm$json$Json$Encode$int,
-					A2(
-						$elm$core$List$take,
-						n,
-						_List_fromArray(
-							[9223372036854775800, 922, 10, 9223372, 9223372036854, 1234, 56, 7, 10240, 65536])));
+					A2($elm$random$Random$list, n, $author$project$Gen$goUInt64));
 			case 'GoFloat':
 				return A2(
-					$elm$json$Json$Encode$list,
+					value,
 					$elm$json$Json$Encode$float,
-					A2(
-						$elm$core$List$take,
-						n,
-						_List_fromArray(
-							[9.5, 3.8, 1.13, 4.79, 5.023, 6.1, 2.7234, 1.9, 1.02, 5.64])));
+					A2($elm$random$Random$list, n, $elm_community$random_extra$Random$Float$anyFloat));
 			case 'GoDouble':
 				return A2(
-					$elm$json$Json$Encode$list,
+					value,
 					$elm$json$Json$Encode$float,
-					A2(
-						$elm$core$List$take,
-						n,
-						_List_fromArray(
-							[8.5397342, 4.26986711133, 871.0528907127, 9.869604, 31.00627668, 10.24, 16.3, 12.6, 12.0001, 564.222])));
+					A2($elm$random$Random$list, n, $elm_community$random_extra$Random$Float$anyFloat));
 			case 'GoString':
 				return A2(
-					$elm$json$Json$Encode$list,
+					randomTake,
 					$elm$json$Json$Encode$string,
-					A2(
-						$elm$core$List$take,
-						n,
-						_List_fromArray(
-							['rob pike', 'Robert', 'Pike', 'gopher', 'Gopher', 'Go', 'Golang', 'goroutine', 'interface{}', 'struct'])));
+					_List_fromArray(
+						['rob pike', 'Robert', 'Pike', 'gopher', 'Gopher', 'Go', 'Golang', 'goroutine', 'interface{}', 'struct']));
 			default:
 				return A2(
-					$elm$json$Json$Encode$list,
+					randomTake,
 					$elm$json$Json$Encode$string,
-					A2(
-						$elm$core$List$take,
-						n,
-						_List_fromArray(
-							['2011-01-26T19:06:43Z', '2020-07-16T14:49:50.3269159+08:00', '2011-01-26T19:01:12Z', '2011-01-26T19:14:43Z', '2009-11-10T23:00:00Z', '2018-09-22T12:42:31Z', '2020-12-29T14:58:15Z', '2006-01-02T15:04:05Z', '2020-12-29T14:58:15.229579703+08:00', '2017-12-30T11:25:30+09:00'])));
+					_List_fromArray(
+						['2011-01-26T19:06:43Z', '2020-07-16T14:49:50.3269159+08:00', '2011-01-26T19:01:12Z', '2011-01-26T19:14:43Z', '2009-11-10T23:00:00Z', '2018-09-22T12:42:31Z', '2020-12-29T14:58:15Z', '2006-01-02T15:04:05Z', '2020-12-29T14:58:15.229579703+08:00', '2017-12-30T11:25:30+09:00']));
 		}
 	});
+var $elm_community$random_extra$Random$Extra$frequency = F2(
+	function (head, pairs) {
+		var total = $elm$core$List$sum(
+			A2(
+				$elm$core$List$map,
+				A2($elm$core$Basics$composeL, $elm$core$Basics$abs, $elm$core$Tuple$first),
+				A2($elm$core$List$cons, head, pairs)));
+		var pick = F2(
+			function (someChoices, n) {
+				pick:
+				while (true) {
+					if (someChoices.b) {
+						var _v1 = someChoices.a;
+						var k = _v1.a;
+						var g = _v1.b;
+						var rest = someChoices.b;
+						if (_Utils_cmp(n, k) < 1) {
+							return g;
+						} else {
+							var $temp$someChoices = rest,
+								$temp$n = n - k;
+							someChoices = $temp$someChoices;
+							n = $temp$n;
+							continue pick;
+						}
+					} else {
+						return head.b;
+					}
+				}
+			});
+		return A2(
+			$elm$random$Random$andThen,
+			pick(
+				A2($elm$core$List$cons, head, pairs)),
+			A2($elm$random$Random$float, 0, total));
+	});
+var $elm_community$random_extra$Random$Extra$choices = F2(
+	function (hd, gens) {
+		return A2(
+			$elm_community$random_extra$Random$Extra$frequency,
+			_Utils_Tuple2(1, hd),
+			A2(
+				$elm$core$List$map,
+				function (g) {
+					return _Utils_Tuple2(1, g);
+				},
+				gens));
+	});
+var $elm_community$random_extra$Random$Char$upperCaseLatin = A2($elm_community$random_extra$Random$Char$char, 65, 90);
+var $elm_community$random_extra$Random$Char$latin = A2(
+	$elm_community$random_extra$Random$Extra$choices,
+	$elm_community$random_extra$Random$Char$lowerCaseLatin,
+	_List_fromArray(
+		[$elm_community$random_extra$Random$Char$upperCaseLatin]));
+var $elm_community$random_extra$Random$Char$english = $elm_community$random_extra$Random$Char$latin;
 var $author$project$Gen$simpleValue = function (typ) {
 	switch (typ.$) {
 		case 'GoInt':
-			return $elm$json$Json$Encode$int(1);
+			return A2($elm$random$Random$map, $elm$json$Json$Encode$int, $elm_community$random_extra$Random$Int$anyInt);
 		case 'GoInt8':
-			return $elm$json$Json$Encode$int(127);
+			return A2(
+				$elm$random$Random$map,
+				$elm$json$Json$Encode$int,
+				A2($elm$random$Random$int, -128, 127));
 		case 'GoInt16':
-			return $elm$json$Json$Encode$int(-1616);
+			return A2(
+				$elm$random$Random$map,
+				$elm$json$Json$Encode$int,
+				A2($elm$random$Random$int, -32768, 32767));
 		case 'GoInt32':
-			return $elm$json$Json$Encode$int(60000);
+			return A2(
+				$elm$random$Random$map,
+				$elm$json$Json$Encode$int,
+				A2($elm$random$Random$int, -323232, 323232));
 		case 'GoInt64':
-			return $elm$json$Json$Encode$int(64);
+			return A2($elm$random$Random$map, $elm$json$Json$Encode$int, $elm_community$random_extra$Random$Int$anyInt);
 		case 'GoUInt':
-			return $elm$json$Json$Encode$int(1);
+			return A2($elm$random$Random$map, $elm$json$Json$Encode$int, $elm_community$random_extra$Random$Int$positiveInt);
 		case 'GoUInt8':
-			return $elm$json$Json$Encode$int(255);
+			return A2($elm$random$Random$map, $elm$json$Json$Encode$int, $author$project$Gen$goUInt8);
 		case 'GoUInt16':
-			return $elm$json$Json$Encode$int(1616);
+			return A2($elm$random$Random$map, $elm$json$Json$Encode$int, $author$project$Gen$goUInt16);
 		case 'GoUInt32':
-			return $elm$json$Json$Encode$int(323232);
+			return A2($elm$random$Random$map, $elm$json$Json$Encode$int, $author$project$Gen$goUInt32);
 		case 'GoUInt64':
-			return $elm$json$Json$Encode$int(646464646464);
+			return A2($elm$random$Random$map, $elm$json$Json$Encode$int, $author$project$Gen$goUInt64);
 		case 'GoString':
-			return $elm$json$Json$Encode$string('robpike');
+			return A2(
+				$elm$random$Random$map,
+				$elm$json$Json$Encode$string,
+				A3($elm_community$random_extra$Random$String$rangeLengthString, 2, 16, $elm_community$random_extra$Random$Char$english));
 		case 'GoFloat':
-			return $elm$json$Json$Encode$float(2.71828);
+			return A2($elm$random$Random$map, $elm$json$Json$Encode$float, $elm_community$random_extra$Random$Float$anyFloat);
 		case 'GoDouble':
-			return $elm$json$Json$Encode$float(3.1415926);
+			return A2($elm$random$Random$map, $elm$json$Json$Encode$float, $elm_community$random_extra$Random$Float$anyFloat);
 		case 'GoBool':
-			return $elm$json$Json$Encode$bool(true);
+			return A2($elm$random$Random$map, $elm$json$Json$Encode$bool, $elm_community$random_extra$Random$Extra$bool);
 		default:
-			return $elm$json$Json$Encode$string('2006-01-02T15:04:05Z');
+			return $elm$random$Random$constant(
+				$elm$json$Json$Encode$string('2006-01-02T15:04:05Z'));
 	}
 };
+var $author$project$Gen$stringValue = F2(
+	function (f, g) {
+		return A2(
+			$elm$random$Random$map,
+			A2($elm$core$Basics$composeL, $elm$json$Json$Encode$string, f),
+			g);
+	});
+var $author$project$Gen$floatString = $author$project$Gen$stringValue($elm$core$String$fromFloat);
+var $author$project$Gen$intString = $author$project$Gen$stringValue($elm$core$String$fromInt);
 var $author$project$Gen$simpleValueAsString = function (typ) {
 	switch (typ.$) {
 		case 'GoInt':
-			return $elm$json$Json$Encode$string('0');
+			return $author$project$Gen$intString($author$project$Gen$goInt);
 		case 'GoInt8':
-			return $elm$json$Json$Encode$string('1');
+			return $author$project$Gen$intString($author$project$Gen$goInt8);
 		case 'GoInt16':
-			return $elm$json$Json$Encode$string('2');
+			return $author$project$Gen$intString($author$project$Gen$goInt16);
 		case 'GoInt32':
-			return $elm$json$Json$Encode$string('4');
+			return $author$project$Gen$intString($author$project$Gen$goInt32);
 		case 'GoInt64':
-			return $elm$json$Json$Encode$string('8');
+			return $author$project$Gen$intString($author$project$Gen$goInt64);
 		case 'GoUInt':
-			return $elm$json$Json$Encode$string('0');
+			return $author$project$Gen$intString($author$project$Gen$goUInt);
 		case 'GoUInt8':
-			return $elm$json$Json$Encode$string('255');
+			return $author$project$Gen$intString($author$project$Gen$goUInt8);
 		case 'GoUInt16':
-			return $elm$json$Json$Encode$string('65535');
+			return $author$project$Gen$intString($author$project$Gen$goUInt16);
 		case 'GoUInt32':
-			return $elm$json$Json$Encode$string('4294967295');
+			return $author$project$Gen$intString($author$project$Gen$goUInt32);
 		case 'GoUInt64':
-			return $elm$json$Json$Encode$string('18446744073709551615');
+			return $author$project$Gen$intString($author$project$Gen$goUInt64);
 		case 'GoString':
-			return $elm$json$Json$Encode$string('\"___\"');
+			return $elm$random$Random$constant(
+				$elm$json$Json$Encode$string('\"robpike\"'));
 		case 'GoFloat':
-			return $elm$json$Json$Encode$string('2.71828');
+			return $author$project$Gen$floatString(
+				A2($elm$random$Random$float, 0, 1));
 		case 'GoDouble':
-			return $elm$json$Json$Encode$string('3.1415926');
+			return $author$project$Gen$floatString(
+				A2($elm$random$Random$float, 0, 1));
 		case 'GoBool':
-			return $elm$json$Json$Encode$string('false');
+			return A2(
+				$elm$random$Random$map,
+				function (b) {
+					return b ? $elm$json$Json$Encode$string('true') : $elm$json$Json$Encode$string('false');
+				},
+				$elm_community$random_extra$Random$Extra$bool);
 		default:
-			return $elm$json$Json$Encode$string('2006-01-02T15:04:05Z');
+			return $elm$random$Random$constant(
+				$elm$json$Json$Encode$string('2006-01-02T15:04:05Z'));
 	}
 };
 var $elm$core$Maybe$withDefault = F2(
@@ -6661,15 +7180,20 @@ var $author$project$Gen$exampleValue = F2(
 						var t = typ.b;
 						var _v12 = A2($author$project$Gen$exampleValue, env, t);
 						if (_v12.$ === 'Ok') {
-							var v = _v12.a;
+							var vg = _v12.a;
 							return $elm$core$Result$Ok(
 								A2(
-									$elm$json$Json$Encode$list,
-									$elm$core$Basics$identity,
-									A2(
-										$elm$core$List$repeat,
-										A2($elm$core$Maybe$withDefault, 3, n),
-										v)));
+									$elm$random$Random$map,
+									function (v) {
+										return A2(
+											$elm$json$Json$Encode$list,
+											$elm$core$Basics$identity,
+											A2(
+												$elm$core$List$repeat,
+												A2($elm$core$Maybe$withDefault, 3, n),
+												v));
+									},
+									vg));
 						} else {
 							var e = _v12.a;
 							return $elm$core$Result$Err(e);
@@ -6692,7 +7216,8 @@ var $author$project$Gen$exampleValue = F2(
 					}
 				case 'GoInterface':
 					return $elm$core$Result$Ok(
-						$elm$json$Json$Encode$object(_List_Nil));
+						$elm$random$Random$constant(
+							$elm$json$Json$Encode$object(_List_Nil)));
 				case 'GoPointer':
 					var p = typ.a;
 					var _v14 = A2($author$project$Gen$deref, 1, p);
@@ -6715,19 +7240,20 @@ var $author$project$Gen$exampleValue = F2(
 						var e = _v15.a;
 						return $elm$core$Result$Err(e);
 					} else {
-						var key = _v15.a;
+						var keyGenerator = _v15.a;
 						var _v16 = A2($author$project$Gen$exampleValue, env, t2);
 						if (_v16.$ === 'Err') {
 							var e = _v16.a;
 							return $elm$core$Result$Err(e);
 						} else {
-							var value = _v16.a;
+							var valueGenerator = _v16.a;
 							return $elm$core$Result$Ok(
-								$elm$json$Json$Encode$object(
-									_List_fromArray(
-										[
-											_Utils_Tuple2(key, value)
-										])));
+								A2(
+									$elm$random$Random$map,
+									function (d) {
+										return A3($elm$json$Json$Encode$dict, $elm$core$Basics$identity, $elm$core$Basics$identity, d);
+									},
+									A4($elm_community$random_extra$Random$Dict$rangeLengthDict, 3, 5, keyGenerator, valueGenerator)));
 						}
 					}
 			}
@@ -6737,7 +7263,9 @@ var $author$project$Gen$json = F2(
 	function (env, structfields) {
 		return A2(
 			$elm$core$Result$map,
-			$elm$json$Json$Encode$object,
+			function (v) {
+				return A2($elm$random$Random$map, $elm$json$Json$Encode$object, v);
+			},
 			A2($author$project$Gen$json_, env, structfields));
 	});
 var $author$project$Gen$json_ = F2(
@@ -6796,7 +7324,8 @@ var $author$project$Gen$json_ = F2(
 										A2($elm$core$Dict$remove, t, env),
 										def);
 								} else {
-									return $elm$core$Result$Ok($elm$json$Json$Encode$null);
+									return $elm$core$Result$Ok(
+										$elm$random$Random$constant($elm$json$Json$Encode$null));
 								}
 							} else {
 								var t = _v7.a;
@@ -6842,15 +7371,29 @@ var $author$project$Gen$json_ = F2(
 									if (_v4.$ === 'Just') {
 										var name_ = _v4.a;
 										return $elm$core$Result$Ok(
-											A2(
-												$elm$core$List$cons,
-												_Utils_Tuple2(
-													name_,
-													$elm$json$Json$Encode$object(pairs__)),
-												pairs));
+											A3(
+												$elm$random$Random$map2,
+												F2(
+													function (p0, p1) {
+														return A2(
+															$elm$core$List$cons,
+															_Utils_Tuple2(
+																name_,
+																$elm$json$Json$Encode$object(p1)),
+															p0);
+													}),
+												pairs,
+												pairs__));
 									} else {
 										return $elm$core$Result$Ok(
-											_Utils_ap(pairs__, pairs));
+											A3(
+												$elm$random$Random$map2,
+												F2(
+													function (p0, p1) {
+														return _Utils_ap(p0, p1);
+													}),
+												pairs__,
+												pairs));
 									}
 								}
 							} else {
@@ -6872,14 +7415,21 @@ var $author$project$Gen$json_ = F2(
 									typ,
 									asString(tags));
 								if (_v5.$ === 'Ok') {
-									var value = _v5.a;
+									var generator = _v5.a;
 									return $elm$core$Result$Ok(
-										A2(
-											$elm$core$List$cons,
-											_Utils_Tuple2(
-												A2(rename_, id, tags),
-												value),
-											pairs));
+										A3(
+											$elm$random$Random$map2,
+											F2(
+												function (p0, value) {
+													return A2(
+														$elm$core$List$cons,
+														_Utils_Tuple2(
+															A2(rename_, id, tags),
+															value),
+														p0);
+												}),
+											pairs,
+											generator));
 								} else {
 									var e = _v5.a;
 									return $elm$core$Result$Err(e);
@@ -6892,7 +7442,8 @@ var $author$project$Gen$json_ = F2(
 		return A3(
 			$elm$core$List$foldl,
 			folder,
-			$elm$core$Result$Ok(_List_Nil),
+			$elm$core$Result$Ok(
+				$elm$random$Random$constant(_List_Nil)),
 			structfields);
 	});
 var $elm$core$Result$map2 = F3(
@@ -6912,11 +7463,16 @@ var $elm$core$Result$map2 = F3(
 			}
 		}
 	});
+var $elm_community$random_extra$Random$Extra$sequence = A2(
+	$elm$core$List$foldr,
+	$elm$random$Random$map2($elm$core$List$cons),
+	$elm$random$Random$constant(_List_Nil));
 var $author$project$Gen$fromParsed = function (result) {
 	if (result.$ === 'Err') {
 		var e = result.a;
-		return $elm$core$Result$Err(
-			$author$project$P$deadEndsToString(e));
+		return $elm$random$Random$constant(
+			$elm$core$Result$Err(
+				$author$project$P$deadEndsToString(e)));
 	} else {
 		var lines = result.a;
 		var jsonize = F2(
@@ -6949,26 +7505,107 @@ var $author$project$Gen$fromParsed = function (result) {
 			var _v5 = A2(jsonize, env, lines);
 			if (_v5.$ === 'Err') {
 				var e = _v5.a;
-				return $elm$core$Result$Err(e);
+				return $elm$random$Random$constant(
+					$elm$core$Result$Err(e));
 			} else {
 				var values = _v5.a;
-				return $elm$core$Result$Ok(
+				return A2(
+					$elm$random$Random$map,
 					A2(
-						$elm$core$String$join,
-						'\n',
+						$elm$core$Basics$composeL,
 						A2(
-							$elm$core$List$map,
+							$elm$core$Basics$composeL,
+							$elm$core$Result$Ok,
+							$elm$core$String$join('\n')),
+						$elm$core$List$map(
 							function (value) {
 								return A2($elm$json$Json$Encode$encode, 4, value);
-							},
-							values)));
+							})),
+					$elm_community$random_extra$Random$Extra$sequence(values));
 			}
 		} else {
 			var e = _v4.a;
-			return $elm$core$Result$Err(e);
+			return $elm$random$Random$constant(
+				$elm$core$Result$Err(e));
 		}
 	}
 };
+var $elm$random$Random$Generate = function (a) {
+	return {$: 'Generate', a: a};
+};
+var $elm$random$Random$initialSeed = function (x) {
+	var _v0 = $elm$random$Random$next(
+		A2($elm$random$Random$Seed, 0, 1013904223));
+	var state1 = _v0.a;
+	var incr = _v0.b;
+	var state2 = (state1 + x) >>> 0;
+	return $elm$random$Random$next(
+		A2($elm$random$Random$Seed, state2, incr));
+};
+var $elm$time$Time$Name = function (a) {
+	return {$: 'Name', a: a};
+};
+var $elm$time$Time$Offset = function (a) {
+	return {$: 'Offset', a: a};
+};
+var $elm$time$Time$Zone = F2(
+	function (a, b) {
+		return {$: 'Zone', a: a, b: b};
+	});
+var $elm$time$Time$customZone = $elm$time$Time$Zone;
+var $elm$time$Time$Posix = function (a) {
+	return {$: 'Posix', a: a};
+};
+var $elm$time$Time$millisToPosix = $elm$time$Time$Posix;
+var $elm$time$Time$now = _Time_now($elm$time$Time$millisToPosix);
+var $elm$time$Time$posixToMillis = function (_v0) {
+	var millis = _v0.a;
+	return millis;
+};
+var $elm$random$Random$init = A2(
+	$elm$core$Task$andThen,
+	function (time) {
+		return $elm$core$Task$succeed(
+			$elm$random$Random$initialSeed(
+				$elm$time$Time$posixToMillis(time)));
+	},
+	$elm$time$Time$now);
+var $elm$random$Random$onEffects = F3(
+	function (router, commands, seed) {
+		if (!commands.b) {
+			return $elm$core$Task$succeed(seed);
+		} else {
+			var generator = commands.a.a;
+			var rest = commands.b;
+			var _v1 = A2($elm$random$Random$step, generator, seed);
+			var value = _v1.a;
+			var newSeed = _v1.b;
+			return A2(
+				$elm$core$Task$andThen,
+				function (_v2) {
+					return A3($elm$random$Random$onEffects, router, rest, newSeed);
+				},
+				A2($elm$core$Platform$sendToApp, router, value));
+		}
+	});
+var $elm$random$Random$onSelfMsg = F3(
+	function (_v0, _v1, seed) {
+		return $elm$core$Task$succeed(seed);
+	});
+var $elm$random$Random$cmdMap = F2(
+	function (func, _v0) {
+		var generator = _v0.a;
+		return $elm$random$Random$Generate(
+			A2($elm$random$Random$map, func, generator));
+	});
+_Platform_effectManagers['Random'] = _Platform_createManager($elm$random$Random$init, $elm$random$Random$onEffects, $elm$random$Random$onSelfMsg, $elm$random$Random$cmdMap);
+var $elm$random$Random$command = _Platform_leaf('Random');
+var $elm$random$Random$generate = F2(
+	function (tagger, generator) {
+		return $elm$random$Random$command(
+			$elm$random$Random$Generate(
+				A2($elm$random$Random$map, tagger, generator)));
+	});
 var $elm$parser$Parser$Advanced$Bad = F2(
 	function (a, b) {
 		return {$: 'Bad', a: a, b: b};
@@ -8505,13 +9142,10 @@ var $elm$parser$Parser$run = F2(
 	});
 var $author$project$Main$getJson = function (str) {
 	return A2(
-		$elm$core$Task$perform,
-		function (_v0) {
-			return $author$project$Main$GotText(
-				$author$project$Gen$fromParsed(
-					A2($elm$parser$Parser$run, $author$project$P$goStructs, str)));
-		},
-		$elm$core$Task$succeed(_Utils_Tuple0));
+		$elm$random$Random$generate,
+		$author$project$Main$GotText,
+		$author$project$Gen$fromParsed(
+			A2($elm$parser$Parser$run, $author$project$P$goStructs, str)));
 };
 var $author$project$Main$update = F2(
 	function (msg, model) {

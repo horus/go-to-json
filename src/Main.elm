@@ -7,7 +7,7 @@ import Html.Events exposing (..)
 import Gen exposing (fromParsed)
 import P exposing (goStructs)
 import Parser exposing (run)
-import Task
+import Random exposing (generate)
 
 type Model = Loading | Failed String | Success String
 
@@ -81,4 +81,4 @@ textAreaStyle : List (Attribute Msg)
 textAreaStyle = [style "display" "block", style "width" "500px", style "height" "300px", style "resize" "none", readonly True ]
 
 getJson : String -> Cmd Msg
-getJson str = Task.perform (\_ -> GotText (Gen.fromParsed <| run P.goStructs str)) (Task.succeed ())
+getJson str = Random.generate GotText (Gen.fromParsed <| run P.goStructs str)
