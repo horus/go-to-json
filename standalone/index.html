@@ -5663,6 +5663,9 @@ var $author$project$P$deadEndsToString = function (deadEnds) {
 			'; ',
 			A2($elm$core$List$map, $author$project$P$deadEndToString, deadEnds)));
 };
+var $author$project$P$GoTyVar = function (a) {
+	return {$: 'GoTyVar', a: a};
+};
 var $author$project$P$KeyAsString = {$: 'KeyAsString'};
 var $author$project$P$KeyIgnore = {$: 'KeyIgnore'};
 var $elm$core$Bitwise$and = _Bitwise_and;
@@ -7198,15 +7201,15 @@ var $author$project$Gen$simpleValueAsString = function (typ) {
 				$elm$json$Json$Encode$string('2006-01-02T15:04:05Z'));
 	}
 };
-var $author$project$Gen$exampleValue = F2(
-	function (env, typ) {
+var $author$project$Gen$exampleValue = F3(
+	function (env, typ, asString) {
 		exampleValue:
 		while (true) {
 			switch (typ.$) {
 				case 'GoBasic':
 					var t = typ.a;
 					return $elm$core$Result$Ok(
-						$author$project$Gen$simpleValue(t));
+						asString ? $author$project$Gen$simpleValueAsString(t) : $author$project$Gen$simpleValue(t));
 				case 'GoArrayLike':
 					if (typ.b.$ === 'GoBasic') {
 						var n = typ.a;
@@ -7219,9 +7222,9 @@ var $author$project$Gen$exampleValue = F2(
 					} else {
 						var n = typ.a;
 						var t = typ.b;
-						var _v12 = A2($author$project$Gen$exampleValue, env, t);
-						if (_v12.$ === 'Ok') {
-							var vg = _v12.a;
+						var _v9 = A3($author$project$Gen$exampleValue, env, t, asString);
+						if (_v9.$ === 'Ok') {
+							var vg = _v9.a;
 							return $elm$core$Result$Ok(
 								A2(
 									$elm$random$Random$map,
@@ -7236,7 +7239,7 @@ var $author$project$Gen$exampleValue = F2(
 									},
 									vg));
 						} else {
-							var e = _v12.a;
+							var e = _v9.a;
 							return $elm$core$Result$Err(e);
 						}
 					}
@@ -7245,9 +7248,9 @@ var $author$project$Gen$exampleValue = F2(
 					return A2($author$project$Gen$json, env, defs);
 				case 'GoTyVar':
 					var t = typ.a;
-					var _v13 = A2($elm$core$Dict$get, t, env);
-					if (_v13.$ === 'Just') {
-						var def = _v13.a.a;
+					var _v10 = A2($elm$core$Dict$get, t, env);
+					if (_v10.$ === 'Just') {
+						var def = _v10.a.a;
 						return A2(
 							$author$project$Gen$json,
 							A2($elm$core$Dict$remove, t, env),
@@ -7261,33 +7264,51 @@ var $author$project$Gen$exampleValue = F2(
 							$elm$json$Json$Encode$object(_List_Nil)));
 				case 'GoPointer':
 					var p = typ.a;
-					var _v14 = A2($author$project$Gen$deref, 1, p);
-					if (_v14.$ === 'Ok') {
-						var t = _v14.a;
-						var $temp$env = env,
-							$temp$typ = t;
-						env = $temp$env;
-						typ = $temp$typ;
-						continue exampleValue;
+					var _v11 = A2($author$project$Gen$deref, 1, p);
+					if (_v11.$ === 'Ok') {
+						if (_v11.a.$ === 'GoTyVar') {
+							var t = _v11.a.a;
+							if (A2($elm$core$Dict$member, t, env)) {
+								var $temp$env = env,
+									$temp$typ = $author$project$P$GoTyVar(t),
+									$temp$asString = asString;
+								env = $temp$env;
+								typ = $temp$typ;
+								asString = $temp$asString;
+								continue exampleValue;
+							} else {
+								return $elm$core$Result$Ok(
+									$elm$random$Random$constant($elm$json$Json$Encode$null));
+							}
+						} else {
+							var t = _v11.a;
+							var $temp$env = env,
+								$temp$typ = t,
+								$temp$asString = asString;
+							env = $temp$env;
+							typ = $temp$typ;
+							asString = $temp$asString;
+							continue exampleValue;
+						}
 					} else {
-						var e = _v14.a;
+						var e = _v11.a;
 						return $elm$core$Result$Err(e);
 					}
 				default:
 					var t1 = typ.a;
 					var t2 = typ.b;
-					var _v15 = A2($author$project$Gen$mapKey, t1, t2);
-					if (_v15.$ === 'Err') {
-						var e = _v15.a;
+					var _v12 = A2($author$project$Gen$mapKey, t1, t2);
+					if (_v12.$ === 'Err') {
+						var e = _v12.a;
 						return $elm$core$Result$Err(e);
 					} else {
-						var keyGenerator = _v15.a;
-						var _v16 = A2($author$project$Gen$exampleValue, env, t2);
-						if (_v16.$ === 'Err') {
-							var e = _v16.a;
+						var keyGenerator = _v12.a;
+						var _v13 = A3($author$project$Gen$exampleValue, env, t2, asString);
+						if (_v13.$ === 'Err') {
+							var e = _v13.a;
 							return $elm$core$Result$Err(e);
 						} else {
-							var valueGenerator = _v16.a;
+							var valueGenerator = _v13.a;
 							return $elm$core$Result$Ok(
 								A2(
 									$elm$random$Random$map,
@@ -7335,8 +7356,8 @@ var $author$project$Gen$json_ = F2(
 				$elm$core$Basics$composeL,
 				$elm$core$Maybe$withDefault(true),
 				$elm$core$Maybe$map(
-					function (_v9) {
-						var c = _v9.a;
+					function (_v6) {
+						var c = _v6.a;
 						return !$elm$core$Char$isUpper(c);
 					}),
 				$elm$core$String$uncons(id));
@@ -7344,42 +7365,6 @@ var $author$project$Gen$json_ = F2(
 		var ignored = function (tags) {
 			return A2($elm$core$List$member, $author$project$P$KeyIgnore, tags);
 		};
-		var example = F2(
-			function (typ, asString_) {
-				switch (typ.$) {
-					case 'GoBasic':
-						var b = typ.a;
-						return asString_ ? $elm$core$Result$Ok(
-							$author$project$Gen$simpleValueAsString(b)) : A2($author$project$Gen$exampleValue, env, typ);
-					case 'GoPointer':
-						var p = typ.a;
-						var _v7 = A2($author$project$Gen$deref, 1, p);
-						if (_v7.$ === 'Ok') {
-							if (_v7.a.$ === 'GoTyVar') {
-								var t = _v7.a.a;
-								var _v8 = A2($elm$core$Dict$get, t, env);
-								if (_v8.$ === 'Just') {
-									var def = _v8.a.a;
-									return A2(
-										$author$project$Gen$json,
-										A2($elm$core$Dict$remove, t, env),
-										def);
-								} else {
-									return $elm$core$Result$Ok(
-										$elm$random$Random$constant($elm$json$Json$Encode$null));
-								}
-							} else {
-								var t = _v7.a;
-								return A2($author$project$Gen$exampleValue, env, t);
-							}
-						} else {
-							var e = _v7.a;
-							return $elm$core$Result$Err(e);
-						}
-					default:
-						return A2($author$project$Gen$exampleValue, env, typ);
-				}
-			});
 		var asString = function (tags) {
 			return A2($elm$core$List$member, $author$project$P$KeyAsString, tags);
 		};
@@ -7451,8 +7436,9 @@ var $author$project$Gen$json_ = F2(
 							if (notExported(id)) {
 								return (!$elm$core$List$isEmpty(tags)) ? $elm$core$Result$Err('struct field ' + (id + ' has json tag but is not exported')) : pairs_;
 							} else {
-								var _v5 = A2(
-									example,
+								var _v5 = A3(
+									$author$project$Gen$exampleValue,
+									env,
 									typ,
 									asString(tags));
 								if (_v5.$ === 'Ok') {
@@ -7753,9 +7739,6 @@ var $author$project$P$GoStructLine = F3(
 	function (a, b, c) {
 		return {$: 'GoStructLine', a: a, b: b, c: c};
 	});
-var $author$project$P$GoTyVar = function (a) {
-	return {$: 'GoTyVar', a: a};
-};
 var $elm$parser$Parser$Optional = {$: 'Optional'};
 var $elm$parser$Parser$Advanced$findSubString = _Parser_findSubString;
 var $elm$parser$Parser$Advanced$fromInfo = F4(

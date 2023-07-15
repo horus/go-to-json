@@ -82,16 +82,16 @@ show typ =
         GoInterface -> "interface{}"
         GoTyVar t -> "main." ++ t
         GoPointer t -> "*" ++ show t
-        
-exampleValue : Dict String GoStructDef -> GoTypes -> Result String (Random.Generator Json.Encode.Value)
-exampleValue env typ =
+
+exampleValue : Dict String GoStructDef -> GoTypes -> Bool -> Result String (Random.Generator Json.Encode.Value)
+exampleValue env typ asString =
     case typ of
-        GoBasic t -> Ok (simpleValue t)
+        GoBasic t -> Ok <| if asString then simpleValueAsString t else simpleValue t
         GoArrayLike n (GoBasic t) -> Ok
             <| simpleArrayLike (Maybe.withDefault 3 n)
             <| t
         GoArrayLike n t ->
-            case exampleValue env t of
+            case exampleValue env t asString of
                 Ok vg -> Ok
                     <| Random.map (\v -> list identity
                         <| List.repeat (Maybe.withDefault 3 n)
@@ -106,13 +106,22 @@ exampleValue env typ =
         GoInterface -> Ok <| Random.constant <| object []
         GoPointer p ->
             case deref 1 p of
-                Ok t -> exampleValue env t
+                Ok (GoTyVar t) ->
+                    if Dict.member t env
+                        then exampleValue env (GoTyVar t) asString
+                        -- special case: every pointer has a valid value: nil
+                        else Ok <| Random.constant <| Json.Encode.null
+                Ok t ->
+                    -- json tag "string" expecting: string, floating point, integer, or boolean types
+                    -- other types ignore it, just proceed as usual, which I seemed to misunderstand in the original Haskell version.
+                    -- "Pointer values encode as the value pointed to."
+                    exampleValue env t asString
                 Err e -> Err e
         GoMap t1 t2 ->
             case mapKey t1 t2 of
                 Err e -> Err e
                 Ok keyGenerator ->
-                    case exampleValue env t2 of
+                    case exampleValue env t2 asString of
                         Err e -> Err e
                         Ok valueGenerator -> Ok
                             <| Random.map (\d -> Json.Encode.dict identity identity d)
@@ -136,22 +145,6 @@ json_ env structfields =
             in
                 List.head <| List.filterMap keyRename tags
         rename_ name tags = Maybe.withDefault name (rename tags)
-        example typ asString_ =
-            case typ of
-                GoBasic b -> if asString_ then Ok (simpleValueAsString b) else exampleValue env typ
-                GoPointer p ->
-                -- json tag "string" expecting: string, floating point, integer, or boolean types
-                -- other types ignore it, just proceed as usual
-                -- which I seemed to misunderstand in the original Haskell version
-                -- "Pointer values encode as the value pointed to."
-                    case deref 1 p of
-                        Ok (GoTyVar t) ->
-                            case Dict.get t env of
-                                Just (GoStructDef def) -> json (Dict.remove t env) def
-                                Nothing -> Ok <| Random.constant <| Json.Encode.null -- special case
-                        Ok t -> exampleValue env t
-                        Err e -> Err e
-                _ -> exampleValue env typ
         folder structfield pairs_ =
             case pairs_ of
                 Err e -> Err e
@@ -181,13 +174,12 @@ json_ env structfields =
                                                 then Err <| "struct field " ++ id ++ " has json tag but is not exported"
                                                 else pairs_
                                     else
-                                        case example typ (asString tags) of
+                                        case exampleValue env typ (asString tags) of
                                             Ok generator -> Ok <| Random.map2 (\p0 value -> (rename_ id tags, value) :: p0) pairs generator
                                             Err e -> Err e
     in
         List.foldl folder (Ok (Random.constant [])) structfields
 
-                
 mapKey : GoTypes -> GoTypes -> Result String (Random.Generator String)
 mapKey keyType valueType =
     case keyType of
