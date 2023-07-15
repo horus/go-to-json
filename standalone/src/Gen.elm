@@ -87,16 +87,11 @@ exampleValue : Dict String GoStructDef -> GoTypes -> Bool -> Result String (Rand
 exampleValue env typ asString =
     case typ of
         GoBasic t -> Ok <| if asString then simpleValueAsString t else simpleValue t
-        GoArrayLike n (GoBasic t) -> Ok
-            <| simpleArrayLike (Maybe.withDefault 3 n)
-            <| t
         GoArrayLike n t ->
-            case exampleValue env t asString of
+            case exampleValue env t False of
                 Ok vg -> Ok
-                    <| Random.map (\v -> list identity
-                        <| List.repeat (Maybe.withDefault 3 n)
-                        <| v)
-                    <| vg
+                    <| Random.map (\xs -> list identity xs)
+                    <| Random.Extra.rangeLengthList 0 (Maybe.withDefault 3 n) vg
                 Err e -> Err e
         GoStruct (GoStructDef defs) -> json env defs
         GoTyVar t ->
@@ -121,7 +116,7 @@ exampleValue env typ asString =
             case mapKey t1 t2 of
                 Err e -> Err e
                 Ok keyGenerator ->
-                    case exampleValue env t2 asString of
+                    case exampleValue env t2 False of
                         Err e -> Err e
                         Ok valueGenerator -> Ok
                             <| Random.map (\d -> Json.Encode.dict identity identity d)
@@ -214,29 +209,6 @@ deref i typ =
                 else Err <| "deep pointer occurrence: " ++ String.repeat i "*" ++ show typ
         base -> Ok base
 
-simpleArrayLike : Int -> GoSimpleTypes -> Random.Generator Json.Encode.Value
-simpleArrayLike n typ =
-    let
-        value f g = Random.map (\xs -> list f xs) g 
-        randomTake f xs = Random.map (\ys -> list f <| List.take n ys) <| Random.List.shuffle xs
-    in
-        case typ of
-            GoBool -> value bool <| Random.list n Random.Extra.bool
-            GoInt -> value int <| Random.list n Random.Int.anyInt
-            GoInt8 -> value int <| Random.list n goInt8
-            GoInt16 -> value int <| Random.list n goInt16
-            GoInt32 -> value int <| Random.list n goInt32
-            GoInt64 -> value int <| Random.list n Random.Int.anyInt
-            GoUInt -> value int <| Random.list n Random.Int.positiveInt
-            GoUInt8 -> value int <| Random.list n goUInt8
-            GoUInt16 -> value int <| Random.list n goUInt16
-            GoUInt32 -> value int <| Random.list n goUInt32
-            GoUInt64 -> value int <| Random.list n goUInt64
-            GoFloat -> value float <| Random.list n Random.Float.anyFloat
-            GoDouble -> value float <| Random.list n Random.Float.anyFloat
-            GoString -> value string <| Random.list n <| Random.String.rangeLengthString 1 8 Random.Char.english
-            GoTime -> randomTake string ["2011-01-26T19:06:43Z", "2020-07-16T14:49:50.3269159+08:00", "2011-01-26T19:01:12Z", "2011-01-26T19:14:43Z", "2009-11-10T23:00:00Z", "2018-09-22T12:42:31Z", "2020-12-29T14:58:15Z", "2006-01-02T15:04:05Z", "2020-12-29T14:58:15.229579703+08:00", "2017-12-30T11:25:30+09:00"]
-
 simpleValue : GoSimpleTypes -> Random.Generator Json.Encode.Value
 simpleValue typ =
     case typ of
@@ -254,7 +226,9 @@ simpleValue typ =
         GoFloat -> Random.map float Random.Float.anyFloat
         GoDouble -> Random.map float Random.Float.anyFloat
         GoBool -> Random.map bool Random.Extra.bool
-        GoTime -> Random.constant <| string "2006-01-02T15:04:05Z"
+        GoTime -> Random.map (\s -> string <| Maybe.withDefault "2006-01-02T15:04:05Z" s)
+                    <| Random.Extra.sample
+                    <| ["2011-01-26T19:06:43Z", "2020-07-16T14:49:50.3269159+08:00", "2011-01-26T19:01:12Z", "2011-01-26T19:14:43Z", "2009-11-10T23:00:00Z", "2018-09-22T12:42:31Z", "2020-12-29T14:58:15Z", "2006-01-02T15:04:05Z", "2020-12-29T14:58:15.229579703+08:00", "2017-12-30T11:25:30+09:00"]
 
 simpleValueAsString : GoSimpleTypes -> Random.Generator Json.Encode.Value
 simpleValueAsString typ =
