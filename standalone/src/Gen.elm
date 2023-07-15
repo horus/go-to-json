@@ -258,7 +258,7 @@ simpleValue typ =
         GoUInt16 -> Random.map int <| goUInt16
         GoUInt32 -> Random.map int <| goUInt32
         GoUInt64 -> Random.map int <| goUInt64
-        GoString -> Random.map string <| Random.String.rangeLengthString 2 16 Random.Char.english
+        GoString -> Random.map string <| Random.String.rangeLengthString 1 8 Random.Char.english
         GoFloat -> Random.map float Random.Float.anyFloat
         GoDouble -> Random.map float Random.Float.anyFloat
         GoBool -> Random.map bool Random.Extra.bool
