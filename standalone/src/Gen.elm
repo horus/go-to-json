@@ -4,6 +4,14 @@ import P exposing (..)
 import Dict exposing (Dict)
 import Json.Encode exposing (..)
 import Parser exposing (DeadEnd)
+import Random
+import Random.Char
+import Random.Dict
+import Random.Float
+import Random.Int
+import Random.Extra
+import Random.List
+import Random.String
 
 buildEnv : List (Maybe String, GoStructDef) -> Result String (Dict String GoStructDef)
 buildEnv xs =
@@ -14,17 +22,17 @@ buildEnv xs =
                     case name_ of
                         Just name ->
                             if Dict.member name dict
-                                then Err (name ++ " redeclared in this block")
-                                else Ok (Dict.insert name def dict)
+                                then Err <| name ++ " redeclared in this block"
+                                else Ok  <| Dict.insert name def dict
                         Nothing -> dict_
                 err -> err
     in
         List.foldl folder (Ok Dict.empty) xs
 
-fromParsed : Result (List DeadEnd) (List (Maybe String, GoStructDef)) -> Result String String
+fromParsed : Result (List DeadEnd) (List (Maybe String, GoStructDef)) -> Random.Generator (Result String String)
 fromParsed result =
     case result of
-        Err e -> Err (deadEndsToString e)
+        Err e -> Random.constant <| Err <| deadEndsToString e
         Ok lines ->
             let
                 jsonize env_ ls_ =
@@ -42,9 +50,12 @@ fromParsed result =
                 case buildEnv lines of
                     Ok env ->
                         case jsonize env lines of
-                            Err e -> Err e
-                            Ok values -> Ok (String.join "\n" <| List.map (\value -> encode 4 value) values)
-                    Err e -> Err e
+                            Err e -> Random.constant <| Err e
+                            Ok values -> Random.map (Ok
+                                << String.join "\n"
+                                << List.map (\value -> encode 4 value))
+                                <| Random.Extra.sequence values
+                    Err e -> Random.constant (Err e)
 
 show : GoTypes -> String
 show typ =
@@ -72,21 +83,27 @@ show typ =
         GoTyVar t -> "main." ++ t
         GoPointer t -> "*" ++ show t
         
-exampleValue : Dict String GoStructDef -> GoTypes -> Result String Json.Encode.Value
+exampleValue : Dict String GoStructDef -> GoTypes -> Result String (Random.Generator Json.Encode.Value)
 exampleValue env typ =
     case typ of
         GoBasic t -> Ok (simpleValue t)
-        GoArrayLike n (GoBasic t) -> Ok (simpleArrayLike (Maybe.withDefault 3 n) t)
+        GoArrayLike n (GoBasic t) -> Ok
+            <| simpleArrayLike (Maybe.withDefault 3 n)
+            <| t
         GoArrayLike n t ->
             case exampleValue env t of
-                Ok v -> Ok (list identity <| List.repeat (Maybe.withDefault 3 n) v)
+                Ok vg -> Ok
+                    <| Random.map (\v -> list identity
+                        <| List.repeat (Maybe.withDefault 3 n)
+                        <| v)
+                    <| vg
                 Err e -> Err e
         GoStruct (GoStructDef defs) -> json env defs
         GoTyVar t ->
             case Dict.get t env of
                 Just (GoStructDef def) -> json (Dict.remove t env) def
-                Nothing -> Err ("undefined or invalid: " ++ t)
-        GoInterface -> Ok (object [])
+                Nothing -> Err <| "undefined or invalid: " ++ t
+        GoInterface -> Ok <| Random.constant <| object []
         GoPointer p ->
             case deref 1 p of
                 Ok t -> exampleValue env t
@@ -94,15 +111,17 @@ exampleValue env typ =
         GoMap t1 t2 ->
             case mapKey t1 t2 of
                 Err e -> Err e
-                Ok key ->
+                Ok keyGenerator ->
                     case exampleValue env t2 of
                         Err e -> Err e
-                        Ok value -> Ok (object [(key, value)])
+                        Ok valueGenerator -> Ok
+                            <| Random.map (\d -> Json.Encode.dict identity identity d)
+                            <| Random.Dict.rangeLengthDict 3 5 keyGenerator valueGenerator
 
-json : Dict String GoStructDef -> List GoStructLine -> Result String Json.Encode.Value
-json env structfields = Result.map Json.Encode.object (json_ env structfields)
+json : Dict String GoStructDef -> List GoStructLine -> Result String (Random.Generator Json.Encode.Value)
+json env structfields = Result.map (\v -> Random.map Json.Encode.object v) <| json_ env structfields
 
-json_ : Dict String GoStructDef -> List GoStructLine -> Result String (List (String, Json.Encode.Value))
+json_ : Dict String GoStructDef -> List GoStructLine -> Result String (Random.Generator (List (String, Json.Encode.Value)))
 json_ env structfields =
     let
         ignored tags = List.member KeyIgnore tags
@@ -129,7 +148,7 @@ json_ env structfields =
                         Ok (GoTyVar t) ->
                             case Dict.get t env of
                                 Just (GoStructDef def) -> json (Dict.remove t env) def
-                                Nothing -> Ok Json.Encode.null -- special case
+                                Nothing -> Ok <| Random.constant <| Json.Encode.null -- special case
                         Ok t -> exampleValue env t
                         Err e -> Err e
                 _ -> exampleValue env typ
@@ -148,8 +167,8 @@ json_ env structfields =
                                                 Err e -> Err e
                                                 Ok pairs__ ->
                                                     case rename tags of
-                                                        Just name_ -> Ok ((name_, object pairs__) :: pairs)
-                                                        Nothing -> Ok (pairs__ ++ pairs)
+                                                        Just name_ -> Ok <| Random.map2 (\p0 p1 -> (name_, object p1) :: p0) pairs pairs__
+                                                        Nothing    -> Ok <| Random.map2 (\p0 p1 -> p0 ++ p1) pairs__ pairs
                                         Nothing -> Err ("undefined or invalid: " ++ tvar)
                         GoStructLine id typ tags ->
                             if ignored tags
@@ -157,39 +176,42 @@ json_ env structfields =
                                 else
                                     if notExported id
                                         -- XXX: what to do with an JSON empty tag?
-                                        then if not (List.isEmpty tags) then Err ("struct field " ++ id ++ " has json tag but is not exported") else pairs_
+                                        then
+                                            if not (List.isEmpty tags)
+                                                then Err <| "struct field " ++ id ++ " has json tag but is not exported"
+                                                else pairs_
                                     else
                                         case example typ (asString tags) of
-                                            Ok value -> Ok ((rename_ id tags, value) :: pairs)
+                                            Ok generator -> Ok <| Random.map2 (\p0 value -> (rename_ id tags, value) :: p0) pairs generator
                                             Err e -> Err e
     in
-        List.foldl folder (Ok []) structfields
+        List.foldl folder (Ok (Random.constant [])) structfields
 
                 
-mapKey : GoTypes -> GoTypes -> Result String String
+mapKey : GoTypes -> GoTypes -> Result String (Random.Generator String)
 mapKey keyType valueType =
     case keyType of
-        GoBasic GoString -> Ok "myKey"
-        GoBasic GoInt8 -> Ok "8" 
-        GoBasic GoInt16 -> Ok "16"
-        GoBasic GoInt32 -> Ok "-32"
-        GoBasic GoInt64 -> Ok "64"
-        GoBasic GoInt -> Ok "-1024"
-        GoBasic GoUInt8 -> Ok "8" 
-        GoBasic GoUInt16 -> Ok "1616"
-        GoBasic GoUInt32 -> Ok "323232"
-        GoBasic GoUInt64 -> Ok "646464646464"
-        GoBasic GoUInt -> Ok "1024"
-        GoBasic GoFloat -> Ok "1.26"
-        GoBasic GoDouble -> Ok "16.3"
-        GoBasic GoTime -> Ok "2009-11-10T23:00:00Z"
-        GoBasic GoBool -> Err ("json: unsupported type: map[bool]" ++ (show valueType))
-        GoArrayLike _ _ -> Err ("json: unsupported type: map[" ++ (show keyType) ++ "]" ++ (show valueType))
-        GoMap _ _ -> Err ("json: unsupported type: map[" ++ (show keyType) ++ "]" ++ (show valueType))
-        GoStruct _ -> Err ("json: unsupported type: map[" ++ (show keyType) ++ "]" ++ (show valueType))
-        GoInterface -> Err ("json: unsupported type: map[interface{}]" ++ (show valueType))
-        GoTyVar t -> Err ("json: unsupported type: map[main." ++ t ++ "]" ++ (show valueType))
-        GoPointer t -> Err ("json: unsupported type: map[*" ++ (show t) ++ "]" ++ (show valueType))
+        GoBasic GoString -> Ok <| Random.String.rangeLengthString 1 5 Random.Char.lowerCaseLatin
+        GoBasic GoInt8 -> Ok <| Random.map String.fromInt goInt8
+        GoBasic GoInt16 -> Ok <| Random.map String.fromInt goInt16
+        GoBasic GoInt32 -> Ok <| Random.map String.fromInt goInt32
+        GoBasic GoInt64 -> Ok <| Random.map String.fromInt goInt64
+        GoBasic GoInt -> Ok <| Random.map String.fromInt goInt
+        GoBasic GoUInt8 -> Ok <| Random.map String.fromInt goUInt8
+        GoBasic GoUInt16 -> Ok <| Random.map String.fromInt goUInt16
+        GoBasic GoUInt32 -> Ok <| Random.map String.fromInt goUInt32
+        GoBasic GoUInt64 -> Ok <| Random.map String.fromInt goUInt64
+        GoBasic GoUInt -> Ok <| Random.map String.fromInt goUInt
+        GoBasic GoFloat -> Ok <| Random.map String.fromFloat Random.Float.anyFloat
+        GoBasic GoDouble -> Ok <| Random.map String.fromFloat Random.Float.anyFloat
+        GoBasic GoTime -> Ok <| Random.constant "2009-11-10T23:00:00Z"
+        GoBasic GoBool -> Err <| "json: unsupported type: map[bool]" ++ show valueType
+        GoArrayLike _ _ -> Err <| "json: unsupported type: map[" ++ show keyType ++ "]" ++ show valueType
+        GoMap _ _ -> Err <| "json: unsupported type: map[" ++ show keyType ++ "]" ++ show valueType
+        GoStruct _ -> Err <| "json: unsupported type: map[" ++ show keyType ++ "]" ++ show valueType
+        GoInterface -> Err <| "json: unsupported type: map[interface{}]" ++ show valueType
+        GoTyVar t -> Err <| "json: unsupported type: map[main." ++ t ++ "]" ++ show valueType
+        GoPointer t -> Err <| "json: unsupported type: map[*" ++ show t ++ "]" ++ show valueType
 
 deref : Int -> GoTypes -> Result String GoTypes
 deref i typ =
@@ -197,62 +219,105 @@ deref i typ =
         GoPointer p ->
             if i < 5
                 then deref (i+1) p
-                else Err ("deep pointer occurrence: " ++ String.repeat i "*" ++ show typ)
+                else Err <| "deep pointer occurrence: " ++ String.repeat i "*" ++ show typ
         base -> Ok base
 
-simpleArrayLike : Int -> GoSimpleTypes -> Json.Encode.Value
+simpleArrayLike : Int -> GoSimpleTypes -> Random.Generator Json.Encode.Value
 simpleArrayLike n typ =
-    case typ of
-        GoBool -> list bool <| List.take n <| [False, True, True, False, True, False, False, False, True, False]
-        GoInt -> list int <| List.take n [1, -2, 3, -4, 5, -6, 7, -8, 9, 0]
-        GoInt8 -> list int <| List.take n [-8, 16, 32, -64, -128, 0, 1, 2, 4, 8]
-        GoInt16 -> list int <| List.take n [16, 17, 18, 19, -20, 21, 22, 23, -24, -25]
-        GoInt32 -> list int <| List.take n [32, 3, -3, 4, 6, -4, 0, 2, -5, 8]
-        GoInt64 -> list int <| List.take n [9223372036854775800, 922, 10, -9223372, 9223372036854, -1234, 56, -7, 10240, 65536]
-        GoUInt -> list int <| List.take n [1, 2, 3, 4, 5, 6, 7, 8, 9, 0]
-        GoUInt8 -> list int <| List.take n [8, 16, 32, 64, 128, 0, 1, 2, 4, 8]
-        GoUInt16 -> list int <| List.take n [16, 17, 18, 19, 20, 21, 22, 23, 24, 25]
-        GoUInt32 -> list int <| List.take n [32, 3, 3, 4, 6, 4, 0, 2, 5, 8]
-        GoUInt64 -> list int <| List.take n [9223372036854775800, 922, 10, 9223372, 9223372036854, 1234, 56, 7, 10240, 65536]
-        GoFloat -> list float <| List.take n [9.5, 3.8, 1.13, 4.79, 5.023, 6.1, 2.7234, 1.9, 1.02, 5.64]
-        GoDouble -> list float <| List.take n [8.5397342, 4.26986711133, 871.0528907127, 9.869604, 31.00627668, 10.24, 16.3, 12.6, 12.0001, 564.222]
-        GoString -> list string <| List.take n ["rob pike", "Robert", "Pike", "gopher", "Gopher", "Go", "Golang", "goroutine", "interface{}", "struct"]
-        GoTime -> list string  <| List.take n ["2011-01-26T19:06:43Z", "2020-07-16T14:49:50.3269159+08:00", "2011-01-26T19:01:12Z", "2011-01-26T19:14:43Z", "2009-11-10T23:00:00Z", "2018-09-22T12:42:31Z", "2020-12-29T14:58:15Z", "2006-01-02T15:04:05Z", "2020-12-29T14:58:15.229579703+08:00", "2017-12-30T11:25:30+09:00"]
+    let
+        value f g = Random.map (\xs -> list f xs) g 
+        randomTake f xs = Random.map (\ys -> list f <| List.take n ys) <| Random.List.shuffle xs
+    in
+        case typ of
+            GoBool -> value bool <| Random.list n Random.Extra.bool
+            GoInt -> value int <| Random.list n Random.Int.anyInt
+            GoInt8 -> value int <| Random.list n goInt8
+            GoInt16 -> value int <| Random.list n goInt16
+            GoInt32 -> value int <| Random.list n goInt32
+            GoInt64 -> value int <| Random.list n Random.Int.anyInt
+            GoUInt -> value int <| Random.list n Random.Int.positiveInt
+            GoUInt8 -> value int <| Random.list n goUInt8
+            GoUInt16 -> value int <| Random.list n goUInt16
+            GoUInt32 -> value int <| Random.list n goUInt32
+            GoUInt64 -> value int <| Random.list n goUInt64
+            GoFloat -> value float <| Random.list n Random.Float.anyFloat
+            GoDouble -> value float <| Random.list n Random.Float.anyFloat
+            GoString -> randomTake string ["rob pike", "Robert", "Pike", "gopher", "Gopher", "Go", "Golang", "goroutine", "interface{}", "struct"]
+            GoTime -> randomTake string ["2011-01-26T19:06:43Z", "2020-07-16T14:49:50.3269159+08:00", "2011-01-26T19:01:12Z", "2011-01-26T19:14:43Z", "2009-11-10T23:00:00Z", "2018-09-22T12:42:31Z", "2020-12-29T14:58:15Z", "2006-01-02T15:04:05Z", "2020-12-29T14:58:15.229579703+08:00", "2017-12-30T11:25:30+09:00"]
 
-simpleValue : GoSimpleTypes -> Json.Encode.Value
+simpleValue : GoSimpleTypes -> Random.Generator Json.Encode.Value
 simpleValue typ =
     case typ of
-        GoInt -> int 1
-        GoInt8 -> int 127
-        GoInt16 -> int (-1616)
-        GoInt32 -> int 60000
-        GoInt64 -> int 64
-        GoUInt -> int 1
-        GoUInt8 -> int 255
-        GoUInt16 -> int 1616
-        GoUInt32 -> int 323232
-        GoUInt64 -> int 646464646464
-        GoString -> string "robpike"
-        GoFloat -> float 2.71828
-        GoDouble -> float 3.1415926
-        GoBool -> bool True
-        GoTime -> string "2006-01-02T15:04:05Z"
+        GoInt -> Random.map int Random.Int.anyInt
+        GoInt8 -> Random.map int <| Random.int -128 127
+        GoInt16 -> Random.map int <| Random.int -32768 32767
+        GoInt32 -> Random.map int <| Random.int -323232 323232
+        GoInt64 -> Random.map int Random.Int.anyInt
+        GoUInt -> Random.map int Random.Int.positiveInt
+        GoUInt8 -> Random.map int <| goUInt8
+        GoUInt16 -> Random.map int <| goUInt16
+        GoUInt32 -> Random.map int <| goUInt32
+        GoUInt64 -> Random.map int <| goUInt64
+        GoString -> Random.map string <| Random.String.rangeLengthString 2 16 Random.Char.english
+        GoFloat -> Random.map float Random.Float.anyFloat
+        GoDouble -> Random.map float Random.Float.anyFloat
+        GoBool -> Random.map bool Random.Extra.bool
+        GoTime -> Random.constant <| string "2006-01-02T15:04:05Z"
 
-simpleValueAsString : GoSimpleTypes -> Json.Encode.Value
+simpleValueAsString : GoSimpleTypes -> Random.Generator Json.Encode.Value
 simpleValueAsString typ =
     case typ of
-        GoInt -> string "0"
-        GoInt8 -> string "1"
-        GoInt16 -> string "2"
-        GoInt32 -> string "4"
-        GoInt64 -> string "8"
-        GoUInt -> string "0"
-        GoUInt8 -> string "255"
-        GoUInt16 -> string "65535"
-        GoUInt32 -> string "4294967295"
-        GoUInt64 -> string "18446744073709551615"
-        GoString -> string "\"___\""
-        GoFloat -> string "2.71828"
-        GoDouble -> string "3.1415926"
-        GoBool -> string "false"
-        GoTime -> string "2006-01-02T15:04:05Z"
+        GoInt ->  intString goInt
+        GoInt8 -> intString goInt8
+        GoInt16 -> intString goInt16
+        GoInt32 -> intString goInt32
+        GoInt64 -> intString goInt64
+        GoUInt -> intString goUInt
+        GoUInt8 -> intString goUInt8
+        GoUInt16 -> intString goUInt16 
+        GoUInt32 -> intString goUInt32
+        GoUInt64 -> intString goUInt64  
+        GoString -> Random.constant <| string "\"robpike\""
+        GoFloat -> floatString <| Random.float 0 1
+        GoDouble -> floatString <| Random.float 0 1
+        GoBool -> Random.map (\b -> if b then string "true" else string "false") Random.Extra.bool
+        GoTime -> Random.constant <| string "2006-01-02T15:04:05Z"
+
+goInt8 : Random.Generator Int
+goInt8 = Random.int -128 127
+
+goInt16 : Random.Generator Int
+goInt16 = Random.int -32768 32767
+
+goInt64 : Random.Generator Int
+goInt64 = Random.Int.anyInt
+
+goInt : Random.Generator Int
+goInt = Random.Int.anyInt
+
+goInt32 : Random.Generator Int
+goInt32 = Random.int -323232 323232
+
+goUInt : Random.Generator Int
+goUInt = Random.Int.positiveInt
+
+goUInt8 : Random.Generator Int
+goUInt8 = Random.int 0 255
+
+goUInt16 : Random.Generator Int
+goUInt16 = Random.int 0 65535
+
+goUInt32 : Random.Generator Int
+goUInt32 = Random.int 0 323232
+
+goUInt64 : Random.Generator Int
+goUInt64 = Random.int 0 646464646464
+
+stringValue : (a -> String) -> Random.Generator a -> Random.Generator Value
+stringValue f g = Random.map (string << f) g
+
+intString : Random.Generator Int -> Random.Generator Value
+intString = stringValue String.fromInt
+
+floatString : Random.Generator Float -> Random.Generator Value
+floatString = stringValue String.fromFloat
