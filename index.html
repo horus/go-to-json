@@ -5599,662 +5599,6 @@ var $elm$random$Random$constant = function (value) {
 var $elm$core$String$concat = function (strings) {
 	return A2($elm$core$String$join, '', strings);
 };
-var $author$project$P$problemToString = function (p) {
-	switch (p.$) {
-		case 'Expecting':
-			var s = p.a;
-			return 'expecting \'' + (s + '\'');
-		case 'ExpectingInt':
-			return 'expecting int';
-		case 'ExpectingHex':
-			return 'expecting hex';
-		case 'ExpectingOctal':
-			return 'expecting octal';
-		case 'ExpectingBinary':
-			return 'expecting binary';
-		case 'ExpectingFloat':
-			return 'expecting float';
-		case 'ExpectingNumber':
-			return 'expecting number';
-		case 'ExpectingVariable':
-			return 'expecting variable';
-		case 'ExpectingSymbol':
-			var s = p.a;
-			return 'expecting symbol \'' + (s + '\'');
-		case 'ExpectingKeyword':
-			var s = p.a;
-			return 'expecting keyword \'' + (s + '\'');
-		case 'ExpectingEnd':
-			return 'expecting end';
-		case 'UnexpectedChar':
-			return 'unexpected char';
-		case 'Problem':
-			var s = p.a;
-			return 'problem: ' + s;
-		default:
-			return 'bad repeat';
-	}
-};
-var $author$project$P$deadEndToString = function (deadend) {
-	return $author$project$P$problemToString(deadend.problem) + (' at row ' + ($elm$core$String$fromInt(deadend.row) + (', col ' + $elm$core$String$fromInt(deadend.col))));
-};
-var $elm$core$List$intersperse = F2(
-	function (sep, xs) {
-		if (!xs.b) {
-			return _List_Nil;
-		} else {
-			var hd = xs.a;
-			var tl = xs.b;
-			var step = F2(
-				function (x, rest) {
-					return A2(
-						$elm$core$List$cons,
-						sep,
-						A2($elm$core$List$cons, x, rest));
-				});
-			var spersed = A3($elm$core$List$foldr, step, _List_Nil, tl);
-			return A2($elm$core$List$cons, hd, spersed);
-		}
-	});
-var $author$project$P$deadEndsToString = function (deadEnds) {
-	return $elm$core$String$concat(
-		A2(
-			$elm$core$List$intersperse,
-			'; ',
-			A2($elm$core$List$map, $author$project$P$deadEndToString, deadEnds)));
-};
-var $author$project$P$GoTyVar = function (a) {
-	return {$: 'GoTyVar', a: a};
-};
-var $author$project$P$KeyAsString = {$: 'KeyAsString'};
-var $author$project$P$KeyIgnore = {$: 'KeyIgnore'};
-var $elm$core$Bitwise$and = _Bitwise_and;
-var $elm$core$Bitwise$shiftRightBy = _Bitwise_shiftRightBy;
-var $elm$core$String$repeatHelp = F3(
-	function (n, chunk, result) {
-		return (n <= 0) ? result : A3(
-			$elm$core$String$repeatHelp,
-			n >> 1,
-			_Utils_ap(chunk, chunk),
-			(!(n & 1)) ? result : _Utils_ap(result, chunk));
-	});
-var $elm$core$String$repeat = F2(
-	function (n, chunk) {
-		return A3($elm$core$String$repeatHelp, n, chunk, '');
-	});
-var $author$project$Gen$show = function (typ) {
-	switch (typ.$) {
-		case 'GoBasic':
-			switch (typ.a.$) {
-				case 'GoInt8':
-					var _v1 = typ.a;
-					return 'int8';
-				case 'GoInt16':
-					var _v2 = typ.a;
-					return 'int16';
-				case 'GoInt32':
-					var _v3 = typ.a;
-					return 'int32';
-				case 'GoInt64':
-					var _v4 = typ.a;
-					return 'int64';
-				case 'GoInt':
-					var _v5 = typ.a;
-					return 'int';
-				case 'GoUInt8':
-					var _v6 = typ.a;
-					return 'uint8';
-				case 'GoUInt16':
-					var _v7 = typ.a;
-					return 'uint16';
-				case 'GoUInt32':
-					var _v8 = typ.a;
-					return 'uint32';
-				case 'GoUInt64':
-					var _v9 = typ.a;
-					return 'uint64';
-				case 'GoUInt':
-					var _v10 = typ.a;
-					return 'uint';
-				case 'GoString':
-					var _v11 = typ.a;
-					return 'string';
-				case 'GoFloat':
-					var _v12 = typ.a;
-					return 'float32';
-				case 'GoDouble':
-					var _v13 = typ.a;
-					return 'float64';
-				case 'GoBool':
-					var _v14 = typ.a;
-					return 'bool';
-				default:
-					var _v15 = typ.a;
-					return 'time.Time';
-			}
-		case 'GoArrayLike':
-			if (typ.a.$ === 'Nothing') {
-				var _v16 = typ.a;
-				var t = typ.b;
-				return '[]' + $author$project$Gen$show(t);
-			} else {
-				var n = typ.a.a;
-				var t = typ.b;
-				return '[' + ($elm$core$String$fromInt(n) + (']' + $author$project$Gen$show(t)));
-			}
-		case 'GoMap':
-			var t1 = typ.a;
-			var t2 = typ.b;
-			return 'map[' + ($author$project$Gen$show(t1) + (']' + $author$project$Gen$show(t2)));
-		case 'GoStruct':
-			return 'struct{...}';
-		case 'GoInterface':
-			return 'interface{}';
-		case 'GoTyVar':
-			var t = typ.a;
-			return 'main.' + t;
-		default:
-			var t = typ.a;
-			return '*' + $author$project$Gen$show(t);
-	}
-};
-var $author$project$Gen$deref = F2(
-	function (i, typ) {
-		deref:
-		while (true) {
-			if (typ.$ === 'GoPointer') {
-				var p = typ.a;
-				if (i < 5) {
-					var $temp$i = i + 1,
-						$temp$typ = p;
-					i = $temp$i;
-					typ = $temp$typ;
-					continue deref;
-				} else {
-					return $elm$core$Result$Err(
-						'deep pointer occurrence: ' + (A2($elm$core$String$repeat, i, '*') + $author$project$Gen$show(typ)));
-				}
-			} else {
-				var base = typ;
-				return $elm$core$Result$Ok(base);
-			}
-		}
-	});
-var $elm$core$Dict$foldl = F3(
-	function (func, acc, dict) {
-		foldl:
-		while (true) {
-			if (dict.$ === 'RBEmpty_elm_builtin') {
-				return acc;
-			} else {
-				var key = dict.b;
-				var value = dict.c;
-				var left = dict.d;
-				var right = dict.e;
-				var $temp$func = func,
-					$temp$acc = A3(
-					func,
-					key,
-					value,
-					A3($elm$core$Dict$foldl, func, acc, left)),
-					$temp$dict = right;
-				func = $temp$func;
-				acc = $temp$acc;
-				dict = $temp$dict;
-				continue foldl;
-			}
-		}
-	});
-var $elm$json$Json$Encode$dict = F3(
-	function (toKey, toValue, dictionary) {
-		return _Json_wrap(
-			A3(
-				$elm$core$Dict$foldl,
-				F3(
-					function (key, value, obj) {
-						return A3(
-							_Json_addField,
-							toKey(key),
-							toValue(value),
-							obj);
-					}),
-				_Json_emptyObject(_Utils_Tuple0),
-				dictionary));
-	});
-var $elm$core$List$maybeCons = F3(
-	function (f, mx, xs) {
-		var _v0 = f(mx);
-		if (_v0.$ === 'Just') {
-			var x = _v0.a;
-			return A2($elm$core$List$cons, x, xs);
-		} else {
-			return xs;
-		}
-	});
-var $elm$core$List$filterMap = F2(
-	function (f, xs) {
-		return A3(
-			$elm$core$List$foldr,
-			$elm$core$List$maybeCons(f),
-			_List_Nil,
-			xs);
-	});
-var $elm$core$List$head = function (list) {
-	if (list.b) {
-		var x = list.a;
-		var xs = list.b;
-		return $elm$core$Maybe$Just(x);
-	} else {
-		return $elm$core$Maybe$Nothing;
-	}
-};
-var $elm$core$List$isEmpty = function (xs) {
-	if (!xs.b) {
-		return true;
-	} else {
-		return false;
-	}
-};
-var $elm$json$Json$Encode$list = F2(
-	function (func, entries) {
-		return _Json_wrap(
-			A3(
-				$elm$core$List$foldl,
-				_Json_addEntry(func),
-				_Json_emptyArray(_Utils_Tuple0),
-				entries));
-	});
-var $elm$core$Maybe$map = F2(
-	function (f, maybe) {
-		if (maybe.$ === 'Just') {
-			var value = maybe.a;
-			return $elm$core$Maybe$Just(
-				f(value));
-		} else {
-			return $elm$core$Maybe$Nothing;
-		}
-	});
-var $elm$random$Random$map = F2(
-	function (func, _v0) {
-		var genA = _v0.a;
-		return $elm$random$Random$Generator(
-			function (seed0) {
-				var _v1 = genA(seed0);
-				var a = _v1.a;
-				var seed1 = _v1.b;
-				return _Utils_Tuple2(
-					func(a),
-					seed1);
-			});
-	});
-var $elm$core$Result$map = F2(
-	function (func, ra) {
-		if (ra.$ === 'Ok') {
-			var a = ra.a;
-			return $elm$core$Result$Ok(
-				func(a));
-		} else {
-			var e = ra.a;
-			return $elm$core$Result$Err(e);
-		}
-	});
-var $elm$random$Random$map2 = F3(
-	function (func, _v0, _v1) {
-		var genA = _v0.a;
-		var genB = _v1.a;
-		return $elm$random$Random$Generator(
-			function (seed0) {
-				var _v2 = genA(seed0);
-				var a = _v2.a;
-				var seed1 = _v2.b;
-				var _v3 = genB(seed1);
-				var b = _v3.a;
-				var seed2 = _v3.b;
-				return _Utils_Tuple2(
-					A2(func, a, b),
-					seed2);
-			});
-	});
-var $elm$core$Basics$negate = function (n) {
-	return -n;
-};
-var $elm$core$Basics$abs = function (n) {
-	return (n < 0) ? (-n) : n;
-};
-var $elm$random$Random$Seed = F2(
-	function (a, b) {
-		return {$: 'Seed', a: a, b: b};
-	});
-var $elm$core$Bitwise$shiftRightZfBy = _Bitwise_shiftRightZfBy;
-var $elm$random$Random$next = function (_v0) {
-	var state0 = _v0.a;
-	var incr = _v0.b;
-	return A2($elm$random$Random$Seed, ((state0 * 1664525) + incr) >>> 0, incr);
-};
-var $elm$core$Bitwise$xor = _Bitwise_xor;
-var $elm$random$Random$peel = function (_v0) {
-	var state = _v0.a;
-	var word = (state ^ (state >>> ((state >>> 28) + 4))) * 277803737;
-	return ((word >>> 22) ^ word) >>> 0;
-};
-var $elm$random$Random$float = F2(
-	function (a, b) {
-		return $elm$random$Random$Generator(
-			function (seed0) {
-				var seed1 = $elm$random$Random$next(seed0);
-				var range = $elm$core$Basics$abs(b - a);
-				var n1 = $elm$random$Random$peel(seed1);
-				var n0 = $elm$random$Random$peel(seed0);
-				var lo = (134217727 & n1) * 1.0;
-				var hi = (67108863 & n0) * 1.0;
-				var val = ((hi * 134217728.0) + lo) / 9007199254740992.0;
-				var scaled = (val * range) + a;
-				return _Utils_Tuple2(
-					scaled,
-					$elm$random$Random$next(seed1));
-			});
-	});
-var $elm$random$Random$maxInt = 2147483647;
-var $elm$random$Random$minInt = -2147483648;
-var $elm_community$random_extra$Random$Float$anyFloat = A2($elm$random$Random$float, $elm$random$Random$minInt, $elm$random$Random$maxInt);
-var $elm$core$String$fromFloat = _String_fromNumber;
-var $elm$random$Random$int = F2(
-	function (a, b) {
-		return $elm$random$Random$Generator(
-			function (seed0) {
-				var _v0 = (_Utils_cmp(a, b) < 0) ? _Utils_Tuple2(a, b) : _Utils_Tuple2(b, a);
-				var lo = _v0.a;
-				var hi = _v0.b;
-				var range = (hi - lo) + 1;
-				if (!((range - 1) & range)) {
-					return _Utils_Tuple2(
-						(((range - 1) & $elm$random$Random$peel(seed0)) >>> 0) + lo,
-						$elm$random$Random$next(seed0));
-				} else {
-					var threshhold = (((-range) >>> 0) % range) >>> 0;
-					var accountForBias = function (seed) {
-						accountForBias:
-						while (true) {
-							var x = $elm$random$Random$peel(seed);
-							var seedN = $elm$random$Random$next(seed);
-							if (_Utils_cmp(x, threshhold) < 0) {
-								var $temp$seed = seedN;
-								seed = $temp$seed;
-								continue accountForBias;
-							} else {
-								return _Utils_Tuple2((x % range) + lo, seedN);
-							}
-						}
-					};
-					return accountForBias(seed0);
-				}
-			});
-	});
-var $elm_community$random_extra$Random$Int$anyInt = A2($elm$random$Random$int, $elm$random$Random$minInt, $elm$random$Random$maxInt);
-var $author$project$Gen$goInt = $elm_community$random_extra$Random$Int$anyInt;
-var $author$project$Gen$goInt16 = A2($elm$random$Random$int, -32768, 32767);
-var $author$project$Gen$goInt32 = A2($elm$random$Random$int, -323232, 323232);
-var $author$project$Gen$goInt64 = $elm_community$random_extra$Random$Int$anyInt;
-var $author$project$Gen$goInt8 = A2($elm$random$Random$int, -128, 127);
-var $elm_community$random_extra$Random$Int$positiveInt = A2($elm$random$Random$int, 1, $elm$random$Random$maxInt);
-var $author$project$Gen$goUInt = $elm_community$random_extra$Random$Int$positiveInt;
-var $author$project$Gen$goUInt16 = A2($elm$random$Random$int, 0, 65535);
-var $author$project$Gen$goUInt32 = A2($elm$random$Random$int, 0, 323232);
-var $author$project$Gen$goUInt64 = A2($elm$random$Random$int, 0, 646464646464);
-var $author$project$Gen$goUInt8 = A2($elm$random$Random$int, 0, 255);
-var $elm$core$Char$fromCode = _Char_fromCode;
-var $elm_community$random_extra$Random$Char$char = F2(
-	function (start, end) {
-		return A2(
-			$elm$random$Random$map,
-			$elm$core$Char$fromCode,
-			A2($elm$random$Random$int, start, end));
-	});
-var $elm_community$random_extra$Random$Char$lowerCaseLatin = A2($elm_community$random_extra$Random$Char$char, 97, 122);
-var $elm$random$Random$andThen = F2(
-	function (callback, _v0) {
-		var genA = _v0.a;
-		return $elm$random$Random$Generator(
-			function (seed) {
-				var _v1 = genA(seed);
-				var result = _v1.a;
-				var newSeed = _v1.b;
-				var _v2 = callback(result);
-				var genB = _v2.a;
-				return genB(newSeed);
-			});
-	});
-var $elm$core$String$fromList = _String_fromList;
-var $elm$random$Random$listHelp = F4(
-	function (revList, n, gen, seed) {
-		listHelp:
-		while (true) {
-			if (n < 1) {
-				return _Utils_Tuple2(revList, seed);
-			} else {
-				var _v0 = gen(seed);
-				var value = _v0.a;
-				var newSeed = _v0.b;
-				var $temp$revList = A2($elm$core$List$cons, value, revList),
-					$temp$n = n - 1,
-					$temp$gen = gen,
-					$temp$seed = newSeed;
-				revList = $temp$revList;
-				n = $temp$n;
-				gen = $temp$gen;
-				seed = $temp$seed;
-				continue listHelp;
-			}
-		}
-	});
-var $elm$random$Random$list = F2(
-	function (n, _v0) {
-		var gen = _v0.a;
-		return $elm$random$Random$Generator(
-			function (seed) {
-				return A4($elm$random$Random$listHelp, _List_Nil, n, gen, seed);
-			});
-	});
-var $elm_community$random_extra$Random$String$string = F2(
-	function (stringLength, charGenerator) {
-		return A2(
-			$elm$random$Random$map,
-			$elm$core$String$fromList,
-			A2($elm$random$Random$list, stringLength, charGenerator));
-	});
-var $elm_community$random_extra$Random$String$rangeLengthString = F3(
-	function (minLength, maxLength, charGenerator) {
-		return A2(
-			$elm$random$Random$andThen,
-			function (len) {
-				return A2($elm_community$random_extra$Random$String$string, len, charGenerator);
-			},
-			A2($elm$random$Random$int, minLength, maxLength));
-	});
-var $author$project$Gen$mapKey = F2(
-	function (keyType, valueType) {
-		switch (keyType.$) {
-			case 'GoBasic':
-				switch (keyType.a.$) {
-					case 'GoString':
-						var _v1 = keyType.a;
-						return $elm$core$Result$Ok(
-							A3($elm_community$random_extra$Random$String$rangeLengthString, 1, 5, $elm_community$random_extra$Random$Char$lowerCaseLatin));
-					case 'GoInt8':
-						var _v2 = keyType.a;
-						return $elm$core$Result$Ok(
-							A2($elm$random$Random$map, $elm$core$String$fromInt, $author$project$Gen$goInt8));
-					case 'GoInt16':
-						var _v3 = keyType.a;
-						return $elm$core$Result$Ok(
-							A2($elm$random$Random$map, $elm$core$String$fromInt, $author$project$Gen$goInt16));
-					case 'GoInt32':
-						var _v4 = keyType.a;
-						return $elm$core$Result$Ok(
-							A2($elm$random$Random$map, $elm$core$String$fromInt, $author$project$Gen$goInt32));
-					case 'GoInt64':
-						var _v5 = keyType.a;
-						return $elm$core$Result$Ok(
-							A2($elm$random$Random$map, $elm$core$String$fromInt, $author$project$Gen$goInt64));
-					case 'GoInt':
-						var _v6 = keyType.a;
-						return $elm$core$Result$Ok(
-							A2($elm$random$Random$map, $elm$core$String$fromInt, $author$project$Gen$goInt));
-					case 'GoUInt8':
-						var _v7 = keyType.a;
-						return $elm$core$Result$Ok(
-							A2($elm$random$Random$map, $elm$core$String$fromInt, $author$project$Gen$goUInt8));
-					case 'GoUInt16':
-						var _v8 = keyType.a;
-						return $elm$core$Result$Ok(
-							A2($elm$random$Random$map, $elm$core$String$fromInt, $author$project$Gen$goUInt16));
-					case 'GoUInt32':
-						var _v9 = keyType.a;
-						return $elm$core$Result$Ok(
-							A2($elm$random$Random$map, $elm$core$String$fromInt, $author$project$Gen$goUInt32));
-					case 'GoUInt64':
-						var _v10 = keyType.a;
-						return $elm$core$Result$Ok(
-							A2($elm$random$Random$map, $elm$core$String$fromInt, $author$project$Gen$goUInt64));
-					case 'GoUInt':
-						var _v11 = keyType.a;
-						return $elm$core$Result$Ok(
-							A2($elm$random$Random$map, $elm$core$String$fromInt, $author$project$Gen$goUInt));
-					case 'GoFloat':
-						var _v12 = keyType.a;
-						return $elm$core$Result$Ok(
-							A2($elm$random$Random$map, $elm$core$String$fromFloat, $elm_community$random_extra$Random$Float$anyFloat));
-					case 'GoDouble':
-						var _v13 = keyType.a;
-						return $elm$core$Result$Ok(
-							A2($elm$random$Random$map, $elm$core$String$fromFloat, $elm_community$random_extra$Random$Float$anyFloat));
-					case 'GoTime':
-						var _v14 = keyType.a;
-						return $elm$core$Result$Ok(
-							$elm$random$Random$constant('2009-11-10T23:00:00Z'));
-					default:
-						var _v15 = keyType.a;
-						return $elm$core$Result$Err(
-							'json: unsupported type: map[bool]' + $author$project$Gen$show(valueType));
-				}
-			case 'GoArrayLike':
-				return $elm$core$Result$Err(
-					'json: unsupported type: map[' + ($author$project$Gen$show(keyType) + (']' + $author$project$Gen$show(valueType))));
-			case 'GoMap':
-				return $elm$core$Result$Err(
-					'json: unsupported type: map[' + ($author$project$Gen$show(keyType) + (']' + $author$project$Gen$show(valueType))));
-			case 'GoStruct':
-				return $elm$core$Result$Err(
-					'json: unsupported type: map[' + ($author$project$Gen$show(keyType) + (']' + $author$project$Gen$show(valueType))));
-			case 'GoInterface':
-				return $elm$core$Result$Err(
-					'json: unsupported type: map[interface{}]' + $author$project$Gen$show(valueType));
-			case 'GoTyVar':
-				var t = keyType.a;
-				return $elm$core$Result$Err(
-					'json: unsupported type: map[main.' + (t + (']' + $author$project$Gen$show(valueType))));
-			default:
-				var t = keyType.a;
-				return $elm$core$Result$Err(
-					'json: unsupported type: map[*' + ($author$project$Gen$show(t) + (']' + $author$project$Gen$show(valueType))));
-		}
-	});
-var $elm$core$List$any = F2(
-	function (isOkay, list) {
-		any:
-		while (true) {
-			if (!list.b) {
-				return false;
-			} else {
-				var x = list.a;
-				var xs = list.b;
-				if (isOkay(x)) {
-					return true;
-				} else {
-					var $temp$isOkay = isOkay,
-						$temp$list = xs;
-					isOkay = $temp$isOkay;
-					list = $temp$list;
-					continue any;
-				}
-			}
-		}
-	});
-var $elm$core$List$member = F2(
-	function (x, xs) {
-		return A2(
-			$elm$core$List$any,
-			function (a) {
-				return _Utils_eq(a, x);
-			},
-			xs);
-	});
-var $elm$core$Basics$not = _Basics_not;
-var $elm$json$Json$Encode$null = _Json_encodeNull;
-var $elm$json$Json$Encode$object = function (pairs) {
-	return _Json_wrap(
-		A3(
-			$elm$core$List$foldl,
-			F2(
-				function (_v0, obj) {
-					var k = _v0.a;
-					var v = _v0.b;
-					return A3(_Json_addField, k, v, obj);
-				}),
-			_Json_emptyObject(_Utils_Tuple0),
-			pairs));
-};
-var $elm$core$Dict$fromList = function (assocs) {
-	return A3(
-		$elm$core$List$foldl,
-		F2(
-			function (_v0, dict) {
-				var key = _v0.a;
-				var value = _v0.b;
-				return A3($elm$core$Dict$insert, key, value, dict);
-			}),
-		$elm$core$Dict$empty,
-		assocs);
-};
-var $elm$random$Random$pair = F2(
-	function (genA, genB) {
-		return A3(
-			$elm$random$Random$map2,
-			F2(
-				function (a, b) {
-					return _Utils_Tuple2(a, b);
-				}),
-			genA,
-			genB);
-	});
-var $elm_community$random_extra$Random$Dict$dict = F3(
-	function (dictLength, keyGenerator, valueGenerator) {
-		return A2(
-			$elm$random$Random$map,
-			$elm$core$Dict$fromList,
-			A2(
-				$elm$random$Random$list,
-				dictLength,
-				A2($elm$random$Random$pair, keyGenerator, valueGenerator)));
-	});
-var $elm_community$random_extra$Random$Dict$rangeLengthDict = F4(
-	function (minLength, maxLength, keyGenerator, valueGenerator) {
-		return A2(
-			$elm$random$Random$andThen,
-			function (len) {
-				return A3($elm_community$random_extra$Random$Dict$dict, len, keyGenerator, valueGenerator);
-			},
-			A2($elm$random$Random$int, minLength, maxLength));
-	});
-var $elm_community$random_extra$Random$Extra$rangeLengthList = F3(
-	function (minLength, maxLength, generator) {
-		return A2(
-			$elm$random$Random$andThen,
-			function (len) {
-				return A2($elm$random$Random$list, len, generator);
-			},
-			A2($elm$random$Random$int, minLength, maxLength));
-	});
 var $elm$core$Dict$getMin = function (dict) {
 	getMin:
 	while (true) {
@@ -6616,6 +5960,825 @@ var $elm$core$Dict$remove = F2(
 			var x = _v0;
 			return x;
 		}
+	});
+var $elm$core$Dict$update = F3(
+	function (targetKey, alter, dictionary) {
+		var _v0 = alter(
+			A2($elm$core$Dict$get, targetKey, dictionary));
+		if (_v0.$ === 'Just') {
+			var value = _v0.a;
+			return A3($elm$core$Dict$insert, targetKey, value, dictionary);
+		} else {
+			return A2($elm$core$Dict$remove, targetKey, dictionary);
+		}
+	});
+var $author$project$P$deadEndToString = F2(
+	function (deadend, dict) {
+		return A3(
+			$elm$core$Dict$update,
+			_Utils_Tuple2(deadend.row, deadend.col),
+			function (old) {
+				if (old.$ === 'Nothing') {
+					return $elm$core$Maybe$Just(
+						_List_fromArray(
+							[deadend.problem]));
+				} else {
+					var problems = old.a;
+					return $elm$core$Maybe$Just(
+						A2($elm$core$List$cons, deadend.problem, problems));
+				}
+			},
+			dict);
+	});
+var $author$project$P$desc = function (p) {
+	switch (p.$) {
+		case 'Expecting':
+			var s = p.a;
+			return _Utils_Tuple2('expecting', '\'' + (s + '\''));
+		case 'ExpectingInt':
+			return _Utils_Tuple2('expecting', 'int');
+		case 'ExpectingHex':
+			return _Utils_Tuple2('expecting', 'hex');
+		case 'ExpectingOctal':
+			return _Utils_Tuple2('expecting', 'octal');
+		case 'ExpectingBinary':
+			return _Utils_Tuple2('expecting', 'binary');
+		case 'ExpectingFloat':
+			return _Utils_Tuple2('expecting', 'float');
+		case 'ExpectingNumber':
+			return _Utils_Tuple2('expecting', 'number');
+		case 'ExpectingVariable':
+			return _Utils_Tuple2('expecting', 'variable');
+		case 'ExpectingSymbol':
+			var s = p.a;
+			return _Utils_Tuple2('expecting', 'symbol \'' + (s + '\''));
+		case 'ExpectingKeyword':
+			var s = p.a;
+			return _Utils_Tuple2('expecting', 'keyword \'' + (s + '\''));
+		case 'ExpectingEnd':
+			return _Utils_Tuple2('expecting', 'end');
+		case 'UnexpectedChar':
+			return _Utils_Tuple2('unexpected', 'char');
+		case 'Problem':
+			var s = p.a;
+			return _Utils_Tuple2(s, 'problem');
+		default:
+			return _Utils_Tuple2('bad', 'repeat');
+	}
+};
+var $elm$core$List$intersperse = F2(
+	function (sep, xs) {
+		if (!xs.b) {
+			return _List_Nil;
+		} else {
+			var hd = xs.a;
+			var tl = xs.b;
+			var step = F2(
+				function (x, rest) {
+					return A2(
+						$elm$core$List$cons,
+						sep,
+						A2($elm$core$List$cons, x, rest));
+				});
+			var spersed = A3($elm$core$List$foldr, step, _List_Nil, tl);
+			return A2($elm$core$List$cons, hd, spersed);
+		}
+	});
+var $elm$core$List$isEmpty = function (xs) {
+	if (!xs.b) {
+		return true;
+	} else {
+		return false;
+	}
+};
+var $elm$core$Dict$map = F2(
+	function (func, dict) {
+		if (dict.$ === 'RBEmpty_elm_builtin') {
+			return $elm$core$Dict$RBEmpty_elm_builtin;
+		} else {
+			var color = dict.a;
+			var key = dict.b;
+			var value = dict.c;
+			var left = dict.d;
+			var right = dict.e;
+			return A5(
+				$elm$core$Dict$RBNode_elm_builtin,
+				color,
+				key,
+				A2(func, key, value),
+				A2($elm$core$Dict$map, func, left),
+				A2($elm$core$Dict$map, func, right));
+		}
+	});
+var $elm$core$List$partition = F2(
+	function (pred, list) {
+		var step = F2(
+			function (x, _v0) {
+				var trues = _v0.a;
+				var falses = _v0.b;
+				return pred(x) ? _Utils_Tuple2(
+					A2($elm$core$List$cons, x, trues),
+					falses) : _Utils_Tuple2(
+					trues,
+					A2($elm$core$List$cons, x, falses));
+			});
+		return A3(
+			$elm$core$List$foldr,
+			step,
+			_Utils_Tuple2(_List_Nil, _List_Nil),
+			list);
+	});
+var $elm$core$Tuple$second = function (_v0) {
+	var y = _v0.b;
+	return y;
+};
+var $elm$core$List$any = F2(
+	function (isOkay, list) {
+		any:
+		while (true) {
+			if (!list.b) {
+				return false;
+			} else {
+				var x = list.a;
+				var xs = list.b;
+				if (isOkay(x)) {
+					return true;
+				} else {
+					var $temp$isOkay = isOkay,
+						$temp$list = xs;
+					isOkay = $temp$isOkay;
+					list = $temp$list;
+					continue any;
+				}
+			}
+		}
+	});
+var $elm$core$List$member = F2(
+	function (x, xs) {
+		return A2(
+			$elm$core$List$any,
+			function (a) {
+				return _Utils_eq(a, x);
+			},
+			xs);
+	});
+var $elm_community$list_extra$List$Extra$uniqueHelp = F4(
+	function (f, existing, remaining, accumulator) {
+		uniqueHelp:
+		while (true) {
+			if (!remaining.b) {
+				return $elm$core$List$reverse(accumulator);
+			} else {
+				var first = remaining.a;
+				var rest = remaining.b;
+				var computedFirst = f(first);
+				if (A2($elm$core$List$member, computedFirst, existing)) {
+					var $temp$f = f,
+						$temp$existing = existing,
+						$temp$remaining = rest,
+						$temp$accumulator = accumulator;
+					f = $temp$f;
+					existing = $temp$existing;
+					remaining = $temp$remaining;
+					accumulator = $temp$accumulator;
+					continue uniqueHelp;
+				} else {
+					var $temp$f = f,
+						$temp$existing = A2($elm$core$List$cons, computedFirst, existing),
+						$temp$remaining = rest,
+						$temp$accumulator = A2($elm$core$List$cons, first, accumulator);
+					f = $temp$f;
+					existing = $temp$existing;
+					remaining = $temp$remaining;
+					accumulator = $temp$accumulator;
+					continue uniqueHelp;
+				}
+			}
+		}
+	});
+var $elm_community$list_extra$List$Extra$unique = function (list) {
+	return A4($elm_community$list_extra$List$Extra$uniqueHelp, $elm$core$Basics$identity, _List_Nil, list, _List_Nil);
+};
+var $elm$core$Dict$values = function (dict) {
+	return A3(
+		$elm$core$Dict$foldr,
+		F3(
+			function (key, value, valueList) {
+				return A2($elm$core$List$cons, value, valueList);
+			}),
+		_List_Nil,
+		dict);
+};
+var $author$project$P$deadEndsToString = function (deadEnds) {
+	var sort_ = function (problems) {
+		var descriptions = A2(
+			$elm$core$List$map,
+			$author$project$P$desc,
+			$elm_community$list_extra$List$Extra$unique(problems));
+		var _v1 = A2(
+			$elm$core$List$partition,
+			function (d) {
+				return d.a === 'expecting';
+			},
+			descriptions);
+		var expectations = _v1.a;
+		var others = _v1.b;
+		var expected = $elm$core$String$concat(
+			A2(
+				$elm$core$List$intersperse,
+				', ',
+				A2($elm$core$List$map, $elm$core$Tuple$second, expectations)));
+		var other = $elm$core$String$concat(
+			A2(
+				$elm$core$List$intersperse,
+				' or ',
+				A2(
+					$elm$core$List$map,
+					function (_v2) {
+						var a = _v2.a;
+						var b = _v2.b;
+						return a + (' ' + b);
+					},
+					others)));
+		var period = ($elm$core$List$isEmpty(others) || $elm$core$List$isEmpty(expectations)) ? '' : ', also ';
+		return _Utils_ap(
+			$elm$core$List$isEmpty(expectations) ? '' : 'expecting: ',
+			_Utils_ap(
+				expected,
+				_Utils_ap(
+					period,
+					_Utils_ap(
+						$elm$core$List$isEmpty(others) ? '' : 'might be ',
+						other))));
+	};
+	var problemDict = A3($elm$core$List$foldl, $author$project$P$deadEndToString, $elm$core$Dict$empty, deadEnds);
+	var display = F2(
+		function (_v0, problems) {
+			var row = _v0.a;
+			var col = _v0.b;
+			return sort_(problems) + (' at row ' + ($elm$core$String$fromInt(row) + (', col ' + $elm$core$String$fromInt(col))));
+		});
+	return $elm$core$String$concat(
+		A2(
+			$elm$core$List$intersperse,
+			'; ',
+			$elm$core$Dict$values(
+				A2($elm$core$Dict$map, display, problemDict))));
+};
+var $author$project$P$GoTyVar = function (a) {
+	return {$: 'GoTyVar', a: a};
+};
+var $author$project$P$KeyAsString = {$: 'KeyAsString'};
+var $author$project$P$KeyIgnore = {$: 'KeyIgnore'};
+var $elm$core$Bitwise$and = _Bitwise_and;
+var $elm$core$Bitwise$shiftRightBy = _Bitwise_shiftRightBy;
+var $elm$core$String$repeatHelp = F3(
+	function (n, chunk, result) {
+		return (n <= 0) ? result : A3(
+			$elm$core$String$repeatHelp,
+			n >> 1,
+			_Utils_ap(chunk, chunk),
+			(!(n & 1)) ? result : _Utils_ap(result, chunk));
+	});
+var $elm$core$String$repeat = F2(
+	function (n, chunk) {
+		return A3($elm$core$String$repeatHelp, n, chunk, '');
+	});
+var $author$project$Gen$show = function (typ) {
+	switch (typ.$) {
+		case 'GoBasic':
+			switch (typ.a.$) {
+				case 'GoInt8':
+					var _v1 = typ.a;
+					return 'int8';
+				case 'GoInt16':
+					var _v2 = typ.a;
+					return 'int16';
+				case 'GoInt32':
+					var _v3 = typ.a;
+					return 'int32';
+				case 'GoInt64':
+					var _v4 = typ.a;
+					return 'int64';
+				case 'GoInt':
+					var _v5 = typ.a;
+					return 'int';
+				case 'GoUInt8':
+					var _v6 = typ.a;
+					return 'uint8';
+				case 'GoUInt16':
+					var _v7 = typ.a;
+					return 'uint16';
+				case 'GoUInt32':
+					var _v8 = typ.a;
+					return 'uint32';
+				case 'GoUInt64':
+					var _v9 = typ.a;
+					return 'uint64';
+				case 'GoUInt':
+					var _v10 = typ.a;
+					return 'uint';
+				case 'GoString':
+					var _v11 = typ.a;
+					return 'string';
+				case 'GoFloat':
+					var _v12 = typ.a;
+					return 'float32';
+				case 'GoDouble':
+					var _v13 = typ.a;
+					return 'float64';
+				case 'GoBool':
+					var _v14 = typ.a;
+					return 'bool';
+				default:
+					var _v15 = typ.a;
+					return 'time.Time';
+			}
+		case 'GoArrayLike':
+			if (typ.a.$ === 'Nothing') {
+				var _v16 = typ.a;
+				var t = typ.b;
+				return '[]' + $author$project$Gen$show(t);
+			} else {
+				var n = typ.a.a;
+				var t = typ.b;
+				return '[' + ($elm$core$String$fromInt(n) + (']' + $author$project$Gen$show(t)));
+			}
+		case 'GoMap':
+			var t1 = typ.a;
+			var t2 = typ.b;
+			return 'map[' + ($author$project$Gen$show(t1) + (']' + $author$project$Gen$show(t2)));
+		case 'GoStruct':
+			return 'struct{...}';
+		case 'GoInterface':
+			return 'interface{}';
+		case 'GoTyVar':
+			var t = typ.a;
+			return 'main.' + t;
+		default:
+			var t = typ.a;
+			return '*' + $author$project$Gen$show(t);
+	}
+};
+var $author$project$Gen$deref = F2(
+	function (i, typ) {
+		deref:
+		while (true) {
+			if (typ.$ === 'GoPointer') {
+				var p = typ.a;
+				if (i < 5) {
+					var $temp$i = i + 1,
+						$temp$typ = p;
+					i = $temp$i;
+					typ = $temp$typ;
+					continue deref;
+				} else {
+					return $elm$core$Result$Err(
+						'deep pointer occurrence: ' + (A2($elm$core$String$repeat, i, '*') + $author$project$Gen$show(typ)));
+				}
+			} else {
+				var base = typ;
+				return $elm$core$Result$Ok(base);
+			}
+		}
+	});
+var $elm$core$Dict$foldl = F3(
+	function (func, acc, dict) {
+		foldl:
+		while (true) {
+			if (dict.$ === 'RBEmpty_elm_builtin') {
+				return acc;
+			} else {
+				var key = dict.b;
+				var value = dict.c;
+				var left = dict.d;
+				var right = dict.e;
+				var $temp$func = func,
+					$temp$acc = A3(
+					func,
+					key,
+					value,
+					A3($elm$core$Dict$foldl, func, acc, left)),
+					$temp$dict = right;
+				func = $temp$func;
+				acc = $temp$acc;
+				dict = $temp$dict;
+				continue foldl;
+			}
+		}
+	});
+var $elm$json$Json$Encode$dict = F3(
+	function (toKey, toValue, dictionary) {
+		return _Json_wrap(
+			A3(
+				$elm$core$Dict$foldl,
+				F3(
+					function (key, value, obj) {
+						return A3(
+							_Json_addField,
+							toKey(key),
+							toValue(value),
+							obj);
+					}),
+				_Json_emptyObject(_Utils_Tuple0),
+				dictionary));
+	});
+var $elm$core$List$maybeCons = F3(
+	function (f, mx, xs) {
+		var _v0 = f(mx);
+		if (_v0.$ === 'Just') {
+			var x = _v0.a;
+			return A2($elm$core$List$cons, x, xs);
+		} else {
+			return xs;
+		}
+	});
+var $elm$core$List$filterMap = F2(
+	function (f, xs) {
+		return A3(
+			$elm$core$List$foldr,
+			$elm$core$List$maybeCons(f),
+			_List_Nil,
+			xs);
+	});
+var $elm$core$List$head = function (list) {
+	if (list.b) {
+		var x = list.a;
+		var xs = list.b;
+		return $elm$core$Maybe$Just(x);
+	} else {
+		return $elm$core$Maybe$Nothing;
+	}
+};
+var $elm$json$Json$Encode$list = F2(
+	function (func, entries) {
+		return _Json_wrap(
+			A3(
+				$elm$core$List$foldl,
+				_Json_addEntry(func),
+				_Json_emptyArray(_Utils_Tuple0),
+				entries));
+	});
+var $elm$core$Maybe$map = F2(
+	function (f, maybe) {
+		if (maybe.$ === 'Just') {
+			var value = maybe.a;
+			return $elm$core$Maybe$Just(
+				f(value));
+		} else {
+			return $elm$core$Maybe$Nothing;
+		}
+	});
+var $elm$random$Random$map = F2(
+	function (func, _v0) {
+		var genA = _v0.a;
+		return $elm$random$Random$Generator(
+			function (seed0) {
+				var _v1 = genA(seed0);
+				var a = _v1.a;
+				var seed1 = _v1.b;
+				return _Utils_Tuple2(
+					func(a),
+					seed1);
+			});
+	});
+var $elm$core$Result$map = F2(
+	function (func, ra) {
+		if (ra.$ === 'Ok') {
+			var a = ra.a;
+			return $elm$core$Result$Ok(
+				func(a));
+		} else {
+			var e = ra.a;
+			return $elm$core$Result$Err(e);
+		}
+	});
+var $elm$random$Random$map2 = F3(
+	function (func, _v0, _v1) {
+		var genA = _v0.a;
+		var genB = _v1.a;
+		return $elm$random$Random$Generator(
+			function (seed0) {
+				var _v2 = genA(seed0);
+				var a = _v2.a;
+				var seed1 = _v2.b;
+				var _v3 = genB(seed1);
+				var b = _v3.a;
+				var seed2 = _v3.b;
+				return _Utils_Tuple2(
+					A2(func, a, b),
+					seed2);
+			});
+	});
+var $elm$core$Basics$negate = function (n) {
+	return -n;
+};
+var $elm$core$Basics$abs = function (n) {
+	return (n < 0) ? (-n) : n;
+};
+var $elm$random$Random$Seed = F2(
+	function (a, b) {
+		return {$: 'Seed', a: a, b: b};
+	});
+var $elm$core$Bitwise$shiftRightZfBy = _Bitwise_shiftRightZfBy;
+var $elm$random$Random$next = function (_v0) {
+	var state0 = _v0.a;
+	var incr = _v0.b;
+	return A2($elm$random$Random$Seed, ((state0 * 1664525) + incr) >>> 0, incr);
+};
+var $elm$core$Bitwise$xor = _Bitwise_xor;
+var $elm$random$Random$peel = function (_v0) {
+	var state = _v0.a;
+	var word = (state ^ (state >>> ((state >>> 28) + 4))) * 277803737;
+	return ((word >>> 22) ^ word) >>> 0;
+};
+var $elm$random$Random$float = F2(
+	function (a, b) {
+		return $elm$random$Random$Generator(
+			function (seed0) {
+				var seed1 = $elm$random$Random$next(seed0);
+				var range = $elm$core$Basics$abs(b - a);
+				var n1 = $elm$random$Random$peel(seed1);
+				var n0 = $elm$random$Random$peel(seed0);
+				var lo = (134217727 & n1) * 1.0;
+				var hi = (67108863 & n0) * 1.0;
+				var val = ((hi * 134217728.0) + lo) / 9007199254740992.0;
+				var scaled = (val * range) + a;
+				return _Utils_Tuple2(
+					scaled,
+					$elm$random$Random$next(seed1));
+			});
+	});
+var $elm$random$Random$maxInt = 2147483647;
+var $elm$random$Random$minInt = -2147483648;
+var $elm_community$random_extra$Random$Float$anyFloat = A2($elm$random$Random$float, $elm$random$Random$minInt, $elm$random$Random$maxInt);
+var $elm$core$String$fromFloat = _String_fromNumber;
+var $elm$random$Random$int = F2(
+	function (a, b) {
+		return $elm$random$Random$Generator(
+			function (seed0) {
+				var _v0 = (_Utils_cmp(a, b) < 0) ? _Utils_Tuple2(a, b) : _Utils_Tuple2(b, a);
+				var lo = _v0.a;
+				var hi = _v0.b;
+				var range = (hi - lo) + 1;
+				if (!((range - 1) & range)) {
+					return _Utils_Tuple2(
+						(((range - 1) & $elm$random$Random$peel(seed0)) >>> 0) + lo,
+						$elm$random$Random$next(seed0));
+				} else {
+					var threshhold = (((-range) >>> 0) % range) >>> 0;
+					var accountForBias = function (seed) {
+						accountForBias:
+						while (true) {
+							var x = $elm$random$Random$peel(seed);
+							var seedN = $elm$random$Random$next(seed);
+							if (_Utils_cmp(x, threshhold) < 0) {
+								var $temp$seed = seedN;
+								seed = $temp$seed;
+								continue accountForBias;
+							} else {
+								return _Utils_Tuple2((x % range) + lo, seedN);
+							}
+						}
+					};
+					return accountForBias(seed0);
+				}
+			});
+	});
+var $elm_community$random_extra$Random$Int$anyInt = A2($elm$random$Random$int, $elm$random$Random$minInt, $elm$random$Random$maxInt);
+var $author$project$Gen$goInt = $elm_community$random_extra$Random$Int$anyInt;
+var $author$project$Gen$goInt16 = A2($elm$random$Random$int, -32768, 32767);
+var $author$project$Gen$goInt32 = A2($elm$random$Random$int, -323232, 323232);
+var $author$project$Gen$goInt64 = $elm_community$random_extra$Random$Int$anyInt;
+var $author$project$Gen$goInt8 = A2($elm$random$Random$int, -128, 127);
+var $elm_community$random_extra$Random$Int$positiveInt = A2($elm$random$Random$int, 1, $elm$random$Random$maxInt);
+var $author$project$Gen$goUInt = $elm_community$random_extra$Random$Int$positiveInt;
+var $author$project$Gen$goUInt16 = A2($elm$random$Random$int, 0, 65535);
+var $author$project$Gen$goUInt32 = A2($elm$random$Random$int, 0, 323232);
+var $author$project$Gen$goUInt64 = A2($elm$random$Random$int, 0, 646464646464);
+var $author$project$Gen$goUInt8 = A2($elm$random$Random$int, 0, 255);
+var $elm$core$Char$fromCode = _Char_fromCode;
+var $elm_community$random_extra$Random$Char$char = F2(
+	function (start, end) {
+		return A2(
+			$elm$random$Random$map,
+			$elm$core$Char$fromCode,
+			A2($elm$random$Random$int, start, end));
+	});
+var $elm_community$random_extra$Random$Char$lowerCaseLatin = A2($elm_community$random_extra$Random$Char$char, 97, 122);
+var $elm$random$Random$andThen = F2(
+	function (callback, _v0) {
+		var genA = _v0.a;
+		return $elm$random$Random$Generator(
+			function (seed) {
+				var _v1 = genA(seed);
+				var result = _v1.a;
+				var newSeed = _v1.b;
+				var _v2 = callback(result);
+				var genB = _v2.a;
+				return genB(newSeed);
+			});
+	});
+var $elm$core$String$fromList = _String_fromList;
+var $elm$random$Random$listHelp = F4(
+	function (revList, n, gen, seed) {
+		listHelp:
+		while (true) {
+			if (n < 1) {
+				return _Utils_Tuple2(revList, seed);
+			} else {
+				var _v0 = gen(seed);
+				var value = _v0.a;
+				var newSeed = _v0.b;
+				var $temp$revList = A2($elm$core$List$cons, value, revList),
+					$temp$n = n - 1,
+					$temp$gen = gen,
+					$temp$seed = newSeed;
+				revList = $temp$revList;
+				n = $temp$n;
+				gen = $temp$gen;
+				seed = $temp$seed;
+				continue listHelp;
+			}
+		}
+	});
+var $elm$random$Random$list = F2(
+	function (n, _v0) {
+		var gen = _v0.a;
+		return $elm$random$Random$Generator(
+			function (seed) {
+				return A4($elm$random$Random$listHelp, _List_Nil, n, gen, seed);
+			});
+	});
+var $elm_community$random_extra$Random$String$string = F2(
+	function (stringLength, charGenerator) {
+		return A2(
+			$elm$random$Random$map,
+			$elm$core$String$fromList,
+			A2($elm$random$Random$list, stringLength, charGenerator));
+	});
+var $elm_community$random_extra$Random$String$rangeLengthString = F3(
+	function (minLength, maxLength, charGenerator) {
+		return A2(
+			$elm$random$Random$andThen,
+			function (len) {
+				return A2($elm_community$random_extra$Random$String$string, len, charGenerator);
+			},
+			A2($elm$random$Random$int, minLength, maxLength));
+	});
+var $author$project$Gen$mapKey = F2(
+	function (keyType, valueType) {
+		switch (keyType.$) {
+			case 'GoBasic':
+				switch (keyType.a.$) {
+					case 'GoString':
+						var _v1 = keyType.a;
+						return $elm$core$Result$Ok(
+							A3($elm_community$random_extra$Random$String$rangeLengthString, 1, 5, $elm_community$random_extra$Random$Char$lowerCaseLatin));
+					case 'GoInt8':
+						var _v2 = keyType.a;
+						return $elm$core$Result$Ok(
+							A2($elm$random$Random$map, $elm$core$String$fromInt, $author$project$Gen$goInt8));
+					case 'GoInt16':
+						var _v3 = keyType.a;
+						return $elm$core$Result$Ok(
+							A2($elm$random$Random$map, $elm$core$String$fromInt, $author$project$Gen$goInt16));
+					case 'GoInt32':
+						var _v4 = keyType.a;
+						return $elm$core$Result$Ok(
+							A2($elm$random$Random$map, $elm$core$String$fromInt, $author$project$Gen$goInt32));
+					case 'GoInt64':
+						var _v5 = keyType.a;
+						return $elm$core$Result$Ok(
+							A2($elm$random$Random$map, $elm$core$String$fromInt, $author$project$Gen$goInt64));
+					case 'GoInt':
+						var _v6 = keyType.a;
+						return $elm$core$Result$Ok(
+							A2($elm$random$Random$map, $elm$core$String$fromInt, $author$project$Gen$goInt));
+					case 'GoUInt8':
+						var _v7 = keyType.a;
+						return $elm$core$Result$Ok(
+							A2($elm$random$Random$map, $elm$core$String$fromInt, $author$project$Gen$goUInt8));
+					case 'GoUInt16':
+						var _v8 = keyType.a;
+						return $elm$core$Result$Ok(
+							A2($elm$random$Random$map, $elm$core$String$fromInt, $author$project$Gen$goUInt16));
+					case 'GoUInt32':
+						var _v9 = keyType.a;
+						return $elm$core$Result$Ok(
+							A2($elm$random$Random$map, $elm$core$String$fromInt, $author$project$Gen$goUInt32));
+					case 'GoUInt64':
+						var _v10 = keyType.a;
+						return $elm$core$Result$Ok(
+							A2($elm$random$Random$map, $elm$core$String$fromInt, $author$project$Gen$goUInt64));
+					case 'GoUInt':
+						var _v11 = keyType.a;
+						return $elm$core$Result$Ok(
+							A2($elm$random$Random$map, $elm$core$String$fromInt, $author$project$Gen$goUInt));
+					case 'GoFloat':
+						var _v12 = keyType.a;
+						return $elm$core$Result$Ok(
+							A2($elm$random$Random$map, $elm$core$String$fromFloat, $elm_community$random_extra$Random$Float$anyFloat));
+					case 'GoDouble':
+						var _v13 = keyType.a;
+						return $elm$core$Result$Ok(
+							A2($elm$random$Random$map, $elm$core$String$fromFloat, $elm_community$random_extra$Random$Float$anyFloat));
+					case 'GoTime':
+						var _v14 = keyType.a;
+						return $elm$core$Result$Ok(
+							$elm$random$Random$constant('2009-11-10T23:00:00Z'));
+					default:
+						var _v15 = keyType.a;
+						return $elm$core$Result$Err(
+							'json: unsupported type: map[bool]' + $author$project$Gen$show(valueType));
+				}
+			case 'GoArrayLike':
+				return $elm$core$Result$Err(
+					'json: unsupported type: map[' + ($author$project$Gen$show(keyType) + (']' + $author$project$Gen$show(valueType))));
+			case 'GoMap':
+				return $elm$core$Result$Err(
+					'json: unsupported type: map[' + ($author$project$Gen$show(keyType) + (']' + $author$project$Gen$show(valueType))));
+			case 'GoStruct':
+				return $elm$core$Result$Err(
+					'json: unsupported type: map[' + ($author$project$Gen$show(keyType) + (']' + $author$project$Gen$show(valueType))));
+			case 'GoInterface':
+				return $elm$core$Result$Err(
+					'json: unsupported type: map[interface{}]' + $author$project$Gen$show(valueType));
+			case 'GoTyVar':
+				var t = keyType.a;
+				return $elm$core$Result$Err(
+					'json: unsupported type: map[main.' + (t + (']' + $author$project$Gen$show(valueType))));
+			default:
+				var t = keyType.a;
+				return $elm$core$Result$Err(
+					'json: unsupported type: map[*' + ($author$project$Gen$show(t) + (']' + $author$project$Gen$show(valueType))));
+		}
+	});
+var $elm$core$Basics$not = _Basics_not;
+var $elm$json$Json$Encode$null = _Json_encodeNull;
+var $elm$json$Json$Encode$object = function (pairs) {
+	return _Json_wrap(
+		A3(
+			$elm$core$List$foldl,
+			F2(
+				function (_v0, obj) {
+					var k = _v0.a;
+					var v = _v0.b;
+					return A3(_Json_addField, k, v, obj);
+				}),
+			_Json_emptyObject(_Utils_Tuple0),
+			pairs));
+};
+var $elm$core$Dict$fromList = function (assocs) {
+	return A3(
+		$elm$core$List$foldl,
+		F2(
+			function (_v0, dict) {
+				var key = _v0.a;
+				var value = _v0.b;
+				return A3($elm$core$Dict$insert, key, value, dict);
+			}),
+		$elm$core$Dict$empty,
+		assocs);
+};
+var $elm$random$Random$pair = F2(
+	function (genA, genB) {
+		return A3(
+			$elm$random$Random$map2,
+			F2(
+				function (a, b) {
+					return _Utils_Tuple2(a, b);
+				}),
+			genA,
+			genB);
+	});
+var $elm_community$random_extra$Random$Dict$dict = F3(
+	function (dictLength, keyGenerator, valueGenerator) {
+		return A2(
+			$elm$random$Random$map,
+			$elm$core$Dict$fromList,
+			A2(
+				$elm$random$Random$list,
+				dictLength,
+				A2($elm$random$Random$pair, keyGenerator, valueGenerator)));
+	});
+var $elm_community$random_extra$Random$Dict$rangeLengthDict = F4(
+	function (minLength, maxLength, keyGenerator, valueGenerator) {
+		return A2(
+			$elm$random$Random$andThen,
+			function (len) {
+				return A3($elm_community$random_extra$Random$Dict$dict, len, keyGenerator, valueGenerator);
+			},
+			A2($elm$random$Random$int, minLength, maxLength));
+	});
+var $elm_community$random_extra$Random$Extra$rangeLengthList = F3(
+	function (minLength, maxLength, generator) {
+		return A2(
+			$elm$random$Random$andThen,
+			function (len) {
+				return A2($elm$random$Random$list, len, generator);
+			},
+			A2($elm$random$Random$int, minLength, maxLength));
 	});
 var $elm$json$Json$Encode$bool = _Json_wrap;
 var $elm$random$Random$addOne = function (value) {

@@ -1,6 +1,8 @@
 module P exposing (..)
 
 import Parser exposing (..)
+import Dict
+import List.Extra
 
 type GoStructDef = GoStructDef (List GoStructLine)
 type GoStructLine = GoStructLine String GoTypes (List JSONTags) | GoEmbedStruct String (List JSONTags)
@@ -162,26 +164,42 @@ ifProgress parser offset = succeed identity
 
 deadEndsToString : List DeadEnd -> String
 deadEndsToString deadEnds =
-  String.concat (List.intersperse "; " (List.map deadEndToString deadEnds))
+    let problemDict =  List.foldl deadEndToString Dict.empty deadEnds
+        sort_ problems =
+            let descriptions = List.map desc <| List.Extra.unique problems
+                (expectations, others) = List.partition (\d -> Tuple.first d == "expecting") descriptions
+                expected = String.concat <| List.intersperse ", " <| List.map Tuple.second expectations
+                period = if List.isEmpty others || List.isEmpty expectations then "" else ", also "
+                other = String.concat <| List.intersperse " or " <| List.map (\(a, b) -> a ++ " " ++ b) others
+            in
+                (if List.isEmpty expectations then "" else "expecting: ")
+                    ++ expected ++ period ++ (if List.isEmpty others then "" else "might be ") ++ other
+        display (row, col) problems = sort_ problems ++ " at row " ++ String.fromInt row ++ ", col " ++ String.fromInt col
+    in
+        String.concat (List.intersperse "; " <| Dict.values <| Dict.map display problemDict)
 
-deadEndToString : DeadEnd -> String
-deadEndToString deadend =
-  problemToString deadend.problem ++ " at row " ++ String.fromInt deadend.row ++ ", col " ++ String.fromInt deadend.col
+deadEndToString : DeadEnd -> Dict.Dict (Int, Int) (List Problem) -> Dict.Dict (Int, Int) (List Problem)
+deadEndToString deadend dict =
+    Dict.update (deadend.row, deadend.col) (\old ->
+        case old of
+            Nothing -> Just [deadend.problem]
+            Just problems -> Just (deadend.problem::problems)
+    ) dict
 
-problemToString : Problem -> String
-problemToString p =
+desc : Problem -> (String, String)
+desc p =
   case p of
-   Expecting s -> "expecting '" ++ s ++ "'"
-   ExpectingInt -> "expecting int"
-   ExpectingHex -> "expecting hex"
-   ExpectingOctal -> "expecting octal"
-   ExpectingBinary -> "expecting binary"
-   ExpectingFloat -> "expecting float"
-   ExpectingNumber -> "expecting number"
-   ExpectingVariable -> "expecting variable"
-   ExpectingSymbol s -> "expecting symbol '" ++ s ++ "'"
-   ExpectingKeyword s -> "expecting keyword '" ++ s ++ "'"
-   ExpectingEnd -> "expecting end"
-   UnexpectedChar -> "unexpected char"
-   Problem s -> "problem: " ++ s
-   BadRepeat -> "bad repeat"
+   Expecting s -> ("expecting", "'" ++ s ++ "'")
+   ExpectingInt -> ("expecting", "int")
+   ExpectingHex -> ("expecting", "hex")
+   ExpectingOctal -> ("expecting", "octal")
+   ExpectingBinary -> ("expecting", "binary")
+   ExpectingFloat -> ("expecting", "float")
+   ExpectingNumber -> ("expecting", "number")
+   ExpectingVariable -> ("expecting", "variable")
+   ExpectingSymbol s -> ("expecting", "symbol '" ++ s ++ "'")
+   ExpectingKeyword s -> ("expecting", "keyword '" ++ s ++ "'")
+   ExpectingEnd -> ("expecting", "end")
+   UnexpectedChar -> ("unexpected", "char")
+   Problem s -> (s, "problem")
+   BadRepeat -> ("bad", "repeat")
