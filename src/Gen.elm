@@ -242,7 +242,7 @@ simpleArrayLike n typ =
             GoUInt64 -> value int <| Random.list n goUInt64
             GoFloat -> value float <| Random.list n Random.Float.anyFloat
             GoDouble -> value float <| Random.list n Random.Float.anyFloat
-            GoString -> randomTake string ["rob pike", "Robert", "Pike", "gopher", "Gopher", "Go", "Golang", "goroutine", "interface{}", "struct"]
+            GoString -> value string <| Random.list n <| Random.String.rangeLengthString 1 8 Random.Char.english
             GoTime -> randomTake string ["2011-01-26T19:06:43Z", "2020-07-16T14:49:50.3269159+08:00", "2011-01-26T19:01:12Z", "2011-01-26T19:14:43Z", "2009-11-10T23:00:00Z", "2018-09-22T12:42:31Z", "2020-12-29T14:58:15Z", "2006-01-02T15:04:05Z", "2020-12-29T14:58:15.229579703+08:00", "2017-12-30T11:25:30+09:00"]
 
 simpleValue : GoSimpleTypes -> Random.Generator Json.Encode.Value
@@ -254,11 +254,11 @@ simpleValue typ =
         GoInt32 -> Random.map int <| Random.int -323232 323232
         GoInt64 -> Random.map int Random.Int.anyInt
         GoUInt -> Random.map int Random.Int.positiveInt
-        GoUInt8 -> Random.map int <| goUInt8
-        GoUInt16 -> Random.map int <| goUInt16
-        GoUInt32 -> Random.map int <| goUInt32
-        GoUInt64 -> Random.map int <| goUInt64
-        GoString -> Random.map string <| Random.String.rangeLengthString 1 8 Random.Char.english
+        GoUInt8 -> Random.map int goUInt8
+        GoUInt16 -> Random.map int goUInt16
+        GoUInt32 -> Random.map int goUInt32
+        GoUInt64 -> Random.map int goUInt64
+        GoString -> Random.map string goString
         GoFloat -> Random.map float Random.Float.anyFloat
         GoDouble -> Random.map float Random.Float.anyFloat
         GoBool -> Random.map bool Random.Extra.bool
@@ -321,3 +321,9 @@ intString = stringValue String.fromInt
 
 floatString : Random.Generator Float -> Random.Generator Value
 floatString = stringValue String.fromFloat
+
+goString : Random.Generator String
+goString =
+    Random.map (\s -> Maybe.withDefault "nil" s)
+    <| Random.Extra.sample
+    <| ["rob pike", "Robert", "Pike", "gopher", "Gopher", "Go", "Golang", "goroutine", "interface{}", "struct"]

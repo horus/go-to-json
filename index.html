@@ -6685,6 +6685,65 @@ var $elm_community$random_extra$Random$Extra$bool = A2(
 	true,
 	_List_fromArray(
 		[false]));
+var $elm$core$Tuple$second = function (_v0) {
+	var y = _v0.b;
+	return y;
+};
+var $elm_community$random_extra$Random$Extra$frequency = F2(
+	function (head, pairs) {
+		var total = $elm$core$List$sum(
+			A2(
+				$elm$core$List$map,
+				A2($elm$core$Basics$composeL, $elm$core$Basics$abs, $elm$core$Tuple$first),
+				A2($elm$core$List$cons, head, pairs)));
+		var pick = F2(
+			function (someChoices, n) {
+				pick:
+				while (true) {
+					if (someChoices.b) {
+						var _v1 = someChoices.a;
+						var k = _v1.a;
+						var g = _v1.b;
+						var rest = someChoices.b;
+						if (_Utils_cmp(n, k) < 1) {
+							return g;
+						} else {
+							var $temp$someChoices = rest,
+								$temp$n = n - k;
+							someChoices = $temp$someChoices;
+							n = $temp$n;
+							continue pick;
+						}
+					} else {
+						return head.b;
+					}
+				}
+			});
+		return A2(
+			$elm$random$Random$andThen,
+			pick(
+				A2($elm$core$List$cons, head, pairs)),
+			A2($elm$random$Random$float, 0, total));
+	});
+var $elm_community$random_extra$Random$Extra$choices = F2(
+	function (hd, gens) {
+		return A2(
+			$elm_community$random_extra$Random$Extra$frequency,
+			_Utils_Tuple2(1, hd),
+			A2(
+				$elm$core$List$map,
+				function (g) {
+					return _Utils_Tuple2(1, g);
+				},
+				gens));
+	});
+var $elm_community$random_extra$Random$Char$upperCaseLatin = A2($elm_community$random_extra$Random$Char$char, 65, 90);
+var $elm_community$random_extra$Random$Char$latin = A2(
+	$elm_community$random_extra$Random$Extra$choices,
+	$elm_community$random_extra$Random$Char$lowerCaseLatin,
+	_List_fromArray(
+		[$elm_community$random_extra$Random$Char$upperCaseLatin]));
+var $elm_community$random_extra$Random$Char$english = $elm_community$random_extra$Random$Char$latin;
 var $elm$json$Json$Encode$float = _Json_wrap;
 var $elm$json$Json$Encode$int = _Json_wrap;
 var $elm_community$random_extra$Random$List$anyInt = A2($elm$random$Random$int, $elm$random$Random$minInt, $elm$random$Random$maxInt);
@@ -6728,10 +6787,6 @@ var $elm$random$Random$independentSeed = $elm$random$Random$Generator(
 			A4($elm$random$Random$map3, makeIndependentSeed, gen, gen, gen),
 			seed0);
 	});
-var $elm$core$Tuple$second = function (_v0) {
-	var y = _v0.b;
-	return y;
-};
 var $elm$core$List$sortBy = _List_sortBy;
 var $elm_community$random_extra$Random$List$shuffle = function (list) {
 	return A2(
@@ -6982,10 +7037,12 @@ var $author$project$Gen$simpleArrayLike = F2(
 					A2($elm$random$Random$list, n, $elm_community$random_extra$Random$Float$anyFloat));
 			case 'GoString':
 				return A2(
-					randomTake,
+					value,
 					$elm$json$Json$Encode$string,
-					_List_fromArray(
-						['rob pike', 'Robert', 'Pike', 'gopher', 'Gopher', 'Go', 'Golang', 'goroutine', 'interface{}', 'struct']));
+					A2(
+						$elm$random$Random$list,
+						n,
+						A3($elm_community$random_extra$Random$String$rangeLengthString, 1, 8, $elm_community$random_extra$Random$Char$english)));
 			default:
 				return A2(
 					randomTake,
@@ -6994,61 +7051,57 @@ var $author$project$Gen$simpleArrayLike = F2(
 						['2011-01-26T19:06:43Z', '2020-07-16T14:49:50.3269159+08:00', '2011-01-26T19:01:12Z', '2011-01-26T19:14:43Z', '2009-11-10T23:00:00Z', '2018-09-22T12:42:31Z', '2020-12-29T14:58:15Z', '2006-01-02T15:04:05Z', '2020-12-29T14:58:15.229579703+08:00', '2017-12-30T11:25:30+09:00']));
 		}
 	});
-var $elm_community$random_extra$Random$Extra$frequency = F2(
-	function (head, pairs) {
-		var total = $elm$core$List$sum(
-			A2(
-				$elm$core$List$map,
-				A2($elm$core$Basics$composeL, $elm$core$Basics$abs, $elm$core$Tuple$first),
-				A2($elm$core$List$cons, head, pairs)));
-		var pick = F2(
-			function (someChoices, n) {
-				pick:
-				while (true) {
-					if (someChoices.b) {
-						var _v1 = someChoices.a;
-						var k = _v1.a;
-						var g = _v1.b;
-						var rest = someChoices.b;
-						if (_Utils_cmp(n, k) < 1) {
-							return g;
-						} else {
-							var $temp$someChoices = rest,
-								$temp$n = n - k;
-							someChoices = $temp$someChoices;
-							n = $temp$n;
-							continue pick;
-						}
+var $elm_community$random_extra$Random$Extra$sample = function () {
+	var find = F2(
+		function (k, ys) {
+			find:
+			while (true) {
+				if (!ys.b) {
+					return $elm$core$Maybe$Nothing;
+				} else {
+					var z = ys.a;
+					var zs = ys.b;
+					if (!k) {
+						return $elm$core$Maybe$Just(z);
 					} else {
-						return head.b;
+						var $temp$k = k - 1,
+							$temp$ys = zs;
+						k = $temp$k;
+						ys = $temp$ys;
+						continue find;
 					}
 				}
-			});
+			}
+		});
+	return function (xs) {
 		return A2(
-			$elm$random$Random$andThen,
-			pick(
-				A2($elm$core$List$cons, head, pairs)),
-			A2($elm$random$Random$float, 0, total));
-	});
-var $elm_community$random_extra$Random$Extra$choices = F2(
-	function (hd, gens) {
-		return A2(
-			$elm_community$random_extra$Random$Extra$frequency,
-			_Utils_Tuple2(1, hd),
+			$elm$random$Random$map,
+			function (i) {
+				return A2(find, i, xs);
+			},
 			A2(
-				$elm$core$List$map,
-				function (g) {
-					return _Utils_Tuple2(1, g);
-				},
-				gens));
+				$elm$random$Random$int,
+				0,
+				$elm$core$List$length(xs) - 1));
+	};
+}();
+var $elm$core$Maybe$withDefault = F2(
+	function (_default, maybe) {
+		if (maybe.$ === 'Just') {
+			var value = maybe.a;
+			return value;
+		} else {
+			return _default;
+		}
 	});
-var $elm_community$random_extra$Random$Char$upperCaseLatin = A2($elm_community$random_extra$Random$Char$char, 65, 90);
-var $elm_community$random_extra$Random$Char$latin = A2(
-	$elm_community$random_extra$Random$Extra$choices,
-	$elm_community$random_extra$Random$Char$lowerCaseLatin,
-	_List_fromArray(
-		[$elm_community$random_extra$Random$Char$upperCaseLatin]));
-var $elm_community$random_extra$Random$Char$english = $elm_community$random_extra$Random$Char$latin;
+var $author$project$Gen$goString = A2(
+	$elm$random$Random$map,
+	function (s) {
+		return A2($elm$core$Maybe$withDefault, 'nil', s);
+	},
+	$elm_community$random_extra$Random$Extra$sample(
+		_List_fromArray(
+			['rob pike', 'Robert', 'Pike', 'gopher', 'Gopher', 'Go', 'Golang', 'goroutine', 'interface{}', 'struct'])));
 var $author$project$Gen$simpleValue = function (typ) {
 	switch (typ.$) {
 		case 'GoInt':
@@ -7081,10 +7134,7 @@ var $author$project$Gen$simpleValue = function (typ) {
 		case 'GoUInt64':
 			return A2($elm$random$Random$map, $elm$json$Json$Encode$int, $author$project$Gen$goUInt64);
 		case 'GoString':
-			return A2(
-				$elm$random$Random$map,
-				$elm$json$Json$Encode$string,
-				A3($elm_community$random_extra$Random$String$rangeLengthString, 1, 8, $elm_community$random_extra$Random$Char$english));
+			return A2($elm$random$Random$map, $elm$json$Json$Encode$string, $author$project$Gen$goString);
 		case 'GoFloat':
 			return A2($elm$random$Random$map, $elm$json$Json$Encode$float, $elm_community$random_extra$Random$Float$anyFloat);
 		case 'GoDouble':
@@ -7148,15 +7198,6 @@ var $author$project$Gen$simpleValueAsString = function (typ) {
 				$elm$json$Json$Encode$string('2006-01-02T15:04:05Z'));
 	}
 };
-var $elm$core$Maybe$withDefault = F2(
-	function (_default, maybe) {
-		if (maybe.$ === 'Just') {
-			var value = maybe.a;
-			return value;
-		} else {
-			return _default;
-		}
-	});
 var $author$project$Gen$exampleValue = F2(
 	function (env, typ) {
 		exampleValue:
