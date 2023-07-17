@@ -15,45 +15,43 @@ import Random.String
 buildEnv : List (Maybe String, GoStructDef) -> Result String (Dict String GoStructDef)
 buildEnv xs =
     let
-        folder (name_, def) dict_ =
-            case dict_ of
-                Ok dict ->
-                    case name_ of
-                        Just name ->
-                            if Dict.member name dict
-                                then Err <| name ++ " redeclared in this block"
-                                else Ok  <| Dict.insert name def dict
-                        Nothing -> dict_
-                err -> err
+        folder (name_, def) = Result.andThen <| \dict ->
+            Maybe.withDefault (Ok dict)
+            <| Maybe.map (\name ->
+                if Dict.member name dict
+                    then Err <| name ++ " redeclared in this block"
+                    else Ok  <| Dict.insert name def dict)
+            <| name_
     in
         List.foldl folder (Ok Dict.empty) xs
+
+jsonHelper : Dict String GoStructDef -> List ( Maybe String, GoStructDef ) -> Result String (List (Random.Generator Value))
+jsonHelper env_ = 
+    let
+        folder (name, GoStructDef def) result =
+            let
+                env = Maybe.withDefault env_
+                    <| Maybe.map (\name_ -> Dict.remove name_ env_)
+                    <| name
+            in
+                Result.map2 (::) (json env def) result
+    in
+        List.foldl folder <| Ok []
 
 fromParsed : Result (List DeadEnd) (List (Maybe String, GoStructDef)) -> Random.Generator (Result String String)
 fromParsed result =
     case result of
-        Err e -> Random.constant <| Err <| deadEndsToString e
+        Err e ->
+            Random.constant <| Err <| deadEndsToString e
         Ok lines ->
-            let
-                jsonize env_ ls_ =
-                    case ls_ of
-                        [] -> Ok []
-                        ((name, GoStructDef def)::ls) ->
-                            let
-                                env__ =
-                                    case name of
-                                        Just name_ -> Dict.remove name_ env_
-                                        _ -> env_
-                            in
-                                Result.map2 (::) (json env__ def) (jsonize env_ ls)
-             in
-                case buildEnv lines of
-                    Ok env ->
-                        case jsonize env lines of
-                            Err e -> Random.constant <| Err e
-                            Ok values ->
-                                Random.map (Ok << String.join "\n" << List.map (encode 4))
-                                <| Random.Extra.sequence values
-                    Err e -> Random.constant <| Err e
+            case buildEnv lines of
+                Ok env ->
+                    case jsonHelper env lines of
+                        Err e -> Random.constant <| Err e
+                        Ok values ->
+                            Random.Extra.sequence values
+                            |> Random.map (Ok << String.join "\n" << List.map (encode 4))
+                Err e -> Random.constant <| Err e
 
 show : GoTypes -> String
 show typ =
@@ -86,11 +84,9 @@ exampleValue env typ asString =
     case typ of
         GoBasic t -> Ok <| if asString then simpleValueAsString t else simpleValue t
         GoArrayLike n t ->
-            case exampleValue env t False of
-                Ok vg -> Ok
-                    <| Random.map (list identity)
-                    <| Random.Extra.rangeLengthList 0 (Maybe.withDefault 3 n) vg
-                Err e -> Err e
+            exampleValue env t False |> Result.map (\vg ->
+                Random.map (list identity)
+                <| Random.Extra.rangeLengthList 0 (Maybe.withDefault 3 n) vg)
         GoStruct (GoStructDef defs) -> json env defs
         GoTyVar t ->
             case Dict.get t env of
@@ -111,14 +107,11 @@ exampleValue env typ asString =
                     exampleValue env t asString
                 Err e -> Err e
         GoMap t1 t2 ->
-            case mapKey t1 t2 of
-                Err e -> Err e
-                Ok keyGenerator ->
-                    case exampleValue env t2 False of
-                        Err e -> Err e
-                        Ok valueGenerator -> Ok
-                            <| Random.map (Json.Encode.dict identity identity)
-                            <| Random.Dict.rangeLengthDict 3 5 keyGenerator valueGenerator
+            Result.map2 (\keyGenerator valueGenerator ->
+                Random.map (Json.Encode.dict identity identity)
+                <| Random.Dict.rangeLengthDict 3 5 keyGenerator valueGenerator)
+            (mapKey t1 t2)
+            (exampleValue env t2 False)
 
 json : Dict String GoStructDef -> List GoStructLine -> Result String (Random.Generator Json.Encode.Value)
 json env structfields = Result.map (Random.map Json.Encode.object) <| json_ env structfields
@@ -137,7 +130,7 @@ json_ env structfields =
                         _ -> Nothing
             in
                 List.head <| List.filterMap keyRename tags
-        rename_ name tags = Maybe.withDefault name (rename tags)
+        rename_ name tags = rename tags |> Maybe.withDefault name
         folder structfield pairs_ =
             case pairs_ of
                 Err e -> Err e
@@ -149,12 +142,10 @@ json_ env structfields =
                                 else
                                     case Dict.get tvar env of
                                         Just (GoStructDef def) ->
-                                            case json_ (Dict.remove tvar env) def of
-                                                Err e -> Err e
-                                                Ok pairs__ ->
-                                                    case rename tags of
-                                                        Just name_ -> Ok <| Random.map2 (\p0 p1 -> (name_, object p1) :: p0) pairs pairs__
-                                                        Nothing    -> Ok <| Random.map2 (\p0 p1 -> p0 ++ p1) pairs__ pairs
+                                            json_ (Dict.remove tvar env) def |> Result.map (\pairs__ ->
+                                                rename tags
+                                                    |> Maybe.map (\name_ -> Random.map2 (\p0 p1 -> (name_, object p1) :: p0) pairs pairs__)
+                                                    |> Maybe.withDefault (Random.map2 (\p0 p1 -> p0 ++ p1) pairs__ pairs))
                                         Nothing -> Err <| "undefined or invalid: " ++ tvar
                         GoStructLine id typ tags ->
                             if ignored tags
@@ -167,9 +158,8 @@ json_ env structfields =
                                                 then Err <| "struct field " ++ id ++ " has json tag but is not exported"
                                                 else pairs_
                                     else
-                                        case exampleValue env typ (asString tags) of
-                                            Ok generator -> Ok <| Random.map2 (\p0 value -> (rename_ id tags, value) :: p0) pairs generator
-                                            Err e -> Err e
+                                        exampleValue env typ (asString tags) |> Result.map (\generator ->
+                                            Random.map2 (\p0 value -> (rename_ id tags, value) :: p0) pairs generator)
     in
         List.foldl folder (Ok <| Random.constant []) structfields
 
@@ -244,7 +234,7 @@ simpleValueAsString typ =
         GoString -> Random.constant <| string "\"robpike\""
         GoFloat -> floatString <| Random.float 0 1
         GoDouble -> floatString <| Random.float 0 1
-        GoBool -> Random.map (\b -> if b then string "true" else string "false") Random.Extra.bool
+        GoBool -> Random.Extra.bool |> Random.map (\b -> if b then string "true" else string "false")
         GoTime -> Random.constant <| string "2006-01-02T15:04:05Z"
 
 goInt8 : Random.Generator Int
