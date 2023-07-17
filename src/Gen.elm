@@ -10,7 +10,6 @@ import Random.Dict
 import Random.Float
 import Random.Int
 import Random.Extra
-import Random.List
 import Random.String
 
 buildEnv : List (Maybe String, GoStructDef) -> Result String (Dict String GoStructDef)
@@ -51,11 +50,10 @@ fromParsed result =
                     Ok env ->
                         case jsonize env lines of
                             Err e -> Random.constant <| Err e
-                            Ok values -> Random.map (Ok
-                                << String.join "\n"
-                                << List.map (\value -> encode 4 value))
+                            Ok values ->
+                                Random.map (Ok << String.join "\n" << List.map (encode 4))
                                 <| Random.Extra.sequence values
-                    Err e -> Random.constant (Err e)
+                    Err e -> Random.constant <| Err e
 
 show : GoTypes -> String
 show typ =
@@ -90,7 +88,7 @@ exampleValue env typ asString =
         GoArrayLike n t ->
             case exampleValue env t False of
                 Ok vg -> Ok
-                    <| Random.map (\xs -> list identity xs)
+                    <| Random.map (list identity)
                     <| Random.Extra.rangeLengthList 0 (Maybe.withDefault 3 n) vg
                 Err e -> Err e
         GoStruct (GoStructDef defs) -> json env defs
@@ -119,18 +117,18 @@ exampleValue env typ asString =
                     case exampleValue env t2 False of
                         Err e -> Err e
                         Ok valueGenerator -> Ok
-                            <| Random.map (\d -> Json.Encode.dict identity identity d)
+                            <| Random.map (Json.Encode.dict identity identity)
                             <| Random.Dict.rangeLengthDict 3 5 keyGenerator valueGenerator
 
 json : Dict String GoStructDef -> List GoStructLine -> Result String (Random.Generator Json.Encode.Value)
-json env structfields = Result.map (\v -> Random.map Json.Encode.object v) <| json_ env structfields
+json env structfields = Result.map (Random.map Json.Encode.object) <| json_ env structfields
 
 json_ : Dict String GoStructDef -> List GoStructLine -> Result String (Random.Generator (List (String, Json.Encode.Value)))
 json_ env structfields =
     let
         ignored tags = List.member KeyIgnore tags
         asString tags = List.member KeyAsString tags
-        notExported id = Maybe.withDefault True << Maybe.map (\(c, _) -> not <| Char.isUpper <| c) <| String.uncons <| id
+        notExported id = Maybe.withDefault True << Maybe.map (\(c, _) -> not <| Char.isUpper c) <| String.uncons <| id
         rename tags =
             let
                 keyRename t =
@@ -157,7 +155,7 @@ json_ env structfields =
                                                     case rename tags of
                                                         Just name_ -> Ok <| Random.map2 (\p0 p1 -> (name_, object p1) :: p0) pairs pairs__
                                                         Nothing    -> Ok <| Random.map2 (\p0 p1 -> p0 ++ p1) pairs__ pairs
-                                        Nothing -> Err ("undefined or invalid: " ++ tvar)
+                                        Nothing -> Err <| "undefined or invalid: " ++ tvar
                         GoStructLine id typ tags ->
                             if ignored tags
                                 then pairs_
@@ -173,7 +171,7 @@ json_ env structfields =
                                             Ok generator -> Ok <| Random.map2 (\p0 value -> (rename_ id tags, value) :: p0) pairs generator
                                             Err e -> Err e
     in
-        List.foldl folder (Ok (Random.constant [])) structfields
+        List.foldl folder (Ok <| Random.constant []) structfields
 
 mapKey : GoTypes -> GoTypes -> Result String (Random.Generator String)
 mapKey keyType valueType =
@@ -226,7 +224,7 @@ simpleValue typ =
         GoFloat -> Random.map float Random.Float.anyFloat
         GoDouble -> Random.map float Random.Float.anyFloat
         GoBool -> Random.map bool Random.Extra.bool
-        GoTime -> Random.map (\s -> string <| Maybe.withDefault "2006-01-02T15:04:05Z" s)
+        GoTime -> Random.map (string << Maybe.withDefault "2006-01-02T15:04:05Z")
                     <| Random.Extra.sample
                     <| ["2011-01-26T19:06:43Z", "2020-07-16T14:49:50.3269159+08:00", "2011-01-26T19:01:12Z", "2011-01-26T19:14:43Z", "2009-11-10T23:00:00Z", "2018-09-22T12:42:31Z", "2020-12-29T14:58:15Z", "2006-01-02T15:04:05Z", "2020-12-29T14:58:15.229579703+08:00", "2017-12-30T11:25:30+09:00"]
 
@@ -290,6 +288,6 @@ floatString = stringValue String.fromFloat
 
 goString : Random.Generator String
 goString =
-    Random.map (\s -> Maybe.withDefault "nil" s)
+    Random.map (Maybe.withDefault "nil")
     <| Random.Extra.sample
     <| ["rob pike", "Robert", "Pike", "gopher", "Gopher", "Go", "Golang", "goroutine", "interface{}", "struct"]
