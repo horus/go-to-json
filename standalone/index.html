@@ -7035,9 +7035,9 @@ var $author$project$Gen$exampleValue = F3(
 					return A2($author$project$Gen$json, env, defs);
 				case 5:
 					var t = typ.a;
-					var _v6 = A2($elm$core$Dict$get, t, env);
-					if (!_v6.$) {
-						var def = _v6.a;
+					var _v5 = A2($elm$core$Dict$get, t, env);
+					if (!_v5.$) {
+						var def = _v5.a;
 						return A2(
 							$author$project$Gen$json,
 							A2($elm$core$Dict$remove, t, env),
@@ -7051,10 +7051,10 @@ var $author$project$Gen$exampleValue = F3(
 							$elm$json$Json$Encode$object(_List_Nil)));
 				case 6:
 					var p = typ.a;
-					var _v7 = A2($author$project$Gen$deref, 1, p);
-					if (!_v7.$) {
-						if (_v7.a.$ === 5) {
-							var t = _v7.a.a;
+					var _v6 = A2($author$project$Gen$deref, 1, p);
+					if (!_v6.$) {
+						if (_v6.a.$ === 5) {
+							var t = _v6.a.a;
 							if (A2($elm$core$Dict$member, t, env)) {
 								var $temp$env = env,
 									$temp$typ = $author$project$P$GoTyVar(t),
@@ -7068,7 +7068,7 @@ var $author$project$Gen$exampleValue = F3(
 									$elm$random$Random$constant($elm$json$Json$Encode$null));
 							}
 						} else {
-							var t = _v7.a;
+							var t = _v6.a;
 							var $temp$env = env,
 								$temp$typ = t,
 								$temp$asString = asString;
@@ -7078,7 +7078,7 @@ var $author$project$Gen$exampleValue = F3(
 							continue exampleValue;
 						}
 					} else {
-						var e = _v7.a;
+						var e = _v6.a;
 						return $elm$core$Result$Err(e);
 					}
 				default:
@@ -7107,6 +7107,10 @@ var $author$project$Gen$json = F2(
 	});
 var $author$project$Gen$json_ = F2(
 	function (env, structfields) {
+		var tagHelper = F3(
+			function (tags, def, val) {
+				return A2($elm$core$List$member, $author$project$P$KeyIgnore, tags) ? def : val;
+			});
 		var rename = function (tags) {
 			var keyRename = function (t) {
 				if (!t.$) {
@@ -7131,102 +7135,98 @@ var $author$project$Gen$json_ = F2(
 				$elm$core$Basics$composeL,
 				$elm$core$Maybe$withDefault(true),
 				$elm$core$Maybe$map(
-					function (_v3) {
-						var c = _v3.a;
+					function (_v2) {
+						var c = _v2.a;
 						return !$elm$core$Char$isUpper(c);
 					}),
 				$elm$core$String$uncons(id));
-		};
-		var ignored = function (tags) {
-			return A2($elm$core$List$member, $author$project$P$KeyIgnore, tags);
 		};
 		var asString = function (tags) {
 			return A2($elm$core$List$member, $author$project$P$KeyAsString, tags);
 		};
 		var folder = F2(
-			function (structfield, pairs_) {
-				if (pairs_.$ === 1) {
-					var e = pairs_.a;
-					return $elm$core$Result$Err(e);
-				} else {
-					var pairs = pairs_.a;
-					if (structfield.$ === 1) {
-						var tvar = structfield.a;
-						var tags = structfield.b;
-						if (ignored(tags)) {
-							return pairs_;
-						} else {
-							var _v2 = A2($elm$core$Dict$get, tvar, env);
-							if (!_v2.$) {
-								var def = _v2.a;
-								return A2(
-									$elm$core$Result$map,
-									function (pairs__) {
-										return A2(
-											$elm$core$Maybe$withDefault,
-											A3(
-												$elm$random$Random$map2,
-												F2(
-													function (p0, p1) {
-														return _Utils_ap(p0, p1);
-													}),
-												pairs__,
-												pairs),
-											A2(
-												$elm$core$Maybe$map,
-												function (name_) {
-													return A3(
-														$elm$random$Random$map2,
-														F2(
-															function (p0, p1) {
-																return A2(
-																	$elm$core$List$cons,
-																	_Utils_Tuple2(
-																		name_,
-																		$elm$json$Json$Encode$object(p1)),
-																	p0);
-															}),
-														pairs,
-														pairs__);
-												},
-												rename(tags)));
-									},
+			function (structfield, result) {
+				return A2(
+					$elm$core$Result$andThen,
+					function (pairs) {
+						if (structfield.$ === 1) {
+							var tvar = structfield.a;
+							var tags = structfield.b;
+							return A3(
+								tagHelper,
+								tags,
+								result,
+								A2(
+									$elm$core$Maybe$withDefault,
+									$elm$core$Result$Err('undefined or invalid: ' + tvar),
 									A2(
-										$author$project$Gen$json_,
-										A2($elm$core$Dict$remove, tvar, env),
-										def));
-							} else {
-								return $elm$core$Result$Err('undefined or invalid: ' + tvar);
-							}
-						}
-					} else {
-						var id = structfield.a;
-						var typ = structfield.b;
-						var tags = structfield.c;
-						return ignored(tags) ? pairs_ : (notExported(id) ? ((!$elm$core$List$isEmpty(tags)) ? $elm$core$Result$Err('struct field ' + (id + ' has json tag but is not exported')) : pairs_) : A2(
-							$elm$core$Result$map,
-							function (generator) {
-								return A3(
-									$elm$random$Random$map2,
-									F2(
-										function (p0, value) {
+										$elm$core$Maybe$map,
+										function (_v1) {
+											var def = _v1;
 											return A2(
-												$elm$core$List$cons,
-												_Utils_Tuple2(
-													A2(rename_, id, tags),
-													value),
-												p0);
-										}),
-									pairs,
-									generator);
-							},
-							A3(
-								$author$project$Gen$exampleValue,
-								env,
-								typ,
-								asString(tags))));
-					}
-				}
+												$elm$core$Result$map,
+												function (pairs_) {
+													return A2(
+														$elm$core$Maybe$withDefault,
+														A3($elm$random$Random$map2, $elm$core$Basics$append, pairs_, pairs),
+														A2(
+															$elm$core$Maybe$map,
+															function (name_) {
+																return A3(
+																	$elm$random$Random$map2,
+																	F2(
+																		function (o, ps) {
+																			return A2(
+																				$elm$core$List$cons,
+																				_Utils_Tuple2(
+																					name_,
+																					$elm$json$Json$Encode$object(o)),
+																				ps);
+																		}),
+																	pairs_,
+																	pairs);
+															},
+															rename(tags)));
+												},
+												A2(
+													$author$project$Gen$json_,
+													A2($elm$core$Dict$remove, tvar, env),
+													def));
+										},
+										A2($elm$core$Dict$get, tvar, env))));
+						} else {
+							var id = structfield.a;
+							var typ = structfield.b;
+							var tags = structfield.c;
+							return notExported(id) ? ((!$elm$core$List$isEmpty(tags)) ? $elm$core$Result$Err('struct field ' + (id + ' has json tag but is not exported')) : result) : A3(
+								tagHelper,
+								tags,
+								result,
+								A2(
+									$elm$core$Result$map,
+									function (generator) {
+										return A3(
+											$elm$random$Random$map2,
+											F2(
+												function (value, ps) {
+													return A2(
+														$elm$core$List$cons,
+														_Utils_Tuple2(
+															A2(rename_, id, tags),
+															value),
+														ps);
+												}),
+											generator,
+											pairs);
+									},
+									A3(
+										$author$project$Gen$exampleValue,
+										env,
+										typ,
+										asString(tags))));
+						}
+					},
+					result);
 			});
 		return A3(
 			$elm$core$List$foldl,

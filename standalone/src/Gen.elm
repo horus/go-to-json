@@ -119,7 +119,7 @@ json env structfields = Result.map (Random.map Json.Encode.object) <| json_ env 
 json_ : Dict String GoStructDef -> List GoStructLine -> Result String (Random.Generator (List (String, Json.Encode.Value)))
 json_ env structfields =
     let
-        ignored tags = List.member KeyIgnore tags
+        tagHelper tags def val = if List.member KeyIgnore tags then def else val
         asString tags = List.member KeyAsString tags
         notExported id = Maybe.withDefault True << Maybe.map (\(c, _) -> not <| Char.isUpper c) <| String.uncons <| id
         rename tags =
@@ -131,35 +131,27 @@ json_ env structfields =
             in
                 List.head <| List.filterMap keyRename tags
         rename_ name tags = rename tags |> Maybe.withDefault name
-        folder structfield pairs_ =
-            case pairs_ of
-                Err e -> Err e
-                Ok pairs ->
-                    case structfield of
-                        GoEmbedStruct tvar tags ->
-                            if ignored tags
-                                then pairs_
-                                else
-                                    case Dict.get tvar env of
-                                        Just (GoStructDef def) ->
-                                            json_ (Dict.remove tvar env) def |> Result.map (\pairs__ ->
-                                                rename tags
-                                                    |> Maybe.map (\name_ -> Random.map2 (\p0 p1 -> (name_, object p1) :: p0) pairs pairs__)
-                                                    |> Maybe.withDefault (Random.map2 (\p0 p1 -> p0 ++ p1) pairs__ pairs))
-                                        Nothing -> Err <| "undefined or invalid: " ++ tvar
-                        GoStructLine id typ tags ->
-                            if ignored tags
-                                then pairs_
-                                else
-                                    if notExported id
-                                        -- XXX: what to do with an JSON empty tag?
-                                        then
-                                            if not (List.isEmpty tags)
-                                                then Err <| "struct field " ++ id ++ " has json tag but is not exported"
-                                                else pairs_
-                                    else
-                                        exampleValue env typ (asString tags) |> Result.map (\generator ->
-                                            Random.map2 (\p0 value -> (rename_ id tags, value) :: p0) pairs generator)
+        folder structfield result = result |> Result.andThen (\pairs ->
+            case structfield of
+                GoEmbedStruct tvar tags ->
+                    Dict.get tvar env |> Maybe.map (\(GoStructDef def) ->
+                        json_ (Dict.remove tvar env) def
+                            |> Result.map (\pairs_ -> rename tags
+                                |> Maybe.map (\name_ -> Random.map2 (\o ps -> (name_, object o) :: ps) pairs_ pairs)
+                                |> Maybe.withDefault (Random.map2 (++) pairs_ pairs)))
+                        |> Maybe.withDefault (Err <| "undefined or invalid: " ++ tvar)
+                    |> tagHelper tags result
+                GoStructLine id typ tags ->
+                    if notExported id
+                        -- XXX: what to do with an JSON empty tag?
+                        then
+                            if not (List.isEmpty tags)
+                                then Err <| "struct field " ++ id ++ " has json tag but is not exported"
+                                else result
+                        else
+                            exampleValue env typ (asString tags) |> Result.map (\generator ->
+                                Random.map2 (\value ps -> (rename_ id tags, value) :: ps) generator pairs)
+                    |> tagHelper tags result)
     in
         List.foldl folder (Ok <| Random.constant []) structfields
 
