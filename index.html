@@ -7292,7 +7292,8 @@ var $author$project$Gen$fromParsed = function (result) {
 							$elm$core$String$join('\n')),
 						$elm$core$List$map(
 							$elm$json$Json$Encode$encode(4))),
-					$elm_community$random_extra$Random$Extra$sequence(values));
+					$elm_community$random_extra$Random$Extra$sequence(
+						$elm$core$List$reverse(values)));
 			}
 		} else {
 			var e = _v1.a;
