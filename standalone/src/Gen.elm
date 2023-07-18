@@ -48,8 +48,8 @@ fromParsed result =
                 Ok env ->
                     case jsonHelper env lines of
                         Err e -> Random.constant <| Err e
-                        Ok values ->
-                            Random.Extra.sequence values
+                        Ok values -> List.reverse values
+                            |> Random.Extra.sequence
                             |> Random.map (Ok << String.join "\n" << List.map (encode 4))
                 Err e -> Random.constant <| Err e
 
