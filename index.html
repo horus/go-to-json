@@ -6249,6 +6249,10 @@ var $author$project$P$GoTyVar = function (a) {
 };
 var $author$project$P$KeyAsString = {$: 3};
 var $author$project$P$KeyIgnore = {$: 2};
+var $elm$core$Basics$always = F2(
+	function (a, _v0) {
+		return a;
+	});
 var $elm$core$Bitwise$and = _Bitwise_and;
 var $elm$core$Bitwise$shiftRightBy = _Bitwise_shiftRightBy;
 var $elm$core$String$repeatHelp = F3(
@@ -7198,7 +7202,10 @@ var $author$project$Gen$json_ = F2(
 							var id = structfield.a;
 							var typ = structfield.b;
 							var tags = structfield.c;
-							return notExported(id) ? ((!$elm$core$List$isEmpty(tags)) ? $elm$core$Result$Err('struct field ' + (id + ' has json tag but is not exported')) : result) : A3(
+							return notExported(id) ? ((!$elm$core$List$isEmpty(tags)) ? $elm$core$Result$Err('struct field ' + (id + ' has json tag but is not exported')) : A2(
+								$elm$core$Result$andThen,
+								$elm$core$Basics$always(result),
+								A3($author$project$Gen$exampleValue, env, typ, false))) : A3(
 								tagHelper,
 								tags,
 								result,
@@ -7531,10 +7538,6 @@ var $elm$core$List$filter = F2(
 				}),
 			_List_Nil,
 			list);
-	});
-var $elm$core$Basics$always = F2(
-	function (a, _v0) {
-		return a;
 	});
 var $elm$parser$Parser$Advanced$mapChompedString = F2(
 	function (func, _v0) {
