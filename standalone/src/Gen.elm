@@ -147,7 +147,7 @@ json_ env structfields =
                         then
                             if not (List.isEmpty tags)
                                 then Err <| "struct field " ++ id ++ " has json tag but is not exported"
-                                else result
+                                else exampleValue env typ False |> Result.andThen (always result) -- typecheck only
                         else
                             exampleValue env typ (asString tags) |> Result.map (\generator ->
                                 Random.map2 (\value ps -> (rename_ id tags, value) :: ps) generator pairs)
