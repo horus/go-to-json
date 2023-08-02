@@ -7,7 +7,7 @@
 
 module Lib (getJson) where
 
-import Control.Applicative (liftA2, (<|>))
+import Control.Applicative ((<|>))
 import Control.Monad (foldM, guard, liftM2, (<=<))
 import Data.Aeson as A
 import qualified Data.Aeson.Key as A

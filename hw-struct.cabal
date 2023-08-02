@@ -1,10 +1,10 @@
 cabal-version: 1.12
 
--- This file has been generated from package.yaml by hpack version 0.33.0.
+-- This file has been generated from package.yaml by hpack version 0.35.2.
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 426dfa58700e15198ea0c0a83d301de2c0319b44c77590c954a3234f69001b56
+-- hash: 60bb75c120070ef4ee9bfb44d29a5bd0bdefd591f338f850edc83df8e9020bc4
 
 name:           hw-struct
 version:        0.1.0.0
@@ -39,8 +39,6 @@ library
     , attoparsec
     , base >=4.7 && <5
     , bytestring
-    , ekg
-    , ekg-core
     , http-types
     , pretty
     , scientific
@@ -64,8 +62,6 @@ executable hw-struct-exe
     , attoparsec
     , base >=4.7 && <5
     , bytestring
-    , ekg
-    , ekg-core
     , http-types
     , hw-struct
     , pretty
@@ -91,8 +87,6 @@ test-suite hw-struct-test
     , attoparsec
     , base >=4.7 && <5
     , bytestring
-    , ekg
-    , ekg-core
     , http-types
     , hw-struct
     , pretty
