@@ -11,6 +11,9 @@ import Random.Float
 import Random.Int
 import Random.Extra
 import Random.String
+import Basics.Extra
+import Maybe.Extra
+import Result.Extra
 
 buildEnv : List (Maybe String, GoStructDef) -> Result String (Dict String GoStructDef)
 buildEnv xs =
@@ -39,19 +42,15 @@ jsonHelper env_ =
         List.foldl folder <| Ok []
 
 fromParsed : Result (List DeadEnd) (List (Maybe String, GoStructDef)) -> Random.Generator (Result String String)
-fromParsed result =
-    case result of
-        Err e ->
-            Random.constant <| Err <| deadEndsToString e
-        Ok lines ->
-            case buildEnv lines of
-                Ok env ->
-                    case jsonHelper env lines of
-                        Err e -> Random.constant <| Err e
-                        Ok values -> List.reverse values
-                            |> Random.Extra.sequence
-                            |> Random.map (Ok << String.join "\n" << List.map (encode 4))
-                Err e -> Random.constant <| Err e
+fromParsed = Result.Extra.unpack
+    (Random.constant << Err << deadEndsToString)
+    (\lines -> buildEnv lines
+        |> Result.Extra.unpack
+            (Random.constant << Err)
+            (Basics.Extra.flip jsonHelper lines
+            >> Result.Extra.unpack
+                (Random.constant << Err)
+                (Random.map (Ok << String.join "\n" << List.map (encode 4)) << Random.Extra.sequence << List.reverse)))
 
 show : GoTypes -> String
 show typ =
@@ -83,33 +82,27 @@ exampleValue : Dict String GoStructDef -> GoTypes -> Bool -> Result String (Rand
 exampleValue env typ asString =
     case typ of
         GoBasic t -> Ok <| if asString then simpleValueAsString t else simpleValue t
-        GoArrayLike n t ->
-            exampleValue env t False |> Result.map (\vg ->
-                Random.map (list identity)
-                <| Random.Extra.rangeLengthList 0 (Maybe.withDefault 3 n) vg)
+        GoArrayLike n t -> exampleValue env t False |> Result.map (\vg ->
+            Random.map (list identity) <| Random.Extra.rangeLengthList 0 (Maybe.withDefault 3 n) vg)
         GoStruct (GoStructDef defs) -> json env defs
-        GoTyVar t ->
-            case Dict.get t env of
-                Just (GoStructDef def) -> json (Dict.remove t env) def
-                Nothing -> Err <| "undefined or invalid: " ++ t
+        GoTyVar t -> Dict.get t env
+            |> Maybe.Extra.unwrap (Err <| "undefined or invalid: " ++ t) (\(GoStructDef def) -> json (Dict.remove t env) def)
         GoInterface -> Ok <| Random.constant <| object []
-        GoPointer p ->
-            case deref 1 p of
-                Ok (GoTyVar t) ->
-                    if Dict.member t env
-                        then exampleValue env (GoTyVar t) asString
-                        -- special case: every pointer has a valid value: nil
-                        else Ok <| Random.constant <| Json.Encode.null
-                Ok t ->
-                    -- json tag "string" expecting: string, floating point, integer, or boolean types
-                    -- other types ignore it, just proceed as usual, which I seemed to misunderstand in the original Haskell version.
-                    -- "Pointer values encode as the value pointed to."
-                    exampleValue env t asString
-                Err e -> Err e
-        GoMap t1 t2 ->
-            Result.map2 (\keyGenerator valueGenerator ->
-                Random.map (Json.Encode.dict identity identity)
-                <| Random.Dict.rangeLengthDict 3 5 keyGenerator valueGenerator)
+        GoPointer p -> case deref 1 p of
+            Ok (GoTyVar t) ->
+                if Dict.member t env
+                    then exampleValue env (GoTyVar t) asString
+                    -- special case: every pointer has a valid value: nil
+                    else Ok <| Random.constant <| Json.Encode.null
+            Ok t ->
+                -- json tag "string" expecting: string, floating point, integer, or boolean types
+                -- other types ignore it, just proceed as usual, which I seemed to misunderstand in the original Haskell version.
+                -- "Pointer values encode as the value pointed to."
+                exampleValue env t asString
+            Err e -> Err e
+        GoMap t1 t2 -> Result.map2 (\keyGenerator valueGenerator ->
+            Random.map (Json.Encode.dict identity identity)
+            <| Random.Dict.rangeLengthDict 3 5 keyGenerator valueGenerator)
             (mapKey t1 t2)
             (exampleValue env t2 False)
 
@@ -149,8 +142,8 @@ json_ env structfields =
                                 then Err <| "struct field " ++ id ++ " has json tag but is not exported"
                                 else exampleValue env typ False |> Result.andThen (always result) -- typecheck only
                         else
-                            exampleValue env typ (asString tags) |> Result.map (\generator ->
-                                Random.map2 (\value ps -> (rename_ id tags, value) :: ps) generator pairs)
+                            exampleValue env typ (asString tags)
+                            |> Result.map (\generator -> Random.map2 (\value ps -> (rename_ id tags, value) :: ps) generator pairs)
                     |> tagHelper tags result)
     in
         List.foldl folder (Ok <| Random.constant []) structfields
