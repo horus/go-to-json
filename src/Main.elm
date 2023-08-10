@@ -4,13 +4,14 @@ import Browser
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
-import Gen exposing (fromParsed)
+import Gen
 import P exposing (goStructs)
-import Parser exposing (run)
-import Random exposing (generate)
+import Parser
+import Random
 
 type Model = Loading | Failed String | Success String
 
+main : Program () Model Msg
 main =
   Browser.document
     { init = init
@@ -81,4 +82,4 @@ textAreaStyle : List (Attribute Msg)
 textAreaStyle = [style "display" "block", style "width" "500px", style "height" "300px", style "resize" "none", readonly True ]
 
 getJson : String -> Cmd Msg
-getJson str = Random.generate GotText (Gen.fromParsed <| run P.goStructs str)
+getJson str = Random.generate GotText (Gen.fromParsed <| Parser.run goStructs str)
