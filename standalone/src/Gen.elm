@@ -115,11 +115,16 @@ json_ env structfields =
         tagHelper tags def val = if List.member KeyIgnore tags then def else val
         asString tags = List.member KeyAsString tags
         notExported id = Maybe.withDefault True << Maybe.map (\(c, _) -> not <| Char.isUpper c) <| String.uncons <| id
+        isValidTag t =
+            let
+                validChars = String.toList "!#$%&()*+-./:;<=>?@[]^_{|}~ "
+             in
+                String.all (\c -> Char.isAlphaNum c || List.member c validChars) t
         rename tags =
             let
                 keyRename t =
                     case t of
-                        KeyRename n -> Just n
+                        KeyRename n -> if isValidTag n then Just n else Nothing
                         _ -> Nothing
             in
                 List.head <| List.filterMap keyRename tags

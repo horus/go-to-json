@@ -7033,6 +7033,10 @@ var $author$project$Gen$simpleValueAsString = function (typ) {
 				$elm$json$Json$Encode$string('2006-01-02T15:04:05Z'));
 	}
 };
+var $elm$core$String$foldr = _String_foldr;
+var $elm$core$String$toList = function (string) {
+	return A3($elm$core$String$foldr, $elm$core$List$cons, _List_Nil, string);
+};
 var $elm_community$maybe_extra$Maybe$Extra$unwrap = F3(
 	function (_default, f, m) {
 		if (m.$ === 'Nothing') {
@@ -7149,11 +7153,31 @@ var $author$project$Gen$json_ = F2(
 			function (tags, def, val) {
 				return A2($elm$core$List$member, $author$project$P$KeyIgnore, tags) ? def : val;
 			});
+		var notExported = function (id) {
+			return A3(
+				$elm$core$Basics$composeL,
+				$elm$core$Maybe$withDefault(true),
+				$elm$core$Maybe$map(
+					function (_v3) {
+						var c = _v3.a;
+						return !$elm$core$Char$isUpper(c);
+					}),
+				$elm$core$String$uncons(id));
+		};
+		var isValidTag = function (t) {
+			var validChars = $elm$core$String$toList('!#$%&()*+-./:;<=>?@[]^_{|}~ ');
+			return A2(
+				$elm$core$String$all,
+				function (c) {
+					return $elm$core$Char$isAlphaNum(c) || A2($elm$core$List$member, c, validChars);
+				},
+				t);
+		};
 		var rename = function (tags) {
 			var keyRename = function (t) {
 				if (t.$ === 'KeyRename') {
 					var n = t.a;
-					return $elm$core$Maybe$Just(n);
+					return isValidTag(n) ? $elm$core$Maybe$Just(n) : $elm$core$Maybe$Nothing;
 				} else {
 					return $elm$core$Maybe$Nothing;
 				}
@@ -7168,17 +7192,6 @@ var $author$project$Gen$json_ = F2(
 					name,
 					rename(tags));
 			});
-		var notExported = function (id) {
-			return A3(
-				$elm$core$Basics$composeL,
-				$elm$core$Maybe$withDefault(true),
-				$elm$core$Maybe$map(
-					function (_v2) {
-						var c = _v2.a;
-						return !$elm$core$Char$isUpper(c);
-					}),
-				$elm$core$String$uncons(id));
-		};
 		var asString = function (tags) {
 			return A2($elm$core$List$member, $author$project$P$KeyAsString, tags);
 		};
