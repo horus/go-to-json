@@ -4,7 +4,7 @@ Online json.Marshal as opposed to json-to-go
 
 ## Usage
 
-Please click the link on the right and paste your `struct` definitions.
+Please click the [link](https://horus.github.io/go-to-json/) to the right and paste your `struct` definitions.
 
 ## Is there anything...
 
