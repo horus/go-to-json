@@ -29,6 +29,14 @@ Feel free to try it out.
 
 Overall, this tool is a hobbyist's creation. I have been working on it since 2020, and I hope it reaches a wider audience and helps those in need.
 
+## Implementations
+
+| Branch                          | Language                                                               |
+| ------------------------------- | ---------------------------------------------------------------------- |
+| [archive](../../tree/archive)   | Haskell (back) + Elm (front)                                           |
+| [main](../../tree/main)         | pure Elm                                                               |
+| [ghcjs](../../tree/ghcjs)       | 98% Haskell (w./ GHC 9.8.1 JavaScript Backend) + 1% HTML  + 1% JS shim |
+
 ## Got Questions?
 
 Issues or PRs welcome.
