@@ -1,0 +1,61 @@
+cabal-version: 1.12
+
+name:           go-to-json
+version:        0.1.0.0
+description:    Please see the README on GitHub at <https://github.com/horus/go-to-json#readme>
+homepage:       https://github.com/horus/go-to-json#readme
+bug-reports:    https://github.com/horus/go-to-json/issues
+author:         horus
+maintainer:     horus.li@gmail.com
+copyright:      2020 Author name here
+license:        BSD3
+license-file:   LICENSE
+build-type:     Simple
+extra-source-files:
+    README.md
+    ChangeLog.md
+
+source-repository head
+  type: git
+  location: https://github.com/horus/go-to-json
+
+library
+  if arch(javascript)
+    js-sources:
+      jsbits/shim.js
+  exposed-modules:
+      Lib
+  other-modules:
+      Paths_go_to_json
+  hs-source-dirs:
+      src
+  ghc-options: -Wall -O2
+  build-depends:
+      aeson
+    , aeson-pretty
+    , base
+    , bytestring
+    , megaparsec
+    , text
+    , unordered-containers
+    , vector
+  default-language: Haskell2010
+
+executable go-to-json-exe
+  main-is: Main.hs
+  other-modules:
+      Paths_go_to_json
+  hs-source-dirs:
+      app
+  ghc-options: -Wall -O2
+  build-depends:
+      aeson
+    , attoparsec
+    , base
+    , bytestring
+    , go-to-json
+    , megaparsec
+    , text
+    , unordered-containers
+    , vector
+  default-language: Haskell2010

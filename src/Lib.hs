@@ -2,70 +2,81 @@
 {-# LANGUAGE LambdaCase #-}
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE TupleSections #-}
+{-# LANGUAGE TypeApplications #-}
 {-# OPTIONS_GHC -Wno-missing-signatures #-}
 {-# OPTIONS_GHC -Wno-unused-do-bind #-}
 
-module Lib (getJson) where
+module Lib where
 
-import Control.Applicative ((<|>))
-import Control.Monad (foldM, guard, liftM2, (<=<))
+import Control.Monad (foldM)
 import Data.Aeson as A
+import Data.Aeson.Encode.Pretty (encodePretty)
 import qualified Data.Aeson.Key as A
 import qualified Data.Aeson.KeyMap as A
-import Data.Aeson.Encode.Pretty (encodePretty)
-import Data.Attoparsec.Text as P
-import Data.Bifunctor (first)
-import Data.ByteString.Lazy.Char8 (pack)
-import Data.Char (isAlphaNum, isPrint, isSpace, isUpper)
+import Data.ByteString (ByteString)
+import qualified Data.ByteString.Char8 as C8 (pack)
+import Data.ByteString.Lazy (toStrict)
+import Data.Char (isAlphaNum, isUpper)
 import Data.Foldable (foldlM)
+import Data.Functor (($>))
 import qualified Data.HashMap.Strict as HM
 import Data.List (intersperse)
-import Data.Maybe (mapMaybe)
-import Data.Text (Text)
-import qualified Data.Text as T
-import Data.Text.Encoding (decodeUtf8')
+import Data.Maybe (fromMaybe)
+import qualified Data.Text as T (pack)
 import qualified Data.Vector as V
+import Data.Void (Void)
 import Numeric (showInt)
+import Text.Megaparsec
+import Text.Megaparsec.Char
+import qualified Text.Megaparsec.Char.Lexer as L
 
-getJson = either pack jsonize . (parseOnly goStructBlock <=< first show . decodeUtf8')
+type Parser = Parsec Void String
+
+getJson :: String -> ByteString
+getJson "" = ""
+getJson s = either C8.pack id result
   where
-    goStructBlock = skipMany endOfLine' *> goStructs <* ((comment `sepBy` skipSpace) >> skipSpace >> endOfInput)
-    comment = skipSpace >> string "//" >> skipWhile (not . isEndOfLine)
+    result =
+      case parse goStructs "" s of
+        Left err -> Left $ errorBundlePretty err
+        Right defs -> jsonize defs
 
 newtype GoStructDef = GoStructDef [GoStructLine]
 
 instance Show GoStructDef where
   show (GoStructDef []) = "struct {}"
-  show (GoStructDef defs) = "struct {\n" ++ concatMap (\line -> "    " ++ show line) defs ++ "}"
+  show (GoStructDef defs) = "struct {\n" ++ concatMap (\line -> "    " ++ show line ++ "\n") defs ++ "}"
 
-data GoStructLine = GoStructLine Text GoTypes [JSONTags] | GoEmbedStruct Text [JSONTags] -- Id type tags
+data JSONTags = KeyRename String | KeyOmitEmpty | KeyIgnore | KeyAsString | KeyUnknown String deriving (Show, Eq)
+
+data GoStructLine = GoStructLine String GoTypes [JSONTags] | GoEmbedStruct String [JSONTags] -- Id type tags
 
 instance Show GoStructLine where
-  show (GoStructLine k typ _) = let k' = T.unpack k in k' ++ " " ++ show typ ++ " `json:\"" ++ k' ++ "\"`\n"
-  show (GoEmbedStruct t _) = T.unpack t
+  show (GoStructLine k typ _) = k ++ " " ++ show typ
+  show (GoEmbedStruct t _) = t
 
-data JSONTags = KeyRename Text | KeyOmitEmpty | KeyIgnore | KeyAsString deriving (Show, Eq)
-
-goStructs = (typedef <|> fmap (Nothing,) goStruct) `sepBy` skipMany1 endOfLine'
+goStructs :: Parser [(Maybe String, GoStructDef)]
+goStructs = some (typedef <|> fmap (Nothing,) goStruct)
 
 typedef = liftA2 (,) name def
   where
-    name = (string "type" >> skipSpace') *> fmap Just goIdent
-    def = skipSpace' *> goStruct
+    name = (string "type" >> hspace1) *> fmap Just goIdent
+    def = hspace1 *> goStruct
 
-goStruct = string "struct" >> goBlocky (withComments definitions)
-  where
-    definitions = GoStructDef <$> (goStructLine `sepBy` skipMany1 endOfLine')
-    withComments p = skipMany endOfLine' *> p <* skipMany endOfLine'
+goStruct :: Parser GoStructDef
+goStruct =
+  string "struct"
+    *> hspace
+    *> between
+      (symbol "{")
+      (symbol "}")
+      (GoStructDef <$> goStructLine `sepEndBy` sc)
 
-endOfLine' = do
-  skipWhile isHorizontalSpace
-  trailingComment <|> endOfLine
-  where
-    trailingComment = do
-      string "//"
-      skipWhile (not . isEndOfLine)
-      endOfLine
+sc :: Parser ()
+sc = L.space space1 (L.skipLineComment "//") (L.skipBlockComment "/*" "*/")
+
+symbol :: String -> Parser String
+symbol = L.symbol sc
 
 data GoSimpleTypes = GoInt8 | GoInt16 | GoInt32 | GoInt64 | GoInt | GoUInt8 | GoUInt16 | GoUInt32 | GoUInt64 | GoUInt | GoString | GoDouble | GoFloat | GoBool | GoTime deriving (Eq)
 
@@ -86,44 +97,30 @@ instance Show GoSimpleTypes where
   show GoBool = "bool"
   show GoTime = "time.Time"
 
-data GoTypes = GoBasic GoSimpleTypes | GoArrayLike Int GoTypes | GoMap GoTypes GoTypes | GoStruct GoStructDef | GoInterface | GoTyVar Text | GoPointer GoTypes
+data GoTypes = GoBasic GoSimpleTypes | GoArrayLike (Maybe Int) GoTypes | GoMap GoTypes GoTypes | GoStruct GoStructDef | GoInterface | GoTyVar String | GoPointer GoTypes
 
 instance Show GoTypes where
   show (GoBasic t) = show t
-  show (GoArrayLike n t) = let t' = "]" ++ show t in "[" ++ if n > 0 then showInt n t' else t'
+  show (GoArrayLike Nothing t) = "[]" ++ show t
+  show (GoArrayLike (Just n) t) = '[' : showInt n ("]" ++ show t)
   show (GoMap t1 t2) = "map[" ++ show t1 ++ "]" ++ show t2
   show (GoStruct defs) = show defs
   show GoInterface = "interface{}"
-  show (GoTyVar t) = show t
+  show (GoTyVar t) = '$' : t
   show (GoPointer t) = '*' : show t
-
-goBlocky p = begin *> p <* end
-  where
-    begin = skipSpace >> char '{'
-    end = skipSpace >> char '}'
 
 goTypeLit = goPointer <|> goInterface <|> fmap GoBasic goBasicTypeLit <|> goArrayLike <|> goMap <|> fmap GoStruct goStruct <|> goTyVar
   where
-    goPointer = char '*' >> (GoPointer <$> goTypeLit)
-    goInterface = (string "interface{}" <|> string "any") >> pure GoInterface
-    goArrayLike = do
-      n <- goSlice <|> goArray
-      GoArrayLike n <$> goTypeLit
+    goPointer = char '*' *> (GoPointer <$> goTypeLit)
+    goInterface = (string "interface{}" <|> string "any") $> GoInterface
+    goArrayLike = GoArrayLike <$> (goSlice <|> goArray) <*> goTypeLit
       where
-        goSlice = string "[]" >> return 0
-        goArray = do
-          char '['
-          n <- decimal
-          guard (n > 0)
-          char ']'
-          return n
-    goMap = do
-      string "map["
-      keyType <- goTypeLit
-      char ']'
-      GoMap keyType <$> goTypeLit
+        goSlice = string "[]" >> return Nothing
+        goArray = between (char '[') (char ']') (Just <$> L.decimal)
+    goMap = between (string "map[") (char ']') $ GoMap <$> goTypeLit <*> goTypeLit
     goTyVar = GoTyVar <$> goIdent
 
+goBasicTypeLit :: Parser GoSimpleTypes
 goBasicTypeLit =
   choice
     [ string "int8" >> return GoInt8,
@@ -143,49 +140,75 @@ goBasicTypeLit =
       string "time.Time" >> return GoTime
     ]
 
-skipSpace' = skipMany1 (satisfy isHorizontalSpace)
+goIdent :: Parser String
+goIdent = some alphaNumChar
 
-goIdent = P.takeWhile1 isAlphaNum
+goStructLine :: Parser GoStructLine
+goStructLine = do
+  ident <- goIdent
+  try
+    ( do
+        typ <- hspace1 *> goTypeLit
+        tag <- (hspace1 *> goStructTags) <|> pure []
+        return $ GoStructLine ident typ tag
+    )
+    <|> do
+      tag <- (hspace1 *> goStructTags) <|> pure []
+      return $ GoEmbedStruct ident tag
 
-goStructLine = goPlainStructLine <|> goEmbeddedStructLine
+goStructTags :: Parser [JSONTags]
+goStructTags = between (char '`') (char '`') jsonTags
+
+jsonTags :: Parser [JSONTags]
+jsonTags = jsonTags' <|> (anySingle *> jsonTags)
+
+jsonTags' :: Parser [JSONTags]
+jsonTags' = do
+  string "json:"
+  between (char '"') (char '"') $ do
+    p1 <- jsonKeyName <|> pure []
+    p2 <- jsonOpt <|> pure []
+    return $ p1 ++ p2
+
+jsonKeyName :: Parser [JSONTags]
+jsonKeyName =
+  many (satisfy isValidTag) >>= \case
+    "" -> pure []
+    "-" -> (notFollowedBy (char ',') $> [KeyIgnore]) <|> pure [KeyRename "-"]
+    n -> pure [KeyRename n]
   where
-    goPlainStructLine = GoStructLine <$> (skipSpace *> goIdent) <*> (skipSpace' *> goTypeLit) <*> ((skipSpace' *> goStructTags) <|> pure [])
-    goEmbeddedStructLine = GoEmbedStruct <$> (skipSpace *> goIdent) <*> ((skipSpace' *> goStructTags) <|> pure [])
+    isValidTag c = isAlphaNum c || elem @[] c "!#$%&()*+-./:;<=>?@[]^_{|}~ "
 
-goStructTags = do
-  (a, b) <- char '`' *> (T.breakOn "json:\"" <$> P.takeWhile (\c -> c /= '`' && isPrint c)) <* char '`'
-  if T.null a && T.null b
-    then return []
-    else case T.break (== '"') $ T.drop 6 b of
-      (c, d) | (T.null a || isSpace (T.last a)) && not (T.null d) && T.head d == '"' -> return (tags c)
-      _ -> return []
+jsonOpt :: Parser [JSONTags]
+jsonOpt = char ',' *> (opts `sepEndBy` char ',')
   where
-    tags "" = []
-    tags "-" = [KeyIgnore]
-    tags ts = if T.null x then p1 xs else KeyRename x : p1 xs
-      where
-        (x : xs) = T.split (== ',') ts
-        p1 = mapMaybe $ \case
-          "omitempty" -> Just KeyOmitEmpty
-          "string" -> Just KeyAsString
-          _ -> Nothing
+    opts =
+      choice
+        [ string "omitempty" $> KeyOmitEmpty,
+          string "string" $> KeyAsString,
+          KeyUnknown <$> some alphaNumChar
+        ]
 
-genExampleValue :: HM.HashMap Text GoStructDef -> GoTypes -> Either String A.Value
+genExampleValue :: HM.HashMap String GoStructDef -> GoTypes -> Either String A.Value
 genExampleValue _ (GoBasic t) = pure $ genSimple t
-genExampleValue _ (GoArrayLike n (GoBasic t))
+genExampleValue _ (GoArrayLike n' (GoBasic t))
   | n > 0 && n < 10 = pure $ Array $ V.take n (genSimpleArrayLike t)
   | otherwise = pure $ Array $ genSimpleArrayLike t
-genExampleValue env (GoArrayLike n t)
+  where
+    n = fromMaybe 5 n'
+genExampleValue env (GoArrayLike n' t)
   | n > 0 && n < 6 = do
-    val <- genExampleValue env t
-    pure $ Array $ V.replicate n val
+      val <- genExampleValue env t
+      pure $ Array $ V.replicate n val
   | otherwise = do
-    val <- genExampleValue env t
-    pure $ Array $ V.fromList [val]
+      val <- genExampleValue env t
+      pure $ Array $ V.fromList [val]
+  where
+    n = fromMaybe 5 n'
 genExampleValue env (GoStruct (GoStructDef defs)) = jsonize'' env defs
 genExampleValue env (GoTyVar t) = case HM.lookup t env of
   Just (GoStructDef def) -> jsonize'' (HM.delete t env) def
-  Nothing -> Left $ "undefined or invalid: " ++ T.unpack t
+  Nothing -> Left $ "undefined or invalid: " ++ t
 genExampleValue _ GoInterface = pure $ Object A.empty
 genExampleValue env (GoPointer p) = deref 1 p
   where
@@ -221,7 +244,7 @@ genExampleValue env (GoMap t1 t2) = do
     check t@(GoMap _ _) = Left $ "json: unsupported type: map[" ++ show t ++ "]" ++ show t2
     check t@(GoStruct _) = Left $ "json: unsupported type: map[" ++ show t ++ "]" ++ show t2
     check GoInterface = Left $ "json: unsupported type: map[interface{}]" ++ show t2
-    check (GoTyVar t) = Left $ "json: unsupported type: map[main." ++ T.unpack t ++ "]" ++ show t2
+    check (GoTyVar t) = Left $ "json: unsupported type: map[main." ++ t ++ "]" ++ show t2
     check (GoPointer t) = Left $ "json: unsupported type: map[*" ++ show t ++ "]" ++ show t2
 
 {--
@@ -268,7 +291,7 @@ genSimple GoBool = Bool True
 genSimple GoTime = String "2006-01-02T15:04:05Z"
 {-# INLINE genSimple #-}
 
-genSimple' :: GoSimpleTypes -> Text
+genSimple' :: GoSimpleTypes -> String
 genSimple' GoInt = "0"
 genSimple' GoInt8 = "1"
 genSimple' GoInt16 = "2"
@@ -286,22 +309,22 @@ genSimple' GoBool = "false"
 genSimple' GoTime = "2006-01-02T15:04:05Z"
 {-# INLINE genSimple' #-}
 
-jsonize defs = either pack prettyJson (prepareEnv >>= jsonize' defs)
+jsonize defs = fmap prettyJson (prepareEnv >>= jsonize' defs)
   where
-    prettyJson = mconcat . intersperse "\n" . map encodePretty
+    prettyJson = toStrict . mconcat . intersperse "\n" . map encodePretty
     prepareEnv = foldM g HM.empty [(name, val) | (Just name, val) <- defs]
       where
         g m (k, v)
-          | k `HM.member` m = Left $! T.unpack k ++ " redeclared in this block"
+          | k `HM.member` m = Left $! k ++ " redeclared in this block"
           | otherwise = Right (HM.insert k v m)
 
-jsonize' :: [(Maybe Text, GoStructDef)] -> HM.HashMap Text GoStructDef -> Either String [Value]
+jsonize' :: [(Maybe String, GoStructDef)] -> HM.HashMap String GoStructDef -> Either String [Value]
 jsonize' [] _ = return []
-jsonize' ((name, GoStructDef xs) : defs) env = liftM2 (:) (jsonize'' env' xs) (jsonize' defs env)
+jsonize' ((name, GoStructDef xs) : defs) env = liftA2 (:) (jsonize'' env' xs) (jsonize' defs env)
   where
     env' = maybe env (`HM.delete` env) name
 
-jsonize'' :: HM.HashMap Text GoStructDef -> [GoStructLine] -> Either String Value
+jsonize'' :: HM.HashMap String GoStructDef -> [GoStructLine] -> Either String Value
 jsonize'' env = fmap object . pairize env
 
 pairize environ = foldlM (go environ) []
@@ -309,27 +332,27 @@ pairize environ = foldlM (go environ) []
     go env ps (GoEmbedStruct tv tags)
       | KeyIgnore `elem` tags = return ps
       | otherwise =
-        case HM.lookup tv env of
-          Just (GoStructDef defs) -> do
-            ps' <- pairize (HM.delete tv env) defs
-            if null ident'
-              then return $! ps' ++ ps
-              else return $! (A.fromText (head ident') .= object ps') : ps
-          Nothing -> Left $! "undefined or invalid: " ++ T.unpack tv
+          case HM.lookup tv env of
+            Just (GoStructDef defs) -> do
+              ps' <- pairize (HM.delete tv env) defs
+              if null ident'
+                then return $! ps' ++ ps
+                else return $! (A.fromString (head ident') .= object ps') : ps
+            Nothing -> Left $! "undefined or invalid: " ++ tv
       where
         ident' = [n | KeyRename n <- tags]
     go env ps (GoStructLine ident t tags)
       | KeyIgnore `elem` tags = example >> return ps
-      | notExported && not (null tags) = Left $! "struct field " ++ T.unpack ident ++ " has json tag but is not exported"
+      | notExported && not (null tags) = Left $! "struct field " ++ ident ++ " has json tag but is not exported"
       | notExported = example >> return ps
       | otherwise = do
-        eg <- example
-        return $! (A.fromText ident' .= eg) : ps
+          eg <- example
+          return $! (A.fromString ident' .= eg) : ps
       where
-        notExported = not $ isUpper $ T.head ident
+        notExported = not $ isUpper $ head ident
         ident' = head $ [n | KeyRename n <- tags] <|> [ident]
         example = case t of
-          GoBasic b | KeyAsString `elem` tags -> pure $ String (genSimple' b)
+          GoBasic b | KeyAsString `elem` tags -> pure $ String $ T.pack $ genSimple' b
           -- json tag "string" expecting: string, floating point, integer, or boolean types
           -- other types ignore it, just proceed as usual
           _ -> genExampleValue env t

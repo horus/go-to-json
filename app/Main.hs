@@ -1,15 +1,16 @@
-{-# LANGUAGE OverloadedStrings #-}
-{-# OPTIONS_GHC -Wno-unused-do-bind #-}
-
 module Main where
 
+import Foreign.C.String
+import Data.ByteString as BS (useAsCString)
+import GHC.JS.Prim
+import GHC.JS.Foreign.Callback
 import Lib
-import Network.HTTP.Types.Status
-import Network.Wai
-import Network.Wai.Handler.Warp
+
+foreign import javascript "((arr,offset) => document.getElementById(\"output\").innerHTML = h$decodeUtf8z(arr,offset))"
+  setInnerHtml :: CString -> IO ()
+
+foreign import javascript "((f) => { h$getJSON = f })"
+  setCallback :: Callback (JSVal -> IO ()) -> IO ()
 
 main :: IO ()
-main = do
-  run 1983 $ \req respond -> do
-    bs <- getRequestBodyChunk req
-    respond $ responseLBS status200 [("Content-Type", "text/plain")] (getJson bs)
+main = asyncCallback1 (flip BS.useAsCString setInnerHtml . getJson . fromJSString) >>= setCallback

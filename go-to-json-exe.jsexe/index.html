@@ -1,0 +1,52 @@
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<title>import "encoding/json"</title>
+</head>
+
+<body>
+	<div style="margin: 3cm; font-family: monospace;">
+		<table style="width: 1000px; position: relative;">
+			<tr>
+				<td>
+					<h1 style="text-align: center;">Go struct to JSON</h1>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<p style="text-align: center; margin-bottom: 1.5cm;">A buggy, online version of json.Marshal for
+						you!</p>
+				</td>
+			</tr>
+		</table>
+		<table>
+			<thead style="color: white; background-color: black;">
+				<th>Go struct</th>
+				<th>JSON</th>
+			</thead>
+			<tr>
+				<td><textarea placeholder="type or paste struct here" oninput="h$getJSON(this.value)"
+						style="display: block; width: 500px; height: 300px; resize: none;"></textarea></td>
+				<td><textarea placeholder="...loading" readonly="" id="output"
+						style="display: block; width: 500px; height: 300px; resize: none;"></textarea></td>
+			</tr>
+		</table>
+		<table style="width: 1000px; position: relative;">
+			<tr>
+				<td>
+					<hr style="margin-top: 1cm; text-align: center; width: 35%;">
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<p style="text-align: center; margin-top: 1px; color: gray; font-size: 9pt;">Made with Elm &amp; ♥️
+					</p>
+				</td>
+			</tr>
+		</table>
+	</div>
+	<script language="javascript" src="all.js" defer=""></script>
+</body>
+
+</html>

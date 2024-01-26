@@ -1,0 +1,1276 @@
+number of modules: 1129
+packed metadata:   5206151
+
+code size summary per package (in bytes):
+
+OneTuple-0.4.1.1-4dcd93355399e53e9fac58869c7eba30e2628f607fdf65212be7f59e2c32adf5:0
+QuickCheck-2.14.3-744349c517c62466edcd225b0b7aeed4889f001caa22dd0bfa35bdb48f5394a1:0
+StateVar-1.2.2-bf3051149781a4f9048225c574cd8b6016056bbe0db8a2acc5edb38fff10a751:0
+aeson-2.2.1.0-3c0f54bc8ea3c2038c58621817415045631e499625c61ab4fb150fdeccd70648:358955
+aeson-pretty-0.8.10-7199fdb0d80bff3e173783f0691b594280ee813ae83c5997b0d0ce5822aafa95:166500
+array-0.5.6.0-inplace:   0
+assoc-1.1-5adcaebd2b0dbd17c29a5ac6aefe86250208cb040e2ec4297cf815dbbf071fb5:0
+attoparsec-0.14.4-995c6fe38817e0168eaeb439fb0e36a0e643b746339265f77fdbf45acd7e9ea7:0
+attoparsec-0.14.4-l-attoparsec-internal-9e5c7a440f36f19f81719d49c49b45b9c9cda94aacffeff5c3a1c09d4a0581de:0
+base:                    876270
+base-compat-0.13.1-61d31c275c44ecd8f41c4cf2f6a045886e7d2394d71f9176d514472137d87b15:0
+base-orphans-0.9.1-a561bfa641518a2dd508f6c778bb9e685906352c4fabb2891937256c896135f3:0
+bifunctors-5.6.1-2fee6b2d5015462b1578caebd482df0446b7dba2453ae5e47c7add96b9671946:0
+binary-0.8.9.1-5cf04b31b2904ec65f7c71bf5bfc88946802baae1aa25145867d4da9aac8e16d:0
+bytestring-0.12.0.2-1a9fc154a143ca9a41d408c91c02f5809f9e5b609bd7968f64e029f223467374:104098
+case-insensitive-1.2.1.0-e227ad29dfaa45d60950ee86c0e579627c859663de1fed6060f881e5d3d51d75:0
+comonad-5.0.8-35717e0d0dcd818a75aff0c3d4e09e691a7c5716db495fd8d1f80934d02729c3:0
+containers-0.6.8-inplace:123696
+contravariant-1.5.5-a46a4d0fc89747dd4fe961c80a33a14e3c096210822c21821b76cd28fbbb1838:0
+data-fix-0.3.2-641955f948803253da4185ef15e6ed52a7fd459821c3dfd440adcc0a8ee9b361:0
+deepseq-1.5.0.0-inplace: 0
+distributive-0.6.2.1-540d4046cc62d5fe366cd147cdb464c829550a39b48168c2958571a20d50f0ac:0
+dlist-1.0-a4cc63f99d2094ce8aa443ec6513adbf7e599682b1efe30b883990c93611ea50:0
+exceptions-0.10.7-inplace:0
+filepath-1.4.200.1-a705227d2758f888b27ff825de1c1f70956a008d9195db2d4a8e2ea1c80618bf:0
+generically-0.1.1-b52f94fff1ecdc37b94039cdc547d7076722eca1293dd6ee72643a151aebc87b:0
+ghc-bignum:              197707
+ghc-boot-th-9.8.1-inplace:0
+ghc-prim:                42023
+go-to-json-0.1.0.0-inplace:1184119
+hashable-1.4.3.0-6f420f2e0456420b973ac9cba56b00fd60467c6f50029746d9fd2a783db9a297:2955
+indexed-traversable-0.1.3-61dbffc103f8e183c1e10f4d1797712ab2290e3f97b3bc40a6bd4f02fa397860:0
+indexed-traversable-instances-0.1.1.2-2a0dcd870c60ecd2b72487ad615565133de485401edcccdc6dca8a95768e6bee:0
+integer-conversion-0.1.0.1-3ce694677cb5671c00ffc71b77df713180ffbb67decd11682ff263ecb3115c66:0
+integer-logarithms-1.0.3.1-552fa71537886e1c59aa35685eeb7d87d04a461ababca4d8bfd585fe0fc70544:7037
+main:                    25156
+megaparsec-9.6.1-d117ba2c01361ba99c2912a42a8f5c5755fd1c1ea2a6ca7611fe333b3829754a:312307
+mtl-2.3.1-inplace:       0
+network-uri-2.6.4.2-6f5bc4ed047b10b12f12a914a38ad52bf880caada9236527dc6e3005f710c54c:0
+parsec-3.1.17.0-607e148e182274049d02a52d8b6b05a81ecc528153e2b13ef0818dfd958028d4:0
+parser-combinators-1.3.0-758df801da9cd2c01307dbd7faa8c1fd27836436594796d30ac29ce8b3deb7f4:0
+pretty-1.1.3.6-inplace:  0
+primitive-0.9.0.0-95f13fcbb3bb8172a3fd8cbcb50ff1376c0f3384831a367daa211a115a2d68ad:487
+random-1.2.1.1-db2217418651ba57b91c534bbdd978b7ad0eb0f9df16d05925188cd75ed884f0:0
+scientific-0.3.7.0-01253c2500ab96c3edbcd07309ea19701a1cd8d6db7a84aa06a44e507b752972:507579
+semialign-1.3-6cf2aeb72d48871a7f9e6e7287c4329985c9425b78aeb88cdd0d5c0842d2b0bd:0
+semigroupoids-6.0.0.1-91b9bb8d4dbf8e329ffd11c04fda084816166070d479e5447f8b1f7123c3eea7:0
+splitmix-0.1.0.5-4e606ca741bdc16e708bd4c8fc1d383a513183dc7bfc88676ffd66b91b387f7b:0
+stm-2.5.2.1-inplace:     0
+strict-0.5-662abcbe2ab6a7471daa8a13513200c3026a20a84f08dc6b4f1cc515d4548059:0
+tagged-0.8.8-cb2b541f5f5e97b0235b268fb896d2d09379d351c133f1e08eabcd7cac935337:0
+template-haskell:        0
+text-2.1-dd8721b40cd177ce0854e14b8e9ebaaf89fed846e5ddd4dd6d7e96f3044ae0a9:112064
+text-iso8601-0.1-4992d17577596b9ac561b2ae97beaed79712cb9b7d03d32b9ebab8198b99dce6:0
+text-short-0.1.5-5848b90b7633b3816808c83d65c4889144824925e867324c8dda2751a2a5821f:0
+th-abstraction-0.6.0.0-7d0ddabadca34b5cfe5c92fda9ac8f3b8fd9e914a5a2c8d7b7bfde768a2f5888:0
+th-compat-0.1.4-f88c266c210d8bdc2607b1d6ca7390fc38205c3cb07e0d88a45ee43e4284e7b6:0
+these-1.2-b9d62f4e8b6857f4088e371ac11188a238a97afe622af18cfdff6c7b066c7133:0
+time-1.12.2-inplace:     0
+time-compat-1.9.6.1-dc49b14b4941e049efd10fe14f6dc77c4f093a4110dd2afa2f21ebee518a0e4f:0
+transformers-0.6.1.0-inplace:0
+transformers-compat-0.7.2-0fae934482966e43e7f6c17b322dee2f2bd428c0aeaeeeb304f2f30744f07eeb:0
+unix-2.8.5.0-d3e845b219bc41d80375efff320d8b1d9086ff4ae6c9c39b3e9448b0f34133ee:0
+unordered-containers-0.2.20-2b2da50dcac3eb4c8bacf609c43b51912f984ad1f3d108142f55781dd6e5e737:8257
+uuid-types-1.0.5.1-99ea7b1cc62b3d14e980e61ad62957313a9b0c0c681a296efeda52f5ce4c08b0:0
+vector-0.13.1.0-d4a74cbf0351d74582f893ddc6bb2a0d4254eff1cc791052bb06d922e49c3fc8:4982
+vector-stream-0.1.0.1-fad61182f39ee954b74d66ddc0d6ee87ed950a14301c306fc52ac36d3c82c984:0
+witherable-0.4.2-7ceb8bf14717e3e3a217deec733b4d04939253b39189a25479c28b979e2c5e44:0
+
+
+code size per module (in bytes):
+
+    $OneTuple-0.4.1.1-4dcd93355399e53e9fac58869c7eba30e2628f607fdf65212be7f59e2c32adf5$Data.Tuple.OneTuple:0
+    $OneTuple-0.4.1.1-4dcd93355399e53e9fac58869c7eba30e2628f607fdf65212be7f59e2c32adf5$Data.Tuple.Solo:0
+    $OneTuple-0.4.1.1-4dcd93355399e53e9fac58869c7eba30e2628f607fdf65212be7f59e2c32adf5$Data.Tuple.Solo.TH:0
+
+    $QuickCheck-2.14.3-744349c517c62466edcd225b0b7aeed4889f001caa22dd0bfa35bdb48f5394a1$Test.QuickCheck:0
+    $QuickCheck-2.14.3-744349c517c62466edcd225b0b7aeed4889f001caa22dd0bfa35bdb48f5394a1$Test.QuickCheck.All:0
+    $QuickCheck-2.14.3-744349c517c62466edcd225b0b7aeed4889f001caa22dd0bfa35bdb48f5394a1$Test.QuickCheck.Arbitrary:0
+    $QuickCheck-2.14.3-744349c517c62466edcd225b0b7aeed4889f001caa22dd0bfa35bdb48f5394a1$Test.QuickCheck.Exception:0
+    $QuickCheck-2.14.3-744349c517c62466edcd225b0b7aeed4889f001caa22dd0bfa35bdb48f5394a1$Test.QuickCheck.Features:0
+    $QuickCheck-2.14.3-744349c517c62466edcd225b0b7aeed4889f001caa22dd0bfa35bdb48f5394a1$Test.QuickCheck.Function:0
+    $QuickCheck-2.14.3-744349c517c62466edcd225b0b7aeed4889f001caa22dd0bfa35bdb48f5394a1$Test.QuickCheck.Gen:0
+    $QuickCheck-2.14.3-744349c517c62466edcd225b0b7aeed4889f001caa22dd0bfa35bdb48f5394a1$Test.QuickCheck.Gen.Unsafe:0
+    $QuickCheck-2.14.3-744349c517c62466edcd225b0b7aeed4889f001caa22dd0bfa35bdb48f5394a1$Test.QuickCheck.Modifiers:0
+    $QuickCheck-2.14.3-744349c517c62466edcd225b0b7aeed4889f001caa22dd0bfa35bdb48f5394a1$Test.QuickCheck.Monadic:0
+    $QuickCheck-2.14.3-744349c517c62466edcd225b0b7aeed4889f001caa22dd0bfa35bdb48f5394a1$Test.QuickCheck.Poly:0
+    $QuickCheck-2.14.3-744349c517c62466edcd225b0b7aeed4889f001caa22dd0bfa35bdb48f5394a1$Test.QuickCheck.Property:0
+    $QuickCheck-2.14.3-744349c517c62466edcd225b0b7aeed4889f001caa22dd0bfa35bdb48f5394a1$Test.QuickCheck.Random:0
+    $QuickCheck-2.14.3-744349c517c62466edcd225b0b7aeed4889f001caa22dd0bfa35bdb48f5394a1$Test.QuickCheck.State:0
+    $QuickCheck-2.14.3-744349c517c62466edcd225b0b7aeed4889f001caa22dd0bfa35bdb48f5394a1$Test.QuickCheck.Test:0
+    $QuickCheck-2.14.3-744349c517c62466edcd225b0b7aeed4889f001caa22dd0bfa35bdb48f5394a1$Test.QuickCheck.Text:0
+
+    $StateVar-1.2.2-bf3051149781a4f9048225c574cd8b6016056bbe0db8a2acc5edb38fff10a751$Data.StateVar:0
+
+    $aeson-2.2.1.0-3c0f54bc8ea3c2038c58621817415045631e499625c61ab4fb150fdeccd70648$Data.Aeson:0
+    $aeson-2.2.1.0-3c0f54bc8ea3c2038c58621817415045631e499625c61ab4fb150fdeccd70648$Data.Aeson.Decoding:0
+    $aeson-2.2.1.0-3c0f54bc8ea3c2038c58621817415045631e499625c61ab4fb150fdeccd70648$Data.Aeson.Decoding.ByteString:0
+    $aeson-2.2.1.0-3c0f54bc8ea3c2038c58621817415045631e499625c61ab4fb150fdeccd70648$Data.Aeson.Decoding.ByteString.Lazy:0
+    $aeson-2.2.1.0-3c0f54bc8ea3c2038c58621817415045631e499625c61ab4fb150fdeccd70648$Data.Aeson.Decoding.Conversion:0
+    $aeson-2.2.1.0-3c0f54bc8ea3c2038c58621817415045631e499625c61ab4fb150fdeccd70648$Data.Aeson.Decoding.Internal:0
+    $aeson-2.2.1.0-3c0f54bc8ea3c2038c58621817415045631e499625c61ab4fb150fdeccd70648$Data.Aeson.Decoding.Text:0
+    $aeson-2.2.1.0-3c0f54bc8ea3c2038c58621817415045631e499625c61ab4fb150fdeccd70648$Data.Aeson.Decoding.Tokens:0
+    $aeson-2.2.1.0-3c0f54bc8ea3c2038c58621817415045631e499625c61ab4fb150fdeccd70648$Data.Aeson.Encoding:0
+    $aeson-2.2.1.0-3c0f54bc8ea3c2038c58621817415045631e499625c61ab4fb150fdeccd70648$Data.Aeson.Encoding.Builder:70013
+    $aeson-2.2.1.0-3c0f54bc8ea3c2038c58621817415045631e499625c61ab4fb150fdeccd70648$Data.Aeson.Encoding.Internal:2481
+    $aeson-2.2.1.0-3c0f54bc8ea3c2038c58621817415045631e499625c61ab4fb150fdeccd70648$Data.Aeson.Internal.ByteString:0
+    $aeson-2.2.1.0-3c0f54bc8ea3c2038c58621817415045631e499625c61ab4fb150fdeccd70648$Data.Aeson.Internal.Functions:0
+    $aeson-2.2.1.0-3c0f54bc8ea3c2038c58621817415045631e499625c61ab4fb150fdeccd70648$Data.Aeson.Internal.Prelude:0
+    $aeson-2.2.1.0-3c0f54bc8ea3c2038c58621817415045631e499625c61ab4fb150fdeccd70648$Data.Aeson.Internal.Scientific:0
+    $aeson-2.2.1.0-3c0f54bc8ea3c2038c58621817415045631e499625c61ab4fb150fdeccd70648$Data.Aeson.Internal.TH:0
+    $aeson-2.2.1.0-3c0f54bc8ea3c2038c58621817415045631e499625c61ab4fb150fdeccd70648$Data.Aeson.Internal.Text:0
+    $aeson-2.2.1.0-3c0f54bc8ea3c2038c58621817415045631e499625c61ab4fb150fdeccd70648$Data.Aeson.Internal.Unescape:0
+    $aeson-2.2.1.0-3c0f54bc8ea3c2038c58621817415045631e499625c61ab4fb150fdeccd70648$Data.Aeson.Internal.UnescapeFromText:0
+    $aeson-2.2.1.0-3c0f54bc8ea3c2038c58621817415045631e499625c61ab4fb150fdeccd70648$Data.Aeson.Internal.Word16:0
+    $aeson-2.2.1.0-3c0f54bc8ea3c2038c58621817415045631e499625c61ab4fb150fdeccd70648$Data.Aeson.Internal.Word8:0
+    $aeson-2.2.1.0-3c0f54bc8ea3c2038c58621817415045631e499625c61ab4fb150fdeccd70648$Data.Aeson.Key:0
+    $aeson-2.2.1.0-3c0f54bc8ea3c2038c58621817415045631e499625c61ab4fb150fdeccd70648$Data.Aeson.KeyMap:54540
+    $aeson-2.2.1.0-3c0f54bc8ea3c2038c58621817415045631e499625c61ab4fb150fdeccd70648$Data.Aeson.Parser.Time:0
+    $aeson-2.2.1.0-3c0f54bc8ea3c2038c58621817415045631e499625c61ab4fb150fdeccd70648$Data.Aeson.QQ.Simple:0
+    $aeson-2.2.1.0-3c0f54bc8ea3c2038c58621817415045631e499625c61ab4fb150fdeccd70648$Data.Aeson.RFC8785:0
+    $aeson-2.2.1.0-3c0f54bc8ea3c2038c58621817415045631e499625c61ab4fb150fdeccd70648$Data.Aeson.TH:0
+    $aeson-2.2.1.0-3c0f54bc8ea3c2038c58621817415045631e499625c61ab4fb150fdeccd70648$Data.Aeson.Text:205346
+    $aeson-2.2.1.0-3c0f54bc8ea3c2038c58621817415045631e499625c61ab4fb150fdeccd70648$Data.Aeson.Types:0
+    $aeson-2.2.1.0-3c0f54bc8ea3c2038c58621817415045631e499625c61ab4fb150fdeccd70648$Data.Aeson.Types.Class:0
+    $aeson-2.2.1.0-3c0f54bc8ea3c2038c58621817415045631e499625c61ab4fb150fdeccd70648$Data.Aeson.Types.FromJSON:0
+    $aeson-2.2.1.0-3c0f54bc8ea3c2038c58621817415045631e499625c61ab4fb150fdeccd70648$Data.Aeson.Types.Generic:0
+    $aeson-2.2.1.0-3c0f54bc8ea3c2038c58621817415045631e499625c61ab4fb150fdeccd70648$Data.Aeson.Types.Internal:5302
+    $aeson-2.2.1.0-3c0f54bc8ea3c2038c58621817415045631e499625c61ab4fb150fdeccd70648$Data.Aeson.Types.ToJSON:21273
+
+    $aeson-pretty-0.8.10-7199fdb0d80bff3e173783f0691b594280ee813ae83c5997b0d0ce5822aafa95$Data.Aeson.Encode.Pretty:166500
+
+    $array-0.5.6.0-inplace$Data.Array:  0
+    $array-0.5.6.0-inplace$Data.Array.Base:0
+    $array-0.5.6.0-inplace$Data.Array.IArray:0
+    $array-0.5.6.0-inplace$Data.Array.IO:0
+    $array-0.5.6.0-inplace$Data.Array.IO.Internals:0
+    $array-0.5.6.0-inplace$Data.Array.IO.Safe:0
+    $array-0.5.6.0-inplace$Data.Array.MArray:0
+    $array-0.5.6.0-inplace$Data.Array.MArray.Safe:0
+    $array-0.5.6.0-inplace$Data.Array.ST:0
+    $array-0.5.6.0-inplace$Data.Array.ST.Safe:0
+    $array-0.5.6.0-inplace$Data.Array.Storable:0
+    $array-0.5.6.0-inplace$Data.Array.Storable.Internals:0
+    $array-0.5.6.0-inplace$Data.Array.Storable.Safe:0
+    $array-0.5.6.0-inplace$Data.Array.Unboxed:0
+    $array-0.5.6.0-inplace$Data.Array.Unsafe:0
+
+    $assoc-1.1-5adcaebd2b0dbd17c29a5ac6aefe86250208cb040e2ec4297cf815dbbf071fb5$Data.Bifunctor.Assoc:0
+    $assoc-1.1-5adcaebd2b0dbd17c29a5ac6aefe86250208cb040e2ec4297cf815dbbf071fb5$Data.Bifunctor.Swap:0
+
+    $attoparsec-0.14.4-995c6fe38817e0168eaeb439fb0e36a0e643b746339265f77fdbf45acd7e9ea7$Data.Attoparsec:0
+    $attoparsec-0.14.4-995c6fe38817e0168eaeb439fb0e36a0e643b746339265f77fdbf45acd7e9ea7$Data.Attoparsec.ByteString:0
+    $attoparsec-0.14.4-995c6fe38817e0168eaeb439fb0e36a0e643b746339265f77fdbf45acd7e9ea7$Data.Attoparsec.ByteString.Char8:0
+    $attoparsec-0.14.4-995c6fe38817e0168eaeb439fb0e36a0e643b746339265f77fdbf45acd7e9ea7$Data.Attoparsec.ByteString.Internal:0
+    $attoparsec-0.14.4-995c6fe38817e0168eaeb439fb0e36a0e643b746339265f77fdbf45acd7e9ea7$Data.Attoparsec.ByteString.Lazy:0
+    $attoparsec-0.14.4-995c6fe38817e0168eaeb439fb0e36a0e643b746339265f77fdbf45acd7e9ea7$Data.Attoparsec.Char8:0
+    $attoparsec-0.14.4-995c6fe38817e0168eaeb439fb0e36a0e643b746339265f77fdbf45acd7e9ea7$Data.Attoparsec.Combinator:0
+    $attoparsec-0.14.4-995c6fe38817e0168eaeb439fb0e36a0e643b746339265f77fdbf45acd7e9ea7$Data.Attoparsec.Internal:0
+    $attoparsec-0.14.4-995c6fe38817e0168eaeb439fb0e36a0e643b746339265f77fdbf45acd7e9ea7$Data.Attoparsec.Internal.Types:0
+    $attoparsec-0.14.4-995c6fe38817e0168eaeb439fb0e36a0e643b746339265f77fdbf45acd7e9ea7$Data.Attoparsec.Lazy:0
+    $attoparsec-0.14.4-995c6fe38817e0168eaeb439fb0e36a0e643b746339265f77fdbf45acd7e9ea7$Data.Attoparsec.Number:0
+    $attoparsec-0.14.4-995c6fe38817e0168eaeb439fb0e36a0e643b746339265f77fdbf45acd7e9ea7$Data.Attoparsec.Text:0
+    $attoparsec-0.14.4-995c6fe38817e0168eaeb439fb0e36a0e643b746339265f77fdbf45acd7e9ea7$Data.Attoparsec.Text.Internal:0
+    $attoparsec-0.14.4-995c6fe38817e0168eaeb439fb0e36a0e643b746339265f77fdbf45acd7e9ea7$Data.Attoparsec.Text.Lazy:0
+    $attoparsec-0.14.4-995c6fe38817e0168eaeb439fb0e36a0e643b746339265f77fdbf45acd7e9ea7$Data.Attoparsec.Types:0
+    $attoparsec-0.14.4-995c6fe38817e0168eaeb439fb0e36a0e643b746339265f77fdbf45acd7e9ea7$Data.Attoparsec.Zepto:0
+
+    $attoparsec-0.14.4-l-attoparsec-internal-9e5c7a440f36f19f81719d49c49b45b9c9cda94aacffeff5c3a1c09d4a0581de$Data.Attoparsec.ByteString.Buffer:0
+    $attoparsec-0.14.4-l-attoparsec-internal-9e5c7a440f36f19f81719d49c49b45b9c9cda94aacffeff5c3a1c09d4a0581de$Data.Attoparsec.ByteString.FastSet:0
+    $attoparsec-0.14.4-l-attoparsec-internal-9e5c7a440f36f19f81719d49c49b45b9c9cda94aacffeff5c3a1c09d4a0581de$Data.Attoparsec.Internal.Compat:0
+    $attoparsec-0.14.4-l-attoparsec-internal-9e5c7a440f36f19f81719d49c49b45b9c9cda94aacffeff5c3a1c09d4a0581de$Data.Attoparsec.Internal.Fhthagn:0
+    $attoparsec-0.14.4-l-attoparsec-internal-9e5c7a440f36f19f81719d49c49b45b9c9cda94aacffeff5c3a1c09d4a0581de$Data.Attoparsec.Text.Buffer:0
+    $attoparsec-0.14.4-l-attoparsec-internal-9e5c7a440f36f19f81719d49c49b45b9c9cda94aacffeff5c3a1c09d4a0581de$Data.Attoparsec.Text.FastSet:0
+
+    $base$Control.Applicative:          0
+    $base$Control.Arrow:                0
+    $base$Control.Category:             0
+    $base$Control.Concurrent:           0
+    $base$Control.Concurrent.Chan:      0
+    $base$Control.Concurrent.MVar:      0
+    $base$Control.Concurrent.QSem:      0
+    $base$Control.Concurrent.QSemN:     0
+    $base$Control.Exception:            0
+    $base$Control.Exception.Base:       7629
+    $base$Control.Monad:                0
+    $base$Control.Monad.Fail:           0
+    $base$Control.Monad.Fix:            0
+    $base$Control.Monad.IO.Class:       0
+    $base$Control.Monad.Instances:      0
+    $base$Control.Monad.ST:             0
+    $base$Control.Monad.ST.Imp:         0
+    $base$Control.Monad.ST.Lazy:        0
+    $base$Control.Monad.ST.Lazy.Imp:    0
+    $base$Control.Monad.ST.Lazy.Safe:   0
+    $base$Control.Monad.ST.Lazy.Unsafe: 0
+    $base$Control.Monad.ST.Safe:        0
+    $base$Control.Monad.ST.Strict:      0
+    $base$Control.Monad.ST.Unsafe:      0
+    $base$Control.Monad.Zip:            0
+    $base$Data.Array.Byte:              235
+    $base$Data.Bifoldable:              0
+    $base$Data.Bifoldable1:             0
+    $base$Data.Bifunctor:               0
+    $base$Data.Bitraversable:           0
+    $base$Data.Bits:                    0
+    $base$Data.Bool:                    0
+    $base$Data.Char:                    1908
+    $base$Data.Coerce:                  0
+    $base$Data.Complex:                 0
+    $base$Data.Data:                    0
+    $base$Data.Dynamic:                 0
+    $base$Data.Either:                  409
+    $base$Data.Eq:                      0
+    $base$Data.Fixed:                   0
+    $base$Data.Foldable:                0
+    $base$Data.Foldable1:               0
+    $base$Data.Function:                0
+    $base$Data.Functor:                 0
+    $base$Data.Functor.Classes:         0
+    $base$Data.Functor.Compose:         0
+    $base$Data.Functor.Const:           0
+    $base$Data.Functor.Contravariant:   0
+    $base$Data.Functor.Identity:        1220
+    $base$Data.Functor.Product:         0
+    $base$Data.Functor.Sum:             0
+    $base$Data.Functor.Utils:           0
+    $base$Data.IORef:                   0
+    $base$Data.Int:                     0
+    $base$Data.Ix:                      0
+    $base$Data.Kind:                    0
+    $base$Data.List:                    0
+    $base$Data.List.NonEmpty:           5666
+    $base$Data.Maybe:                   0
+    $base$Data.Monoid:                  0
+    $base$Data.OldList:                 15407
+    $base$Data.Ord:                     0
+    $base$Data.Proxy:                   65
+    $base$Data.Ratio:                   0
+    $base$Data.STRef:                   0
+    $base$Data.STRef.Lazy:              0
+    $base$Data.STRef.Strict:            0
+    $base$Data.Semigroup:               0
+    $base$Data.Semigroup.Internal:      0
+    $base$Data.String:                  0
+    $base$Data.Traversable:             0
+    $base$Data.Tuple:                   0
+    $base$Data.Type.Bool:               0
+    $base$Data.Type.Coercion:           0
+    $base$Data.Type.Equality:           0
+    $base$Data.Type.Ord:                0
+    $base$Data.Typeable:                0
+    $base$Data.Typeable.Internal:       178389
+    $base$Data.Unique:                  0
+    $base$Data.Version:                 251
+    $base$Data.Void:                    0
+    $base$Data.Word:                    0
+    $base$Debug.Trace:                  0
+    $base$Foreign:                      0
+    $base$Foreign.C:                    0
+    $base$Foreign.C.ConstPtr:           0
+    $base$Foreign.C.Error:              17554
+    $base$Foreign.C.String:             0
+    $base$Foreign.C.Types:              0
+    $base$Foreign.Concurrent:           0
+    $base$Foreign.ForeignPtr:           0
+    $base$Foreign.ForeignPtr.Imp:       0
+    $base$Foreign.ForeignPtr.Safe:      0
+    $base$Foreign.ForeignPtr.Unsafe:    0
+    $base$Foreign.Marshal:              0
+    $base$Foreign.Marshal.Alloc:        4057
+    $base$Foreign.Marshal.Array:        0
+    $base$Foreign.Marshal.Error:        0
+    $base$Foreign.Marshal.Pool:         0
+    $base$Foreign.Marshal.Safe:         0
+    $base$Foreign.Marshal.Unsafe:       0
+    $base$Foreign.Marshal.Utils:        0
+    $base$Foreign.Ptr:                  0
+    $base$Foreign.Safe:                 0
+    $base$Foreign.StablePtr:            0
+    $base$Foreign.Storable:             2835
+    $base$GHC.Arr:                      2745
+    $base$GHC.ArrayArray:               0
+    $base$GHC.Base:                     14491
+    $base$GHC.Bits:                     0
+    $base$GHC.ByteOrder:                0
+    $base$GHC.Char:                     0
+    $base$GHC.Clock:                    0
+    $base$GHC.Conc:                     0
+    $base$GHC.Conc.IO:                  0
+    $base$GHC.Conc.Signal:              0
+    $base$GHC.Conc.Sync:                7502
+    $base$GHC.ConsoleHandler:           0
+    $base$GHC.Constants:                0
+    $base$GHC.Desugar:                  0
+    $base$GHC.Encoding.UTF8:            0
+    $base$GHC.Enum:                     11168
+    $base$GHC.Environment:              0
+    $base$GHC.Err:                      741
+    $base$GHC.Event:                    0
+    $base$GHC.Event.Arr:                0
+    $base$GHC.Event.Array:              0
+    $base$GHC.Event.Control:            0
+    $base$GHC.Event.EPoll:              0
+    $base$GHC.Event.IntTable:           0
+    $base$GHC.Event.IntVar:             0
+    $base$GHC.Event.Internal:           0
+    $base$GHC.Event.Internal.Types:     0
+    $base$GHC.Event.KQueue:             0
+    $base$GHC.Event.Manager:            0
+    $base$GHC.Event.PSQ:                0
+    $base$GHC.Event.Poll:               0
+    $base$GHC.Event.Thread:             0
+    $base$GHC.Event.TimeOut:            0
+    $base$GHC.Event.TimerManager:       0
+    $base$GHC.Event.Unique:             0
+    $base$GHC.Exception:                21476
+    $base$GHC.Exception.Type:           8939
+    $base$GHC.ExecutionStack:           0
+    $base$GHC.ExecutionStack.Internal:  0
+    $base$GHC.Exts:                     0
+    $base$GHC.Fingerprint:              14264
+    $base$GHC.Fingerprint.Type:         1064
+    $base$GHC.Float:                    306
+    $base$GHC.Float.ConversionUtils:    0
+    $base$GHC.Float.RealFracMethods:    0
+    $base$GHC.Foreign:                  0
+    $base$GHC.Foreign.Internal:         30653
+    $base$GHC.ForeignPtr:               2637
+    $base$GHC.GHCi:                     0
+    $base$GHC.GHCi.Helpers:             0
+    $base$GHC.Generics:                 0
+    $base$GHC.IO:                       5844
+    $base$GHC.IO.Buffer:                3292
+    $base$GHC.IO.BufferedIO:            2099
+    $base$GHC.IO.Device:                4098
+    $base$GHC.IO.Encoding:              2362
+    $base$GHC.IO.Encoding.CodePage:     0
+    $base$GHC.IO.Encoding.Failure:      3816
+    $base$GHC.IO.Encoding.Iconv:        0
+    $base$GHC.IO.Encoding.Latin1:       0
+    $base$GHC.IO.Encoding.Types:        1549
+    $base$GHC.IO.Encoding.UTF16:        0
+    $base$GHC.IO.Encoding.UTF32:        0
+    $base$GHC.IO.Encoding.UTF8:         80202
+    $base$GHC.IO.Exception:             34866
+    $base$GHC.IO.FD:                    71365
+    $base$GHC.IO.Handle:                1392
+    $base$GHC.IO.Handle.FD:             10657
+    $base$GHC.IO.Handle.Internals:      71179
+    $base$GHC.IO.Handle.Lock:           0
+    $base$GHC.IO.Handle.Lock.Common:    0
+    $base$GHC.IO.Handle.Lock.Flock:     0
+    $base$GHC.IO.Handle.Lock.LinuxOFD:  0
+    $base$GHC.IO.Handle.Lock.NoOp:      0
+    $base$GHC.IO.Handle.Lock.Windows:   0
+    $base$GHC.IO.Handle.Text:           0
+    $base$GHC.IO.Handle.Types:          7911
+    $base$GHC.IO.IOMode:                0
+    $base$GHC.IO.StdHandles:            161
+    $base$GHC.IO.SubSystem:             0
+    $base$GHC.IO.Unsafe:                0
+    $base$GHC.IOArray:                  0
+    $base$GHC.IOPort:                   0
+    $base$GHC.IORef:                    0
+    $base$GHC.InfoProv:                 0
+    $base$GHC.Int:                      759
+    $base$GHC.Integer:                  0
+    $base$GHC.Integer.Logarithms:       1076
+    $base$GHC.IsList:                   0
+    $base$GHC.Ix:                       3534
+    $base$GHC.JS.Foreign.Callback:      0
+    $base$GHC.JS.Prim:                  13109
+    $base$GHC.JS.Prim.Internal:         6246
+    $base$GHC.JS.Prim.Internal.Build:   0
+    $base$GHC.List:                     20156
+    $base$GHC.MVar:                     0
+    $base$GHC.Maybe:                    263
+    $base$GHC.Natural:                  0
+    $base$GHC.Num:                      4621
+    $base$GHC.OldList:                  0
+    $base$GHC.OverloadedLabels:         0
+    $base$GHC.Pack:                     0
+    $base$GHC.Profiling:                0
+    $base$GHC.Ptr:                      224
+    $base$GHC.RTS.Flags:                0
+    $base$GHC.Read:                     0
+    $base$GHC.Real:                     32166
+    $base$GHC.Records:                  0
+    $base$GHC.ResponseFile:             0
+    $base$GHC.ST:                       0
+    $base$GHC.STRef:                    202
+    $base$GHC.Show:                     43889
+    $base$GHC.Stable:                   0
+    $base$GHC.StableName:               0
+    $base$GHC.Stack:                    0
+    $base$GHC.Stack.CCS:                7982
+    $base$GHC.Stack.CloneStack:         0
+    $base$GHC.Stack.Types:              1839
+    $base$GHC.StaticPtr:                0
+    $base$GHC.StaticPtr.Internal:       0
+    $base$GHC.Stats:                    0
+    $base$GHC.Storable:                 0
+    $base$GHC.TopHandler:               30179
+    $base$GHC.TypeError:                0
+    $base$GHC.TypeLits:                 0
+    $base$GHC.TypeLits.Internal:        0
+    $base$GHC.TypeNats:                 0
+    $base$GHC.TypeNats.Internal:        0
+    $base$GHC.Unicode:                  6833
+    $base$GHC.Unicode.Internal.Bits:    0
+    $base$GHC.Unicode.Internal.Char.DerivedCoreProperties:0
+    $base$GHC.Unicode.Internal.Char.UnicodeData.GeneralCategory:382
+    $base$GHC.Unicode.Internal.Char.UnicodeData.SimpleLowerCaseMapping:0
+    $base$GHC.Unicode.Internal.Char.UnicodeData.SimpleTitleCaseMapping:0
+    $base$GHC.Unicode.Internal.Char.UnicodeData.SimpleUpperCaseMapping:0
+    $base$GHC.Unicode.Internal.Version: 0
+    $base$GHC.Weak:                     0
+    $base$GHC.Weak.Finalize:            579
+    $base$GHC.Word:                     547
+    $base$Numeric:                      14500
+    $base$Numeric.Natural:              0
+    $base$Prelude:                      0
+    $base$System.CPUTime:               0
+    $base$System.CPUTime.Javascript:    0
+    $base$System.CPUTime.Posix.ClockGetTime:0
+    $base$System.CPUTime.Posix.RUsage:  0
+    $base$System.CPUTime.Posix.Times:   0
+    $base$System.CPUTime.Unsupported:   0
+    $base$System.CPUTime.Utils:         0
+    $base$System.Console.GetOpt:        0
+    $base$System.Environment:           4783
+    $base$System.Environment.Blank:     0
+    $base$System.Environment.ExecutablePath:0
+    $base$System.Exit:                  0
+    $base$System.IO:                    0
+    $base$System.IO.Error:              0
+    $base$System.IO.Unsafe:             0
+    $base$System.Info:                  0
+    $base$System.Mem:                   0
+    $base$System.Mem.StableName:        0
+    $base$System.Mem.Weak:              0
+    $base$System.Posix.Internals:       29997
+    $base$System.Posix.Types:           0
+    $base$System.Timeout:               0
+    $base$Text.ParserCombinators.ReadP: 0
+    $base$Text.ParserCombinators.ReadPrec:0
+    $base$Text.Printf:                  0
+    $base$Text.Read:                    0
+    $base$Text.Read.Lex:                0
+    $base$Text.Show:                    0
+    $base$Text.Show.Functions:          0
+    $base$Type.Reflection:              0
+    $base$Type.Reflection.Unsafe:       0
+    $base$Unsafe.Coerce:                0
+
+    $base-compat-0.13.1-61d31c275c44ecd8f41c4cf2f6a045886e7d2394d71f9176d514472137d87b15$Control.Concurrent.Compat:0
+    $base-compat-0.13.1-61d31c275c44ecd8f41c4cf2f6a045886e7d2394d71f9176d514472137d87b15$Control.Concurrent.Compat.Repl:0
+    $base-compat-0.13.1-61d31c275c44ecd8f41c4cf2f6a045886e7d2394d71f9176d514472137d87b15$Control.Concurrent.MVar.Compat:0
+    $base-compat-0.13.1-61d31c275c44ecd8f41c4cf2f6a045886e7d2394d71f9176d514472137d87b15$Control.Concurrent.MVar.Compat.Repl:0
+    $base-compat-0.13.1-61d31c275c44ecd8f41c4cf2f6a045886e7d2394d71f9176d514472137d87b15$Control.Exception.Compat:0
+    $base-compat-0.13.1-61d31c275c44ecd8f41c4cf2f6a045886e7d2394d71f9176d514472137d87b15$Control.Exception.Compat.Repl:0
+    $base-compat-0.13.1-61d31c275c44ecd8f41c4cf2f6a045886e7d2394d71f9176d514472137d87b15$Control.Monad.Compat:0
+    $base-compat-0.13.1-61d31c275c44ecd8f41c4cf2f6a045886e7d2394d71f9176d514472137d87b15$Control.Monad.Compat.Repl:0
+    $base-compat-0.13.1-61d31c275c44ecd8f41c4cf2f6a045886e7d2394d71f9176d514472137d87b15$Control.Monad.Fail.Compat:0
+    $base-compat-0.13.1-61d31c275c44ecd8f41c4cf2f6a045886e7d2394d71f9176d514472137d87b15$Control.Monad.Fail.Compat.Repl:0
+    $base-compat-0.13.1-61d31c275c44ecd8f41c4cf2f6a045886e7d2394d71f9176d514472137d87b15$Control.Monad.IO.Class.Compat:0
+    $base-compat-0.13.1-61d31c275c44ecd8f41c4cf2f6a045886e7d2394d71f9176d514472137d87b15$Control.Monad.IO.Class.Compat.Repl:0
+    $base-compat-0.13.1-61d31c275c44ecd8f41c4cf2f6a045886e7d2394d71f9176d514472137d87b15$Control.Monad.ST.Lazy.Unsafe.Compat:0
+    $base-compat-0.13.1-61d31c275c44ecd8f41c4cf2f6a045886e7d2394d71f9176d514472137d87b15$Control.Monad.ST.Lazy.Unsafe.Compat.Repl:0
+    $base-compat-0.13.1-61d31c275c44ecd8f41c4cf2f6a045886e7d2394d71f9176d514472137d87b15$Control.Monad.ST.Unsafe.Compat:0
+    $base-compat-0.13.1-61d31c275c44ecd8f41c4cf2f6a045886e7d2394d71f9176d514472137d87b15$Control.Monad.ST.Unsafe.Compat.Repl:0
+    $base-compat-0.13.1-61d31c275c44ecd8f41c4cf2f6a045886e7d2394d71f9176d514472137d87b15$Data.Bifoldable.Compat:0
+    $base-compat-0.13.1-61d31c275c44ecd8f41c4cf2f6a045886e7d2394d71f9176d514472137d87b15$Data.Bifoldable.Compat.Repl:0
+    $base-compat-0.13.1-61d31c275c44ecd8f41c4cf2f6a045886e7d2394d71f9176d514472137d87b15$Data.Bifoldable1.Compat:0
+    $base-compat-0.13.1-61d31c275c44ecd8f41c4cf2f6a045886e7d2394d71f9176d514472137d87b15$Data.Bifoldable1.Compat.Repl:0
+    $base-compat-0.13.1-61d31c275c44ecd8f41c4cf2f6a045886e7d2394d71f9176d514472137d87b15$Data.Bifunctor.Compat:0
+    $base-compat-0.13.1-61d31c275c44ecd8f41c4cf2f6a045886e7d2394d71f9176d514472137d87b15$Data.Bifunctor.Compat.Repl:0
+    $base-compat-0.13.1-61d31c275c44ecd8f41c4cf2f6a045886e7d2394d71f9176d514472137d87b15$Data.Bitraversable.Compat:0
+    $base-compat-0.13.1-61d31c275c44ecd8f41c4cf2f6a045886e7d2394d71f9176d514472137d87b15$Data.Bitraversable.Compat.Repl:0
+    $base-compat-0.13.1-61d31c275c44ecd8f41c4cf2f6a045886e7d2394d71f9176d514472137d87b15$Data.Bits.Compat:0
+    $base-compat-0.13.1-61d31c275c44ecd8f41c4cf2f6a045886e7d2394d71f9176d514472137d87b15$Data.Bits.Compat.Repl:0
+    $base-compat-0.13.1-61d31c275c44ecd8f41c4cf2f6a045886e7d2394d71f9176d514472137d87b15$Data.Bool.Compat:0
+    $base-compat-0.13.1-61d31c275c44ecd8f41c4cf2f6a045886e7d2394d71f9176d514472137d87b15$Data.Bool.Compat.Repl:0
+    $base-compat-0.13.1-61d31c275c44ecd8f41c4cf2f6a045886e7d2394d71f9176d514472137d87b15$Data.Complex.Compat:0
+    $base-compat-0.13.1-61d31c275c44ecd8f41c4cf2f6a045886e7d2394d71f9176d514472137d87b15$Data.Complex.Compat.Repl:0
+    $base-compat-0.13.1-61d31c275c44ecd8f41c4cf2f6a045886e7d2394d71f9176d514472137d87b15$Data.Either.Compat:0
+    $base-compat-0.13.1-61d31c275c44ecd8f41c4cf2f6a045886e7d2394d71f9176d514472137d87b15$Data.Either.Compat.Repl:0
+    $base-compat-0.13.1-61d31c275c44ecd8f41c4cf2f6a045886e7d2394d71f9176d514472137d87b15$Data.Foldable.Compat:0
+    $base-compat-0.13.1-61d31c275c44ecd8f41c4cf2f6a045886e7d2394d71f9176d514472137d87b15$Data.Foldable.Compat.Repl:0
+    $base-compat-0.13.1-61d31c275c44ecd8f41c4cf2f6a045886e7d2394d71f9176d514472137d87b15$Data.Foldable1.Compat:0
+    $base-compat-0.13.1-61d31c275c44ecd8f41c4cf2f6a045886e7d2394d71f9176d514472137d87b15$Data.Foldable1.Compat.Repl:0
+    $base-compat-0.13.1-61d31c275c44ecd8f41c4cf2f6a045886e7d2394d71f9176d514472137d87b15$Data.Function.Compat:0
+    $base-compat-0.13.1-61d31c275c44ecd8f41c4cf2f6a045886e7d2394d71f9176d514472137d87b15$Data.Function.Compat.Repl:0
+    $base-compat-0.13.1-61d31c275c44ecd8f41c4cf2f6a045886e7d2394d71f9176d514472137d87b15$Data.Functor.Compat:0
+    $base-compat-0.13.1-61d31c275c44ecd8f41c4cf2f6a045886e7d2394d71f9176d514472137d87b15$Data.Functor.Compat.Repl:0
+    $base-compat-0.13.1-61d31c275c44ecd8f41c4cf2f6a045886e7d2394d71f9176d514472137d87b15$Data.Functor.Compose.Compat:0
+    $base-compat-0.13.1-61d31c275c44ecd8f41c4cf2f6a045886e7d2394d71f9176d514472137d87b15$Data.Functor.Compose.Compat.Repl:0
+    $base-compat-0.13.1-61d31c275c44ecd8f41c4cf2f6a045886e7d2394d71f9176d514472137d87b15$Data.Functor.Const.Compat:0
+    $base-compat-0.13.1-61d31c275c44ecd8f41c4cf2f6a045886e7d2394d71f9176d514472137d87b15$Data.Functor.Const.Compat.Repl:0
+    $base-compat-0.13.1-61d31c275c44ecd8f41c4cf2f6a045886e7d2394d71f9176d514472137d87b15$Data.Functor.Contravariant.Compat:0
+    $base-compat-0.13.1-61d31c275c44ecd8f41c4cf2f6a045886e7d2394d71f9176d514472137d87b15$Data.Functor.Contravariant.Compat.Repl:0
+    $base-compat-0.13.1-61d31c275c44ecd8f41c4cf2f6a045886e7d2394d71f9176d514472137d87b15$Data.Functor.Identity.Compat:0
+    $base-compat-0.13.1-61d31c275c44ecd8f41c4cf2f6a045886e7d2394d71f9176d514472137d87b15$Data.Functor.Identity.Compat.Repl:0
+    $base-compat-0.13.1-61d31c275c44ecd8f41c4cf2f6a045886e7d2394d71f9176d514472137d87b15$Data.Functor.Product.Compat:0
+    $base-compat-0.13.1-61d31c275c44ecd8f41c4cf2f6a045886e7d2394d71f9176d514472137d87b15$Data.Functor.Product.Compat.Repl:0
+    $base-compat-0.13.1-61d31c275c44ecd8f41c4cf2f6a045886e7d2394d71f9176d514472137d87b15$Data.Functor.Sum.Compat:0
+    $base-compat-0.13.1-61d31c275c44ecd8f41c4cf2f6a045886e7d2394d71f9176d514472137d87b15$Data.Functor.Sum.Compat.Repl:0
+    $base-compat-0.13.1-61d31c275c44ecd8f41c4cf2f6a045886e7d2394d71f9176d514472137d87b15$Data.IORef.Compat:0
+    $base-compat-0.13.1-61d31c275c44ecd8f41c4cf2f6a045886e7d2394d71f9176d514472137d87b15$Data.IORef.Compat.Repl:0
+    $base-compat-0.13.1-61d31c275c44ecd8f41c4cf2f6a045886e7d2394d71f9176d514472137d87b15$Data.List.Compat:0
+    $base-compat-0.13.1-61d31c275c44ecd8f41c4cf2f6a045886e7d2394d71f9176d514472137d87b15$Data.List.Compat.Repl:0
+    $base-compat-0.13.1-61d31c275c44ecd8f41c4cf2f6a045886e7d2394d71f9176d514472137d87b15$Data.List.NonEmpty.Compat:0
+    $base-compat-0.13.1-61d31c275c44ecd8f41c4cf2f6a045886e7d2394d71f9176d514472137d87b15$Data.List.NonEmpty.Compat.Repl:0
+    $base-compat-0.13.1-61d31c275c44ecd8f41c4cf2f6a045886e7d2394d71f9176d514472137d87b15$Data.Monoid.Compat:0
+    $base-compat-0.13.1-61d31c275c44ecd8f41c4cf2f6a045886e7d2394d71f9176d514472137d87b15$Data.Monoid.Compat.Repl:0
+    $base-compat-0.13.1-61d31c275c44ecd8f41c4cf2f6a045886e7d2394d71f9176d514472137d87b15$Data.Proxy.Compat:0
+    $base-compat-0.13.1-61d31c275c44ecd8f41c4cf2f6a045886e7d2394d71f9176d514472137d87b15$Data.Proxy.Compat.Repl:0
+    $base-compat-0.13.1-61d31c275c44ecd8f41c4cf2f6a045886e7d2394d71f9176d514472137d87b15$Data.Ratio.Compat:0
+    $base-compat-0.13.1-61d31c275c44ecd8f41c4cf2f6a045886e7d2394d71f9176d514472137d87b15$Data.Ratio.Compat.Repl:0
+    $base-compat-0.13.1-61d31c275c44ecd8f41c4cf2f6a045886e7d2394d71f9176d514472137d87b15$Data.STRef.Compat:0
+    $base-compat-0.13.1-61d31c275c44ecd8f41c4cf2f6a045886e7d2394d71f9176d514472137d87b15$Data.STRef.Compat.Repl:0
+    $base-compat-0.13.1-61d31c275c44ecd8f41c4cf2f6a045886e7d2394d71f9176d514472137d87b15$Data.Semigroup.Compat:0
+    $base-compat-0.13.1-61d31c275c44ecd8f41c4cf2f6a045886e7d2394d71f9176d514472137d87b15$Data.Semigroup.Compat.Repl:0
+    $base-compat-0.13.1-61d31c275c44ecd8f41c4cf2f6a045886e7d2394d71f9176d514472137d87b15$Data.String.Compat:0
+    $base-compat-0.13.1-61d31c275c44ecd8f41c4cf2f6a045886e7d2394d71f9176d514472137d87b15$Data.String.Compat.Repl:0
+    $base-compat-0.13.1-61d31c275c44ecd8f41c4cf2f6a045886e7d2394d71f9176d514472137d87b15$Data.Traversable.Compat:0
+    $base-compat-0.13.1-61d31c275c44ecd8f41c4cf2f6a045886e7d2394d71f9176d514472137d87b15$Data.Traversable.Compat.Repl:0
+    $base-compat-0.13.1-61d31c275c44ecd8f41c4cf2f6a045886e7d2394d71f9176d514472137d87b15$Data.Tuple.Compat:0
+    $base-compat-0.13.1-61d31c275c44ecd8f41c4cf2f6a045886e7d2394d71f9176d514472137d87b15$Data.Tuple.Compat.Repl:0
+    $base-compat-0.13.1-61d31c275c44ecd8f41c4cf2f6a045886e7d2394d71f9176d514472137d87b15$Data.Type.Coercion.Compat:0
+    $base-compat-0.13.1-61d31c275c44ecd8f41c4cf2f6a045886e7d2394d71f9176d514472137d87b15$Data.Type.Coercion.Compat.Repl:0
+    $base-compat-0.13.1-61d31c275c44ecd8f41c4cf2f6a045886e7d2394d71f9176d514472137d87b15$Data.Type.Equality.Compat:0
+    $base-compat-0.13.1-61d31c275c44ecd8f41c4cf2f6a045886e7d2394d71f9176d514472137d87b15$Data.Type.Equality.Compat.Repl:0
+    $base-compat-0.13.1-61d31c275c44ecd8f41c4cf2f6a045886e7d2394d71f9176d514472137d87b15$Data.Typeable.Compat:0
+    $base-compat-0.13.1-61d31c275c44ecd8f41c4cf2f6a045886e7d2394d71f9176d514472137d87b15$Data.Typeable.Compat.Repl:0
+    $base-compat-0.13.1-61d31c275c44ecd8f41c4cf2f6a045886e7d2394d71f9176d514472137d87b15$Data.Version.Compat:0
+    $base-compat-0.13.1-61d31c275c44ecd8f41c4cf2f6a045886e7d2394d71f9176d514472137d87b15$Data.Version.Compat.Repl:0
+    $base-compat-0.13.1-61d31c275c44ecd8f41c4cf2f6a045886e7d2394d71f9176d514472137d87b15$Data.Void.Compat:0
+    $base-compat-0.13.1-61d31c275c44ecd8f41c4cf2f6a045886e7d2394d71f9176d514472137d87b15$Data.Void.Compat.Repl:0
+    $base-compat-0.13.1-61d31c275c44ecd8f41c4cf2f6a045886e7d2394d71f9176d514472137d87b15$Data.Word.Compat:0
+    $base-compat-0.13.1-61d31c275c44ecd8f41c4cf2f6a045886e7d2394d71f9176d514472137d87b15$Data.Word.Compat.Repl:0
+    $base-compat-0.13.1-61d31c275c44ecd8f41c4cf2f6a045886e7d2394d71f9176d514472137d87b15$Debug.Trace.Compat:0
+    $base-compat-0.13.1-61d31c275c44ecd8f41c4cf2f6a045886e7d2394d71f9176d514472137d87b15$Debug.Trace.Compat.Repl:0
+    $base-compat-0.13.1-61d31c275c44ecd8f41c4cf2f6a045886e7d2394d71f9176d514472137d87b15$Foreign.Compat:0
+    $base-compat-0.13.1-61d31c275c44ecd8f41c4cf2f6a045886e7d2394d71f9176d514472137d87b15$Foreign.Compat.Repl:0
+    $base-compat-0.13.1-61d31c275c44ecd8f41c4cf2f6a045886e7d2394d71f9176d514472137d87b15$Foreign.ForeignPtr.Compat:0
+    $base-compat-0.13.1-61d31c275c44ecd8f41c4cf2f6a045886e7d2394d71f9176d514472137d87b15$Foreign.ForeignPtr.Compat.Repl:0
+    $base-compat-0.13.1-61d31c275c44ecd8f41c4cf2f6a045886e7d2394d71f9176d514472137d87b15$Foreign.ForeignPtr.Safe.Compat:0
+    $base-compat-0.13.1-61d31c275c44ecd8f41c4cf2f6a045886e7d2394d71f9176d514472137d87b15$Foreign.ForeignPtr.Safe.Compat.Repl:0
+    $base-compat-0.13.1-61d31c275c44ecd8f41c4cf2f6a045886e7d2394d71f9176d514472137d87b15$Foreign.ForeignPtr.Unsafe.Compat:0
+    $base-compat-0.13.1-61d31c275c44ecd8f41c4cf2f6a045886e7d2394d71f9176d514472137d87b15$Foreign.ForeignPtr.Unsafe.Compat.Repl:0
+    $base-compat-0.13.1-61d31c275c44ecd8f41c4cf2f6a045886e7d2394d71f9176d514472137d87b15$Foreign.Marshal.Alloc.Compat:0
+    $base-compat-0.13.1-61d31c275c44ecd8f41c4cf2f6a045886e7d2394d71f9176d514472137d87b15$Foreign.Marshal.Alloc.Compat.Repl:0
+    $base-compat-0.13.1-61d31c275c44ecd8f41c4cf2f6a045886e7d2394d71f9176d514472137d87b15$Foreign.Marshal.Array.Compat:0
+    $base-compat-0.13.1-61d31c275c44ecd8f41c4cf2f6a045886e7d2394d71f9176d514472137d87b15$Foreign.Marshal.Array.Compat.Repl:0
+    $base-compat-0.13.1-61d31c275c44ecd8f41c4cf2f6a045886e7d2394d71f9176d514472137d87b15$Foreign.Marshal.Compat:0
+    $base-compat-0.13.1-61d31c275c44ecd8f41c4cf2f6a045886e7d2394d71f9176d514472137d87b15$Foreign.Marshal.Compat.Repl:0
+    $base-compat-0.13.1-61d31c275c44ecd8f41c4cf2f6a045886e7d2394d71f9176d514472137d87b15$Foreign.Marshal.Safe.Compat:0
+    $base-compat-0.13.1-61d31c275c44ecd8f41c4cf2f6a045886e7d2394d71f9176d514472137d87b15$Foreign.Marshal.Safe.Compat.Repl:0
+    $base-compat-0.13.1-61d31c275c44ecd8f41c4cf2f6a045886e7d2394d71f9176d514472137d87b15$Foreign.Marshal.Unsafe.Compat:0
+    $base-compat-0.13.1-61d31c275c44ecd8f41c4cf2f6a045886e7d2394d71f9176d514472137d87b15$Foreign.Marshal.Unsafe.Compat.Repl:0
+    $base-compat-0.13.1-61d31c275c44ecd8f41c4cf2f6a045886e7d2394d71f9176d514472137d87b15$Foreign.Marshal.Utils.Compat:0
+    $base-compat-0.13.1-61d31c275c44ecd8f41c4cf2f6a045886e7d2394d71f9176d514472137d87b15$Foreign.Marshal.Utils.Compat.Repl:0
+    $base-compat-0.13.1-61d31c275c44ecd8f41c4cf2f6a045886e7d2394d71f9176d514472137d87b15$Numeric.Compat:0
+    $base-compat-0.13.1-61d31c275c44ecd8f41c4cf2f6a045886e7d2394d71f9176d514472137d87b15$Numeric.Compat.Repl:0
+    $base-compat-0.13.1-61d31c275c44ecd8f41c4cf2f6a045886e7d2394d71f9176d514472137d87b15$Numeric.Natural.Compat:0
+    $base-compat-0.13.1-61d31c275c44ecd8f41c4cf2f6a045886e7d2394d71f9176d514472137d87b15$Numeric.Natural.Compat.Repl:0
+    $base-compat-0.13.1-61d31c275c44ecd8f41c4cf2f6a045886e7d2394d71f9176d514472137d87b15$Prelude.Compat:0
+    $base-compat-0.13.1-61d31c275c44ecd8f41c4cf2f6a045886e7d2394d71f9176d514472137d87b15$Prelude.Compat.Repl:0
+    $base-compat-0.13.1-61d31c275c44ecd8f41c4cf2f6a045886e7d2394d71f9176d514472137d87b15$System.Environment.Compat:0
+    $base-compat-0.13.1-61d31c275c44ecd8f41c4cf2f6a045886e7d2394d71f9176d514472137d87b15$System.Environment.Compat.Repl:0
+    $base-compat-0.13.1-61d31c275c44ecd8f41c4cf2f6a045886e7d2394d71f9176d514472137d87b15$System.Exit.Compat:0
+    $base-compat-0.13.1-61d31c275c44ecd8f41c4cf2f6a045886e7d2394d71f9176d514472137d87b15$System.Exit.Compat.Repl:0
+    $base-compat-0.13.1-61d31c275c44ecd8f41c4cf2f6a045886e7d2394d71f9176d514472137d87b15$System.IO.Compat:0
+    $base-compat-0.13.1-61d31c275c44ecd8f41c4cf2f6a045886e7d2394d71f9176d514472137d87b15$System.IO.Compat.Repl:0
+    $base-compat-0.13.1-61d31c275c44ecd8f41c4cf2f6a045886e7d2394d71f9176d514472137d87b15$System.IO.Error.Compat:0
+    $base-compat-0.13.1-61d31c275c44ecd8f41c4cf2f6a045886e7d2394d71f9176d514472137d87b15$System.IO.Error.Compat.Repl:0
+    $base-compat-0.13.1-61d31c275c44ecd8f41c4cf2f6a045886e7d2394d71f9176d514472137d87b15$System.IO.Unsafe.Compat:0
+    $base-compat-0.13.1-61d31c275c44ecd8f41c4cf2f6a045886e7d2394d71f9176d514472137d87b15$System.IO.Unsafe.Compat.Repl:0
+    $base-compat-0.13.1-61d31c275c44ecd8f41c4cf2f6a045886e7d2394d71f9176d514472137d87b15$Text.Read.Compat:0
+    $base-compat-0.13.1-61d31c275c44ecd8f41c4cf2f6a045886e7d2394d71f9176d514472137d87b15$Text.Read.Compat.Repl:0
+    $base-compat-0.13.1-61d31c275c44ecd8f41c4cf2f6a045886e7d2394d71f9176d514472137d87b15$Text.Read.Lex.Compat:0
+    $base-compat-0.13.1-61d31c275c44ecd8f41c4cf2f6a045886e7d2394d71f9176d514472137d87b15$Text.Read.Lex.Compat.Repl:0
+    $base-compat-0.13.1-61d31c275c44ecd8f41c4cf2f6a045886e7d2394d71f9176d514472137d87b15$Type.Reflection.Compat:0
+    $base-compat-0.13.1-61d31c275c44ecd8f41c4cf2f6a045886e7d2394d71f9176d514472137d87b15$Type.Reflection.Compat.Repl:0
+
+    $base-orphans-0.9.1-a561bfa641518a2dd508f6c778bb9e685906352c4fabb2891937256c896135f3$Data.Orphans:0
+    $base-orphans-0.9.1-a561bfa641518a2dd508f6c778bb9e685906352c4fabb2891937256c896135f3$Data.Orphans.Prelude:0
+
+    $bifunctors-5.6.1-2fee6b2d5015462b1578caebd482df0446b7dba2453ae5e47c7add96b9671946$Data.Biapplicative:0
+    $bifunctors-5.6.1-2fee6b2d5015462b1578caebd482df0446b7dba2453ae5e47c7add96b9671946$Data.Bifunctor.Biap:0
+    $bifunctors-5.6.1-2fee6b2d5015462b1578caebd482df0446b7dba2453ae5e47c7add96b9671946$Data.Bifunctor.Biff:0
+    $bifunctors-5.6.1-2fee6b2d5015462b1578caebd482df0446b7dba2453ae5e47c7add96b9671946$Data.Bifunctor.Clown:0
+    $bifunctors-5.6.1-2fee6b2d5015462b1578caebd482df0446b7dba2453ae5e47c7add96b9671946$Data.Bifunctor.Fix:0
+    $bifunctors-5.6.1-2fee6b2d5015462b1578caebd482df0446b7dba2453ae5e47c7add96b9671946$Data.Bifunctor.Flip:0
+    $bifunctors-5.6.1-2fee6b2d5015462b1578caebd482df0446b7dba2453ae5e47c7add96b9671946$Data.Bifunctor.Functor:0
+    $bifunctors-5.6.1-2fee6b2d5015462b1578caebd482df0446b7dba2453ae5e47c7add96b9671946$Data.Bifunctor.Join:0
+    $bifunctors-5.6.1-2fee6b2d5015462b1578caebd482df0446b7dba2453ae5e47c7add96b9671946$Data.Bifunctor.Joker:0
+    $bifunctors-5.6.1-2fee6b2d5015462b1578caebd482df0446b7dba2453ae5e47c7add96b9671946$Data.Bifunctor.Product:0
+    $bifunctors-5.6.1-2fee6b2d5015462b1578caebd482df0446b7dba2453ae5e47c7add96b9671946$Data.Bifunctor.Sum:0
+    $bifunctors-5.6.1-2fee6b2d5015462b1578caebd482df0446b7dba2453ae5e47c7add96b9671946$Data.Bifunctor.TH:0
+    $bifunctors-5.6.1-2fee6b2d5015462b1578caebd482df0446b7dba2453ae5e47c7add96b9671946$Data.Bifunctor.TH.Internal:0
+    $bifunctors-5.6.1-2fee6b2d5015462b1578caebd482df0446b7dba2453ae5e47c7add96b9671946$Data.Bifunctor.Tannen:0
+    $bifunctors-5.6.1-2fee6b2d5015462b1578caebd482df0446b7dba2453ae5e47c7add96b9671946$Data.Bifunctor.Wrapped:0
+
+    $binary-0.8.9.1-5cf04b31b2904ec65f7c71bf5bfc88946802baae1aa25145867d4da9aac8e16d$Data.Binary:0
+    $binary-0.8.9.1-5cf04b31b2904ec65f7c71bf5bfc88946802baae1aa25145867d4da9aac8e16d$Data.Binary.Builder:0
+    $binary-0.8.9.1-5cf04b31b2904ec65f7c71bf5bfc88946802baae1aa25145867d4da9aac8e16d$Data.Binary.Class:0
+    $binary-0.8.9.1-5cf04b31b2904ec65f7c71bf5bfc88946802baae1aa25145867d4da9aac8e16d$Data.Binary.FloatCast:0
+    $binary-0.8.9.1-5cf04b31b2904ec65f7c71bf5bfc88946802baae1aa25145867d4da9aac8e16d$Data.Binary.Generic:0
+    $binary-0.8.9.1-5cf04b31b2904ec65f7c71bf5bfc88946802baae1aa25145867d4da9aac8e16d$Data.Binary.Get:0
+    $binary-0.8.9.1-5cf04b31b2904ec65f7c71bf5bfc88946802baae1aa25145867d4da9aac8e16d$Data.Binary.Get.Internal:0
+    $binary-0.8.9.1-5cf04b31b2904ec65f7c71bf5bfc88946802baae1aa25145867d4da9aac8e16d$Data.Binary.Internal:0
+    $binary-0.8.9.1-5cf04b31b2904ec65f7c71bf5bfc88946802baae1aa25145867d4da9aac8e16d$Data.Binary.Put:0
+
+    $bytestring-0.12.0.2-1a9fc154a143ca9a41d408c91c02f5809f9e5b609bd7968f64e029f223467374$Data.ByteString:0
+    $bytestring-0.12.0.2-1a9fc154a143ca9a41d408c91c02f5809f9e5b609bd7968f64e029f223467374$Data.ByteString.Builder:0
+    $bytestring-0.12.0.2-1a9fc154a143ca9a41d408c91c02f5809f9e5b609bd7968f64e029f223467374$Data.ByteString.Builder.ASCII:55685
+    $bytestring-0.12.0.2-1a9fc154a143ca9a41d408c91c02f5809f9e5b609bd7968f64e029f223467374$Data.ByteString.Builder.Extra:0
+    $bytestring-0.12.0.2-1a9fc154a143ca9a41d408c91c02f5809f9e5b609bd7968f64e029f223467374$Data.ByteString.Builder.Internal:8214
+    $bytestring-0.12.0.2-1a9fc154a143ca9a41d408c91c02f5809f9e5b609bd7968f64e029f223467374$Data.ByteString.Builder.Prim:0
+    $bytestring-0.12.0.2-1a9fc154a143ca9a41d408c91c02f5809f9e5b609bd7968f64e029f223467374$Data.ByteString.Builder.Prim.ASCII:0
+    $bytestring-0.12.0.2-1a9fc154a143ca9a41d408c91c02f5809f9e5b609bd7968f64e029f223467374$Data.ByteString.Builder.Prim.Binary:0
+    $bytestring-0.12.0.2-1a9fc154a143ca9a41d408c91c02f5809f9e5b609bd7968f64e029f223467374$Data.ByteString.Builder.Prim.Internal:0
+    $bytestring-0.12.0.2-1a9fc154a143ca9a41d408c91c02f5809f9e5b609bd7968f64e029f223467374$Data.ByteString.Builder.Prim.Internal.Base16:0
+    $bytestring-0.12.0.2-1a9fc154a143ca9a41d408c91c02f5809f9e5b609bd7968f64e029f223467374$Data.ByteString.Builder.Prim.Internal.Floating:0
+    $bytestring-0.12.0.2-1a9fc154a143ca9a41d408c91c02f5809f9e5b609bd7968f64e029f223467374$Data.ByteString.Builder.RealFloat:0
+    $bytestring-0.12.0.2-1a9fc154a143ca9a41d408c91c02f5809f9e5b609bd7968f64e029f223467374$Data.ByteString.Builder.RealFloat.D2S:0
+    $bytestring-0.12.0.2-1a9fc154a143ca9a41d408c91c02f5809f9e5b609bd7968f64e029f223467374$Data.ByteString.Builder.RealFloat.F2S:0
+    $bytestring-0.12.0.2-1a9fc154a143ca9a41d408c91c02f5809f9e5b609bd7968f64e029f223467374$Data.ByteString.Builder.RealFloat.Internal:0
+    $bytestring-0.12.0.2-1a9fc154a143ca9a41d408c91c02f5809f9e5b609bd7968f64e029f223467374$Data.ByteString.Builder.RealFloat.TableGenerator:0
+    $bytestring-0.12.0.2-1a9fc154a143ca9a41d408c91c02f5809f9e5b609bd7968f64e029f223467374$Data.ByteString.Char8:0
+    $bytestring-0.12.0.2-1a9fc154a143ca9a41d408c91c02f5809f9e5b609bd7968f64e029f223467374$Data.ByteString.Internal:0
+    $bytestring-0.12.0.2-1a9fc154a143ca9a41d408c91c02f5809f9e5b609bd7968f64e029f223467374$Data.ByteString.Internal.Pure:1231
+    $bytestring-0.12.0.2-1a9fc154a143ca9a41d408c91c02f5809f9e5b609bd7968f64e029f223467374$Data.ByteString.Internal.Type:25774
+    $bytestring-0.12.0.2-1a9fc154a143ca9a41d408c91c02f5809f9e5b609bd7968f64e029f223467374$Data.ByteString.Lazy:0
+    $bytestring-0.12.0.2-1a9fc154a143ca9a41d408c91c02f5809f9e5b609bd7968f64e029f223467374$Data.ByteString.Lazy.Char8:0
+    $bytestring-0.12.0.2-1a9fc154a143ca9a41d408c91c02f5809f9e5b609bd7968f64e029f223467374$Data.ByteString.Lazy.Internal:13194
+    $bytestring-0.12.0.2-1a9fc154a143ca9a41d408c91c02f5809f9e5b609bd7968f64e029f223467374$Data.ByteString.Lazy.Internal.Deque:0
+    $bytestring-0.12.0.2-1a9fc154a143ca9a41d408c91c02f5809f9e5b609bd7968f64e029f223467374$Data.ByteString.Lazy.ReadInt:0
+    $bytestring-0.12.0.2-1a9fc154a143ca9a41d408c91c02f5809f9e5b609bd7968f64e029f223467374$Data.ByteString.Lazy.ReadNat:0
+    $bytestring-0.12.0.2-1a9fc154a143ca9a41d408c91c02f5809f9e5b609bd7968f64e029f223467374$Data.ByteString.ReadInt:0
+    $bytestring-0.12.0.2-1a9fc154a143ca9a41d408c91c02f5809f9e5b609bd7968f64e029f223467374$Data.ByteString.ReadNat:0
+    $bytestring-0.12.0.2-1a9fc154a143ca9a41d408c91c02f5809f9e5b609bd7968f64e029f223467374$Data.ByteString.Short:0
+    $bytestring-0.12.0.2-1a9fc154a143ca9a41d408c91c02f5809f9e5b609bd7968f64e029f223467374$Data.ByteString.Short.Internal:0
+    $bytestring-0.12.0.2-1a9fc154a143ca9a41d408c91c02f5809f9e5b609bd7968f64e029f223467374$Data.ByteString.Unsafe:0
+    $bytestring-0.12.0.2-1a9fc154a143ca9a41d408c91c02f5809f9e5b609bd7968f64e029f223467374$Data.ByteString.Utils.UnalignedWrite:0
+
+    $case-insensitive-1.2.1.0-e227ad29dfaa45d60950ee86c0e579627c859663de1fed6060f881e5d3d51d75$Data.CaseInsensitive:0
+    $case-insensitive-1.2.1.0-e227ad29dfaa45d60950ee86c0e579627c859663de1fed6060f881e5d3d51d75$Data.CaseInsensitive.Internal:0
+    $case-insensitive-1.2.1.0-e227ad29dfaa45d60950ee86c0e579627c859663de1fed6060f881e5d3d51d75$Data.CaseInsensitive.Unsafe:0
+
+    $comonad-5.0.8-35717e0d0dcd818a75aff0c3d4e09e691a7c5716db495fd8d1f80934d02729c3$Control.Comonad:0
+    $comonad-5.0.8-35717e0d0dcd818a75aff0c3d4e09e691a7c5716db495fd8d1f80934d02729c3$Control.Comonad.Env:0
+    $comonad-5.0.8-35717e0d0dcd818a75aff0c3d4e09e691a7c5716db495fd8d1f80934d02729c3$Control.Comonad.Env.Class:0
+    $comonad-5.0.8-35717e0d0dcd818a75aff0c3d4e09e691a7c5716db495fd8d1f80934d02729c3$Control.Comonad.Hoist.Class:0
+    $comonad-5.0.8-35717e0d0dcd818a75aff0c3d4e09e691a7c5716db495fd8d1f80934d02729c3$Control.Comonad.Identity:0
+    $comonad-5.0.8-35717e0d0dcd818a75aff0c3d4e09e691a7c5716db495fd8d1f80934d02729c3$Control.Comonad.Store:0
+    $comonad-5.0.8-35717e0d0dcd818a75aff0c3d4e09e691a7c5716db495fd8d1f80934d02729c3$Control.Comonad.Store.Class:0
+    $comonad-5.0.8-35717e0d0dcd818a75aff0c3d4e09e691a7c5716db495fd8d1f80934d02729c3$Control.Comonad.Traced:0
+    $comonad-5.0.8-35717e0d0dcd818a75aff0c3d4e09e691a7c5716db495fd8d1f80934d02729c3$Control.Comonad.Traced.Class:0
+    $comonad-5.0.8-35717e0d0dcd818a75aff0c3d4e09e691a7c5716db495fd8d1f80934d02729c3$Control.Comonad.Trans.Class:0
+    $comonad-5.0.8-35717e0d0dcd818a75aff0c3d4e09e691a7c5716db495fd8d1f80934d02729c3$Control.Comonad.Trans.Env:0
+    $comonad-5.0.8-35717e0d0dcd818a75aff0c3d4e09e691a7c5716db495fd8d1f80934d02729c3$Control.Comonad.Trans.Identity:0
+    $comonad-5.0.8-35717e0d0dcd818a75aff0c3d4e09e691a7c5716db495fd8d1f80934d02729c3$Control.Comonad.Trans.Store:0
+    $comonad-5.0.8-35717e0d0dcd818a75aff0c3d4e09e691a7c5716db495fd8d1f80934d02729c3$Control.Comonad.Trans.Traced:0
+    $comonad-5.0.8-35717e0d0dcd818a75aff0c3d4e09e691a7c5716db495fd8d1f80934d02729c3$Data.Functor.Composition:0
+
+    $containers-0.6.8-inplace$Data.Containers.ListUtils:0
+    $containers-0.6.8-inplace$Data.Graph:0
+    $containers-0.6.8-inplace$Data.IntMap:0
+    $containers-0.6.8-inplace$Data.IntMap.Internal:0
+    $containers-0.6.8-inplace$Data.IntMap.Internal.Debug:0
+    $containers-0.6.8-inplace$Data.IntMap.Internal.DeprecatedDebug:0
+    $containers-0.6.8-inplace$Data.IntMap.Lazy:0
+    $containers-0.6.8-inplace$Data.IntMap.Merge.Lazy:0
+    $containers-0.6.8-inplace$Data.IntMap.Merge.Strict:0
+    $containers-0.6.8-inplace$Data.IntMap.Strict:0
+    $containers-0.6.8-inplace$Data.IntMap.Strict.Internal:0
+    $containers-0.6.8-inplace$Data.IntSet:0
+    $containers-0.6.8-inplace$Data.IntSet.Internal:0
+    $containers-0.6.8-inplace$Data.Map: 0
+    $containers-0.6.8-inplace$Data.Map.Internal:58922
+    $containers-0.6.8-inplace$Data.Map.Internal.Debug:0
+    $containers-0.6.8-inplace$Data.Map.Internal.DeprecatedShowTree:0
+    $containers-0.6.8-inplace$Data.Map.Lazy:0
+    $containers-0.6.8-inplace$Data.Map.Merge.Lazy:0
+    $containers-0.6.8-inplace$Data.Map.Merge.Strict:0
+    $containers-0.6.8-inplace$Data.Map.Strict:0
+    $containers-0.6.8-inplace$Data.Map.Strict.Internal:0
+    $containers-0.6.8-inplace$Data.Sequence:0
+    $containers-0.6.8-inplace$Data.Sequence.Internal:0
+    $containers-0.6.8-inplace$Data.Sequence.Internal.Sorting:0
+    $containers-0.6.8-inplace$Data.Set: 0
+    $containers-0.6.8-inplace$Data.Set.Internal:64774
+    $containers-0.6.8-inplace$Data.Tree:0
+    $containers-0.6.8-inplace$Utils.Containers.Internal.BitQueue:0
+    $containers-0.6.8-inplace$Utils.Containers.Internal.BitUtil:0
+    $containers-0.6.8-inplace$Utils.Containers.Internal.Coercions:0
+    $containers-0.6.8-inplace$Utils.Containers.Internal.Prelude:0
+    $containers-0.6.8-inplace$Utils.Containers.Internal.PtrEquality:0
+    $containers-0.6.8-inplace$Utils.Containers.Internal.State:0
+    $containers-0.6.8-inplace$Utils.Containers.Internal.StrictMaybe:0
+    $containers-0.6.8-inplace$Utils.Containers.Internal.StrictPair:0
+    $containers-0.6.8-inplace$Utils.Containers.Internal.TypeError:0
+
+    $contravariant-1.5.5-a46a4d0fc89747dd4fe961c80a33a14e3c096210822c21821b76cd28fbbb1838$Data.Functor.Contravariant.Compose:0
+    $contravariant-1.5.5-a46a4d0fc89747dd4fe961c80a33a14e3c096210822c21821b76cd28fbbb1838$Data.Functor.Contravariant.Divisible:0
+    $contravariant-1.5.5-a46a4d0fc89747dd4fe961c80a33a14e3c096210822c21821b76cd28fbbb1838$Data.Functor.Contravariant.Generic:0
+
+    $data-fix-0.3.2-641955f948803253da4185ef15e6ed52a7fd459821c3dfd440adcc0a8ee9b361$Data.Fix:0
+
+    $deepseq-1.5.0.0-inplace$Control.DeepSeq:0
+
+    $distributive-0.6.2.1-540d4046cc62d5fe366cd147cdb464c829550a39b48168c2958571a20d50f0ac$Data.Distributive:0
+    $distributive-0.6.2.1-540d4046cc62d5fe366cd147cdb464c829550a39b48168c2958571a20d50f0ac$Data.Distributive.Generic:0
+
+    $dlist-1.0-a4cc63f99d2094ce8aa443ec6513adbf7e599682b1efe30b883990c93611ea50$Data.DList:0
+    $dlist-1.0-a4cc63f99d2094ce8aa443ec6513adbf7e599682b1efe30b883990c93611ea50$Data.DList.DNonEmpty:0
+    $dlist-1.0-a4cc63f99d2094ce8aa443ec6513adbf7e599682b1efe30b883990c93611ea50$Data.DList.DNonEmpty.Internal:0
+    $dlist-1.0-a4cc63f99d2094ce8aa443ec6513adbf7e599682b1efe30b883990c93611ea50$Data.DList.Internal:0
+    $dlist-1.0-a4cc63f99d2094ce8aa443ec6513adbf7e599682b1efe30b883990c93611ea50$Data.DList.Unsafe:0
+
+    $exceptions-0.10.7-inplace$Control.Monad.Catch:0
+    $exceptions-0.10.7-inplace$Control.Monad.Catch.Pure:0
+
+    $filepath-1.4.200.1-a705227d2758f888b27ff825de1c1f70956a008d9195db2d4a8e2ea1c80618bf$System.FilePath:0
+    $filepath-1.4.200.1-a705227d2758f888b27ff825de1c1f70956a008d9195db2d4a8e2ea1c80618bf$System.FilePath.Posix:0
+    $filepath-1.4.200.1-a705227d2758f888b27ff825de1c1f70956a008d9195db2d4a8e2ea1c80618bf$System.FilePath.Windows:0
+    $filepath-1.4.200.1-a705227d2758f888b27ff825de1c1f70956a008d9195db2d4a8e2ea1c80618bf$System.OsPath:0
+    $filepath-1.4.200.1-a705227d2758f888b27ff825de1c1f70956a008d9195db2d4a8e2ea1c80618bf$System.OsPath.Data.ByteString.Short:0
+    $filepath-1.4.200.1-a705227d2758f888b27ff825de1c1f70956a008d9195db2d4a8e2ea1c80618bf$System.OsPath.Data.ByteString.Short.Hidden:0
+    $filepath-1.4.200.1-a705227d2758f888b27ff825de1c1f70956a008d9195db2d4a8e2ea1c80618bf$System.OsPath.Data.ByteString.Short.Internal:0
+    $filepath-1.4.200.1-a705227d2758f888b27ff825de1c1f70956a008d9195db2d4a8e2ea1c80618bf$System.OsPath.Data.ByteString.Short.Internal.Hidden:0
+    $filepath-1.4.200.1-a705227d2758f888b27ff825de1c1f70956a008d9195db2d4a8e2ea1c80618bf$System.OsPath.Data.ByteString.Short.Word16:0
+    $filepath-1.4.200.1-a705227d2758f888b27ff825de1c1f70956a008d9195db2d4a8e2ea1c80618bf$System.OsPath.Data.ByteString.Short.Word16.Hidden:0
+    $filepath-1.4.200.1-a705227d2758f888b27ff825de1c1f70956a008d9195db2d4a8e2ea1c80618bf$System.OsPath.Encoding:0
+    $filepath-1.4.200.1-a705227d2758f888b27ff825de1c1f70956a008d9195db2d4a8e2ea1c80618bf$System.OsPath.Encoding.Internal:0
+    $filepath-1.4.200.1-a705227d2758f888b27ff825de1c1f70956a008d9195db2d4a8e2ea1c80618bf$System.OsPath.Encoding.Internal.Hidden:0
+    $filepath-1.4.200.1-a705227d2758f888b27ff825de1c1f70956a008d9195db2d4a8e2ea1c80618bf$System.OsPath.Internal:0
+    $filepath-1.4.200.1-a705227d2758f888b27ff825de1c1f70956a008d9195db2d4a8e2ea1c80618bf$System.OsPath.Posix:0
+    $filepath-1.4.200.1-a705227d2758f888b27ff825de1c1f70956a008d9195db2d4a8e2ea1c80618bf$System.OsPath.Posix.Internal:0
+    $filepath-1.4.200.1-a705227d2758f888b27ff825de1c1f70956a008d9195db2d4a8e2ea1c80618bf$System.OsPath.Types:0
+    $filepath-1.4.200.1-a705227d2758f888b27ff825de1c1f70956a008d9195db2d4a8e2ea1c80618bf$System.OsPath.Windows:0
+    $filepath-1.4.200.1-a705227d2758f888b27ff825de1c1f70956a008d9195db2d4a8e2ea1c80618bf$System.OsPath.Windows.Internal:0
+    $filepath-1.4.200.1-a705227d2758f888b27ff825de1c1f70956a008d9195db2d4a8e2ea1c80618bf$System.OsString:0
+    $filepath-1.4.200.1-a705227d2758f888b27ff825de1c1f70956a008d9195db2d4a8e2ea1c80618bf$System.OsString.Internal:0
+    $filepath-1.4.200.1-a705227d2758f888b27ff825de1c1f70956a008d9195db2d4a8e2ea1c80618bf$System.OsString.Internal.Hidden:0
+    $filepath-1.4.200.1-a705227d2758f888b27ff825de1c1f70956a008d9195db2d4a8e2ea1c80618bf$System.OsString.Internal.Types:0
+    $filepath-1.4.200.1-a705227d2758f888b27ff825de1c1f70956a008d9195db2d4a8e2ea1c80618bf$System.OsString.Internal.Types.Hidden:0
+    $filepath-1.4.200.1-a705227d2758f888b27ff825de1c1f70956a008d9195db2d4a8e2ea1c80618bf$System.OsString.Posix:0
+    $filepath-1.4.200.1-a705227d2758f888b27ff825de1c1f70956a008d9195db2d4a8e2ea1c80618bf$System.OsString.Posix.Hidden:0
+    $filepath-1.4.200.1-a705227d2758f888b27ff825de1c1f70956a008d9195db2d4a8e2ea1c80618bf$System.OsString.Windows:0
+    $filepath-1.4.200.1-a705227d2758f888b27ff825de1c1f70956a008d9195db2d4a8e2ea1c80618bf$System.OsString.Windows.Hidden:0
+
+    $generically-0.1.1-b52f94fff1ecdc37b94039cdc547d7076722eca1293dd6ee72643a151aebc87b$GHC.Generics.Generically:0
+
+    $ghc-bignum$GHC.Num.Backend:        0
+    $ghc-bignum$GHC.Num.Backend.Native: 36953
+    $ghc-bignum$GHC.Num.Backend.Selected:0
+    $ghc-bignum$GHC.Num.BigNat:         81498
+    $ghc-bignum$GHC.Num.Integer:        70744
+    $ghc-bignum$GHC.Num.Natural:        0
+    $ghc-bignum$GHC.Num.Primitives:     0
+    $ghc-bignum$GHC.Num.WordArray:      8512
+
+    $ghc-boot-th-9.8.1-inplace$GHC.ForeignSrcLang.Type:0
+    $ghc-boot-th-9.8.1-inplace$GHC.LanguageExtensions.Type:0
+    $ghc-boot-th-9.8.1-inplace$GHC.Lexeme:0
+
+    $ghc-prim$GHC.CString:              10742
+    $ghc-prim$GHC.Classes:              24982
+    $ghc-prim$GHC.Debug:                0
+    $ghc-prim$GHC.Magic:                0
+    $ghc-prim$GHC.Magic.Dict:           0
+    $ghc-prim$GHC.Prim.Exception:       296
+    $ghc-prim$GHC.Prim.Ext:             0
+    $ghc-prim$GHC.Prim.Panic:           476
+    $ghc-prim$GHC.Prim.PtrEq:           0
+    $ghc-prim$GHC.PrimopWrappers:       0
+    $ghc-prim$GHC.Tuple:                0
+    $ghc-prim$GHC.Tuple.Prim:           627
+    $ghc-prim$GHC.Types:                4900
+
+    $go-to-json-0.1.0.0-inplace$Lib:    1184119
+    $go-to-json-0.1.0.0-inplace$Paths_go_to_json:0
+
+    $hashable-1.4.3.0-6f420f2e0456420b973ac9cba56b00fd60467c6f50029746d9fd2a783db9a297$Data.Hashable:0
+    $hashable-1.4.3.0-6f420f2e0456420b973ac9cba56b00fd60467c6f50029746d9fd2a783db9a297$Data.Hashable.Class:2955
+    $hashable-1.4.3.0-6f420f2e0456420b973ac9cba56b00fd60467c6f50029746d9fd2a783db9a297$Data.Hashable.Generic:0
+    $hashable-1.4.3.0-6f420f2e0456420b973ac9cba56b00fd60467c6f50029746d9fd2a783db9a297$Data.Hashable.Generic.Instances:0
+    $hashable-1.4.3.0-6f420f2e0456420b973ac9cba56b00fd60467c6f50029746d9fd2a783db9a297$Data.Hashable.Imports:0
+    $hashable-1.4.3.0-6f420f2e0456420b973ac9cba56b00fd60467c6f50029746d9fd2a783db9a297$Data.Hashable.Lifted:0
+    $hashable-1.4.3.0-6f420f2e0456420b973ac9cba56b00fd60467c6f50029746d9fd2a783db9a297$Data.Hashable.LowLevel:0
+
+    $indexed-traversable-0.1.3-61dbffc103f8e183c1e10f4d1797712ab2290e3f97b3bc40a6bd4f02fa397860$CoerceCompat:0
+    $indexed-traversable-0.1.3-61dbffc103f8e183c1e10f4d1797712ab2290e3f97b3bc40a6bd4f02fa397860$Data.Foldable.WithIndex:0
+    $indexed-traversable-0.1.3-61dbffc103f8e183c1e10f4d1797712ab2290e3f97b3bc40a6bd4f02fa397860$Data.Foldable1.WithIndex:0
+    $indexed-traversable-0.1.3-61dbffc103f8e183c1e10f4d1797712ab2290e3f97b3bc40a6bd4f02fa397860$Data.Functor.WithIndex:0
+    $indexed-traversable-0.1.3-61dbffc103f8e183c1e10f4d1797712ab2290e3f97b3bc40a6bd4f02fa397860$Data.Traversable.WithIndex:0
+    $indexed-traversable-0.1.3-61dbffc103f8e183c1e10f4d1797712ab2290e3f97b3bc40a6bd4f02fa397860$GhcList:0
+    $indexed-traversable-0.1.3-61dbffc103f8e183c1e10f4d1797712ab2290e3f97b3bc40a6bd4f02fa397860$WithIndex:0
+
+    $indexed-traversable-instances-0.1.1.2-2a0dcd870c60ecd2b72487ad615565133de485401edcccdc6dca8a95768e6bee$Data.Functor.WithIndex.Instances:0
+
+    $integer-conversion-0.1.0.1-3ce694677cb5671c00ffc71b77df713180ffbb67decd11682ff263ecb3115c66$Data.Integer.Conversion:0
+
+    $integer-logarithms-1.0.3.1-552fa71537886e1c59aa35685eeb7d87d04a461ababca4d8bfd585fe0fc70544$GHC.Integer.Logarithms.Compat:0
+    $integer-logarithms-1.0.3.1-552fa71537886e1c59aa35685eeb7d87d04a461ababca4d8bfd585fe0fc70544$Math.NumberTheory.Logarithms:7037
+    $integer-logarithms-1.0.3.1-552fa71537886e1c59aa35685eeb7d87d04a461ababca4d8bfd585fe0fc70544$Math.NumberTheory.Powers.Integer:0
+    $integer-logarithms-1.0.3.1-552fa71537886e1c59aa35685eeb7d87d04a461ababca4d8bfd585fe0fc70544$Math.NumberTheory.Powers.Natural:0
+
+    $main$Main:                         4581
+    $main$Paths_go_to_json:             20575
+
+    $megaparsec-9.6.1-d117ba2c01361ba99c2912a42a8f5c5755fd1c1ea2a6ca7611fe333b3829754a$Text.Megaparsec:7065
+    $megaparsec-9.6.1-d117ba2c01361ba99c2912a42a8f5c5755fd1c1ea2a6ca7611fe333b3829754a$Text.Megaparsec.Byte:0
+    $megaparsec-9.6.1-d117ba2c01361ba99c2912a42a8f5c5755fd1c1ea2a6ca7611fe333b3829754a$Text.Megaparsec.Byte.Binary:0
+    $megaparsec-9.6.1-d117ba2c01361ba99c2912a42a8f5c5755fd1c1ea2a6ca7611fe333b3829754a$Text.Megaparsec.Byte.Lexer:0
+    $megaparsec-9.6.1-d117ba2c01361ba99c2912a42a8f5c5755fd1c1ea2a6ca7611fe333b3829754a$Text.Megaparsec.Char:687
+    $megaparsec-9.6.1-d117ba2c01361ba99c2912a42a8f5c5755fd1c1ea2a6ca7611fe333b3829754a$Text.Megaparsec.Char.Lexer:0
+    $megaparsec-9.6.1-d117ba2c01361ba99c2912a42a8f5c5755fd1c1ea2a6ca7611fe333b3829754a$Text.Megaparsec.Class:0
+    $megaparsec-9.6.1-d117ba2c01361ba99c2912a42a8f5c5755fd1c1ea2a6ca7611fe333b3829754a$Text.Megaparsec.Common:0
+    $megaparsec-9.6.1-d117ba2c01361ba99c2912a42a8f5c5755fd1c1ea2a6ca7611fe333b3829754a$Text.Megaparsec.Debug:0
+    $megaparsec-9.6.1-d117ba2c01361ba99c2912a42a8f5c5755fd1c1ea2a6ca7611fe333b3829754a$Text.Megaparsec.Error:129186
+    $megaparsec-9.6.1-d117ba2c01361ba99c2912a42a8f5c5755fd1c1ea2a6ca7611fe333b3829754a$Text.Megaparsec.Error.Builder:0
+    $megaparsec-9.6.1-d117ba2c01361ba99c2912a42a8f5c5755fd1c1ea2a6ca7611fe333b3829754a$Text.Megaparsec.Internal:28508
+    $megaparsec-9.6.1-d117ba2c01361ba99c2912a42a8f5c5755fd1c1ea2a6ca7611fe333b3829754a$Text.Megaparsec.Lexer:0
+    $megaparsec-9.6.1-d117ba2c01361ba99c2912a42a8f5c5755fd1c1ea2a6ca7611fe333b3829754a$Text.Megaparsec.Pos:11457
+    $megaparsec-9.6.1-d117ba2c01361ba99c2912a42a8f5c5755fd1c1ea2a6ca7611fe333b3829754a$Text.Megaparsec.State:3246
+    $megaparsec-9.6.1-d117ba2c01361ba99c2912a42a8f5c5755fd1c1ea2a6ca7611fe333b3829754a$Text.Megaparsec.Stream:132158
+
+    $mtl-2.3.1-inplace$Control.Monad.Accum:0
+    $mtl-2.3.1-inplace$Control.Monad.Cont:0
+    $mtl-2.3.1-inplace$Control.Monad.Cont.Class:0
+    $mtl-2.3.1-inplace$Control.Monad.Error.Class:0
+    $mtl-2.3.1-inplace$Control.Monad.Except:0
+    $mtl-2.3.1-inplace$Control.Monad.Identity:0
+    $mtl-2.3.1-inplace$Control.Monad.RWS:0
+    $mtl-2.3.1-inplace$Control.Monad.RWS.CPS:0
+    $mtl-2.3.1-inplace$Control.Monad.RWS.Class:0
+    $mtl-2.3.1-inplace$Control.Monad.RWS.Lazy:0
+    $mtl-2.3.1-inplace$Control.Monad.RWS.Strict:0
+    $mtl-2.3.1-inplace$Control.Monad.Reader:0
+    $mtl-2.3.1-inplace$Control.Monad.Reader.Class:0
+    $mtl-2.3.1-inplace$Control.Monad.Select:0
+    $mtl-2.3.1-inplace$Control.Monad.State:0
+    $mtl-2.3.1-inplace$Control.Monad.State.Class:0
+    $mtl-2.3.1-inplace$Control.Monad.State.Lazy:0
+    $mtl-2.3.1-inplace$Control.Monad.State.Strict:0
+    $mtl-2.3.1-inplace$Control.Monad.Trans:0
+    $mtl-2.3.1-inplace$Control.Monad.Writer:0
+    $mtl-2.3.1-inplace$Control.Monad.Writer.CPS:0
+    $mtl-2.3.1-inplace$Control.Monad.Writer.Class:0
+    $mtl-2.3.1-inplace$Control.Monad.Writer.Lazy:0
+    $mtl-2.3.1-inplace$Control.Monad.Writer.Strict:0
+
+    $network-uri-2.6.4.2-6f5bc4ed047b10b12f12a914a38ad52bf880caada9236527dc6e3005f710c54c$Network.URI:0
+    $network-uri-2.6.4.2-6f5bc4ed047b10b12f12a914a38ad52bf880caada9236527dc6e3005f710c54c$Network.URI.Lens:0
+    $network-uri-2.6.4.2-6f5bc4ed047b10b12f12a914a38ad52bf880caada9236527dc6e3005f710c54c$Network.URI.Static:0
+
+    $parsec-3.1.17.0-607e148e182274049d02a52d8b6b05a81ecc528153e2b13ef0818dfd958028d4$Text.Parsec:0
+    $parsec-3.1.17.0-607e148e182274049d02a52d8b6b05a81ecc528153e2b13ef0818dfd958028d4$Text.Parsec.ByteString:0
+    $parsec-3.1.17.0-607e148e182274049d02a52d8b6b05a81ecc528153e2b13ef0818dfd958028d4$Text.Parsec.ByteString.Lazy:0
+    $parsec-3.1.17.0-607e148e182274049d02a52d8b6b05a81ecc528153e2b13ef0818dfd958028d4$Text.Parsec.Char:0
+    $parsec-3.1.17.0-607e148e182274049d02a52d8b6b05a81ecc528153e2b13ef0818dfd958028d4$Text.Parsec.Combinator:0
+    $parsec-3.1.17.0-607e148e182274049d02a52d8b6b05a81ecc528153e2b13ef0818dfd958028d4$Text.Parsec.Error:0
+    $parsec-3.1.17.0-607e148e182274049d02a52d8b6b05a81ecc528153e2b13ef0818dfd958028d4$Text.Parsec.Expr:0
+    $parsec-3.1.17.0-607e148e182274049d02a52d8b6b05a81ecc528153e2b13ef0818dfd958028d4$Text.Parsec.Language:0
+    $parsec-3.1.17.0-607e148e182274049d02a52d8b6b05a81ecc528153e2b13ef0818dfd958028d4$Text.Parsec.Perm:0
+    $parsec-3.1.17.0-607e148e182274049d02a52d8b6b05a81ecc528153e2b13ef0818dfd958028d4$Text.Parsec.Pos:0
+    $parsec-3.1.17.0-607e148e182274049d02a52d8b6b05a81ecc528153e2b13ef0818dfd958028d4$Text.Parsec.Prim:0
+    $parsec-3.1.17.0-607e148e182274049d02a52d8b6b05a81ecc528153e2b13ef0818dfd958028d4$Text.Parsec.String:0
+    $parsec-3.1.17.0-607e148e182274049d02a52d8b6b05a81ecc528153e2b13ef0818dfd958028d4$Text.Parsec.Text:0
+    $parsec-3.1.17.0-607e148e182274049d02a52d8b6b05a81ecc528153e2b13ef0818dfd958028d4$Text.Parsec.Text.Lazy:0
+    $parsec-3.1.17.0-607e148e182274049d02a52d8b6b05a81ecc528153e2b13ef0818dfd958028d4$Text.Parsec.Token:0
+    $parsec-3.1.17.0-607e148e182274049d02a52d8b6b05a81ecc528153e2b13ef0818dfd958028d4$Text.ParserCombinators.Parsec:0
+    $parsec-3.1.17.0-607e148e182274049d02a52d8b6b05a81ecc528153e2b13ef0818dfd958028d4$Text.ParserCombinators.Parsec.Char:0
+    $parsec-3.1.17.0-607e148e182274049d02a52d8b6b05a81ecc528153e2b13ef0818dfd958028d4$Text.ParserCombinators.Parsec.Combinator:0
+    $parsec-3.1.17.0-607e148e182274049d02a52d8b6b05a81ecc528153e2b13ef0818dfd958028d4$Text.ParserCombinators.Parsec.Error:0
+    $parsec-3.1.17.0-607e148e182274049d02a52d8b6b05a81ecc528153e2b13ef0818dfd958028d4$Text.ParserCombinators.Parsec.Expr:0
+    $parsec-3.1.17.0-607e148e182274049d02a52d8b6b05a81ecc528153e2b13ef0818dfd958028d4$Text.ParserCombinators.Parsec.Language:0
+    $parsec-3.1.17.0-607e148e182274049d02a52d8b6b05a81ecc528153e2b13ef0818dfd958028d4$Text.ParserCombinators.Parsec.Perm:0
+    $parsec-3.1.17.0-607e148e182274049d02a52d8b6b05a81ecc528153e2b13ef0818dfd958028d4$Text.ParserCombinators.Parsec.Pos:0
+    $parsec-3.1.17.0-607e148e182274049d02a52d8b6b05a81ecc528153e2b13ef0818dfd958028d4$Text.ParserCombinators.Parsec.Prim:0
+    $parsec-3.1.17.0-607e148e182274049d02a52d8b6b05a81ecc528153e2b13ef0818dfd958028d4$Text.ParserCombinators.Parsec.Token:0
+
+    $parser-combinators-1.3.0-758df801da9cd2c01307dbd7faa8c1fd27836436594796d30ac29ce8b3deb7f4$Control.Applicative.Combinators:0
+    $parser-combinators-1.3.0-758df801da9cd2c01307dbd7faa8c1fd27836436594796d30ac29ce8b3deb7f4$Control.Applicative.Combinators.NonEmpty:0
+    $parser-combinators-1.3.0-758df801da9cd2c01307dbd7faa8c1fd27836436594796d30ac29ce8b3deb7f4$Control.Applicative.Permutations:0
+    $parser-combinators-1.3.0-758df801da9cd2c01307dbd7faa8c1fd27836436594796d30ac29ce8b3deb7f4$Control.Monad.Combinators:0
+    $parser-combinators-1.3.0-758df801da9cd2c01307dbd7faa8c1fd27836436594796d30ac29ce8b3deb7f4$Control.Monad.Combinators.Expr:0
+    $parser-combinators-1.3.0-758df801da9cd2c01307dbd7faa8c1fd27836436594796d30ac29ce8b3deb7f4$Control.Monad.Combinators.NonEmpty:0
+    $parser-combinators-1.3.0-758df801da9cd2c01307dbd7faa8c1fd27836436594796d30ac29ce8b3deb7f4$Control.Monad.Permutations:0
+
+    $pretty-1.1.3.6-inplace$Text.PrettyPrint:0
+    $pretty-1.1.3.6-inplace$Text.PrettyPrint.Annotated:0
+    $pretty-1.1.3.6-inplace$Text.PrettyPrint.Annotated.HughesPJ:0
+    $pretty-1.1.3.6-inplace$Text.PrettyPrint.Annotated.HughesPJClass:0
+    $pretty-1.1.3.6-inplace$Text.PrettyPrint.HughesPJ:0
+    $pretty-1.1.3.6-inplace$Text.PrettyPrint.HughesPJClass:0
+
+    $primitive-0.9.0.0-95f13fcbb3bb8172a3fd8cbcb50ff1376c0f3384831a367daa211a115a2d68ad$Control.Monad.Primitive:0
+    $primitive-0.9.0.0-95f13fcbb3bb8172a3fd8cbcb50ff1376c0f3384831a367daa211a115a2d68ad$Data.Primitive:0
+    $primitive-0.9.0.0-95f13fcbb3bb8172a3fd8cbcb50ff1376c0f3384831a367daa211a115a2d68ad$Data.Primitive.Array:487
+    $primitive-0.9.0.0-95f13fcbb3bb8172a3fd8cbcb50ff1376c0f3384831a367daa211a115a2d68ad$Data.Primitive.ByteArray:0
+    $primitive-0.9.0.0-95f13fcbb3bb8172a3fd8cbcb50ff1376c0f3384831a367daa211a115a2d68ad$Data.Primitive.Internal.Operations:0
+    $primitive-0.9.0.0-95f13fcbb3bb8172a3fd8cbcb50ff1376c0f3384831a367daa211a115a2d68ad$Data.Primitive.Internal.Read:0
+    $primitive-0.9.0.0-95f13fcbb3bb8172a3fd8cbcb50ff1376c0f3384831a367daa211a115a2d68ad$Data.Primitive.MVar:0
+    $primitive-0.9.0.0-95f13fcbb3bb8172a3fd8cbcb50ff1376c0f3384831a367daa211a115a2d68ad$Data.Primitive.MachDeps:0
+    $primitive-0.9.0.0-95f13fcbb3bb8172a3fd8cbcb50ff1376c0f3384831a367daa211a115a2d68ad$Data.Primitive.MutVar:0
+    $primitive-0.9.0.0-95f13fcbb3bb8172a3fd8cbcb50ff1376c0f3384831a367daa211a115a2d68ad$Data.Primitive.PrimArray:0
+    $primitive-0.9.0.0-95f13fcbb3bb8172a3fd8cbcb50ff1376c0f3384831a367daa211a115a2d68ad$Data.Primitive.PrimVar:0
+    $primitive-0.9.0.0-95f13fcbb3bb8172a3fd8cbcb50ff1376c0f3384831a367daa211a115a2d68ad$Data.Primitive.Ptr:0
+    $primitive-0.9.0.0-95f13fcbb3bb8172a3fd8cbcb50ff1376c0f3384831a367daa211a115a2d68ad$Data.Primitive.SmallArray:0
+    $primitive-0.9.0.0-95f13fcbb3bb8172a3fd8cbcb50ff1376c0f3384831a367daa211a115a2d68ad$Data.Primitive.Types:0
+
+    $random-1.2.1.1-db2217418651ba57b91c534bbdd978b7ad0eb0f9df16d05925188cd75ed884f0$System.Random:0
+    $random-1.2.1.1-db2217418651ba57b91c534bbdd978b7ad0eb0f9df16d05925188cd75ed884f0$System.Random.GFinite:0
+    $random-1.2.1.1-db2217418651ba57b91c534bbdd978b7ad0eb0f9df16d05925188cd75ed884f0$System.Random.Internal:0
+    $random-1.2.1.1-db2217418651ba57b91c534bbdd978b7ad0eb0f9df16d05925188cd75ed884f0$System.Random.Stateful:0
+
+    $scientific-0.3.7.0-01253c2500ab96c3edbcd07309ea19701a1cd8d6db7a84aa06a44e507b752972$Data.ByteString.Builder.Scientific:136687
+    $scientific-0.3.7.0-01253c2500ab96c3edbcd07309ea19701a1cd8d6db7a84aa06a44e507b752972$Data.Scientific:63769
+    $scientific-0.3.7.0-01253c2500ab96c3edbcd07309ea19701a1cd8d6db7a84aa06a44e507b752972$Data.Text.Lazy.Builder.Scientific:288824
+    $scientific-0.3.7.0-01253c2500ab96c3edbcd07309ea19701a1cd8d6db7a84aa06a44e507b752972$GHC.Integer.Compat:0
+    $scientific-0.3.7.0-01253c2500ab96c3edbcd07309ea19701a1cd8d6db7a84aa06a44e507b752972$Utils:18299
+
+    $semialign-1.3-6cf2aeb72d48871a7f9e6e7287c4329985c9425b78aeb88cdd0d5c0842d2b0bd$Data.Align:0
+    $semialign-1.3-6cf2aeb72d48871a7f9e6e7287c4329985c9425b78aeb88cdd0d5c0842d2b0bd$Data.Crosswalk:0
+    $semialign-1.3-6cf2aeb72d48871a7f9e6e7287c4329985c9425b78aeb88cdd0d5c0842d2b0bd$Data.Semialign:0
+    $semialign-1.3-6cf2aeb72d48871a7f9e6e7287c4329985c9425b78aeb88cdd0d5c0842d2b0bd$Data.Semialign.Indexed:0
+    $semialign-1.3-6cf2aeb72d48871a7f9e6e7287c4329985c9425b78aeb88cdd0d5c0842d2b0bd$Data.Semialign.Internal:0
+    $semialign-1.3-6cf2aeb72d48871a7f9e6e7287c4329985c9425b78aeb88cdd0d5c0842d2b0bd$Data.Zip:0
+
+    $semigroupoids-6.0.0.1-91b9bb8d4dbf8e329ffd11c04fda084816166070d479e5447f8b1f7123c3eea7$Data.Bifunctor.Apply:0
+    $semigroupoids-6.0.0.1-91b9bb8d4dbf8e329ffd11c04fda084816166070d479e5447f8b1f7123c3eea7$Data.Functor.Alt:0
+    $semigroupoids-6.0.0.1-91b9bb8d4dbf8e329ffd11c04fda084816166070d479e5447f8b1f7123c3eea7$Data.Functor.Apply:0
+    $semigroupoids-6.0.0.1-91b9bb8d4dbf8e329ffd11c04fda084816166070d479e5447f8b1f7123c3eea7$Data.Functor.Bind:0
+    $semigroupoids-6.0.0.1-91b9bb8d4dbf8e329ffd11c04fda084816166070d479e5447f8b1f7123c3eea7$Data.Functor.Bind.Class:0
+    $semigroupoids-6.0.0.1-91b9bb8d4dbf8e329ffd11c04fda084816166070d479e5447f8b1f7123c3eea7$Data.Functor.Bind.Trans:0
+    $semigroupoids-6.0.0.1-91b9bb8d4dbf8e329ffd11c04fda084816166070d479e5447f8b1f7123c3eea7$Data.Functor.Contravariant.Conclude:0
+    $semigroupoids-6.0.0.1-91b9bb8d4dbf8e329ffd11c04fda084816166070d479e5447f8b1f7123c3eea7$Data.Functor.Contravariant.Decide:0
+    $semigroupoids-6.0.0.1-91b9bb8d4dbf8e329ffd11c04fda084816166070d479e5447f8b1f7123c3eea7$Data.Functor.Contravariant.Divise:0
+    $semigroupoids-6.0.0.1-91b9bb8d4dbf8e329ffd11c04fda084816166070d479e5447f8b1f7123c3eea7$Data.Functor.Extend:0
+    $semigroupoids-6.0.0.1-91b9bb8d4dbf8e329ffd11c04fda084816166070d479e5447f8b1f7123c3eea7$Data.Functor.Plus:0
+    $semigroupoids-6.0.0.1-91b9bb8d4dbf8e329ffd11c04fda084816166070d479e5447f8b1f7123c3eea7$Data.Groupoid:0
+    $semigroupoids-6.0.0.1-91b9bb8d4dbf8e329ffd11c04fda084816166070d479e5447f8b1f7123c3eea7$Data.Isomorphism:0
+    $semigroupoids-6.0.0.1-91b9bb8d4dbf8e329ffd11c04fda084816166070d479e5447f8b1f7123c3eea7$Data.Semigroup.Bifoldable:0
+    $semigroupoids-6.0.0.1-91b9bb8d4dbf8e329ffd11c04fda084816166070d479e5447f8b1f7123c3eea7$Data.Semigroup.Bitraversable:0
+    $semigroupoids-6.0.0.1-91b9bb8d4dbf8e329ffd11c04fda084816166070d479e5447f8b1f7123c3eea7$Data.Semigroup.Foldable:0
+    $semigroupoids-6.0.0.1-91b9bb8d4dbf8e329ffd11c04fda084816166070d479e5447f8b1f7123c3eea7$Data.Semigroup.Foldable.Class:0
+    $semigroupoids-6.0.0.1-91b9bb8d4dbf8e329ffd11c04fda084816166070d479e5447f8b1f7123c3eea7$Data.Semigroup.Traversable:0
+    $semigroupoids-6.0.0.1-91b9bb8d4dbf8e329ffd11c04fda084816166070d479e5447f8b1f7123c3eea7$Data.Semigroup.Traversable.Class:0
+    $semigroupoids-6.0.0.1-91b9bb8d4dbf8e329ffd11c04fda084816166070d479e5447f8b1f7123c3eea7$Data.Semigroupoid:0
+    $semigroupoids-6.0.0.1-91b9bb8d4dbf8e329ffd11c04fda084816166070d479e5447f8b1f7123c3eea7$Data.Semigroupoid.Categorical:0
+    $semigroupoids-6.0.0.1-91b9bb8d4dbf8e329ffd11c04fda084816166070d479e5447f8b1f7123c3eea7$Data.Semigroupoid.Dual:0
+    $semigroupoids-6.0.0.1-91b9bb8d4dbf8e329ffd11c04fda084816166070d479e5447f8b1f7123c3eea7$Data.Semigroupoid.Ob:0
+    $semigroupoids-6.0.0.1-91b9bb8d4dbf8e329ffd11c04fda084816166070d479e5447f8b1f7123c3eea7$Data.Semigroupoid.Static:0
+    $semigroupoids-6.0.0.1-91b9bb8d4dbf8e329ffd11c04fda084816166070d479e5447f8b1f7123c3eea7$Data.Traversable.Instances:0
+    $semigroupoids-6.0.0.1-91b9bb8d4dbf8e329ffd11c04fda084816166070d479e5447f8b1f7123c3eea7$Semigroupoids.Do:0
+    $semigroupoids-6.0.0.1-91b9bb8d4dbf8e329ffd11c04fda084816166070d479e5447f8b1f7123c3eea7$Semigroupoids.Internal:0
+
+    $splitmix-0.1.0.5-4e606ca741bdc16e708bd4c8fc1d383a513183dc7bfc88676ffd66b91b387f7b$Data.Bits.Compat:0
+    $splitmix-0.1.0.5-4e606ca741bdc16e708bd4c8fc1d383a513183dc7bfc88676ffd66b91b387f7b$System.Random.SplitMix:0
+    $splitmix-0.1.0.5-4e606ca741bdc16e708bd4c8fc1d383a513183dc7bfc88676ffd66b91b387f7b$System.Random.SplitMix.Init:0
+    $splitmix-0.1.0.5-4e606ca741bdc16e708bd4c8fc1d383a513183dc7bfc88676ffd66b91b387f7b$System.Random.SplitMix32:0
+
+    $stm-2.5.2.1-inplace$Control.Concurrent.STM:0
+    $stm-2.5.2.1-inplace$Control.Concurrent.STM.TArray:0
+    $stm-2.5.2.1-inplace$Control.Concurrent.STM.TBQueue:0
+    $stm-2.5.2.1-inplace$Control.Concurrent.STM.TChan:0
+    $stm-2.5.2.1-inplace$Control.Concurrent.STM.TMVar:0
+    $stm-2.5.2.1-inplace$Control.Concurrent.STM.TQueue:0
+    $stm-2.5.2.1-inplace$Control.Concurrent.STM.TSem:0
+    $stm-2.5.2.1-inplace$Control.Concurrent.STM.TVar:0
+    $stm-2.5.2.1-inplace$Control.Monad.STM:0
+    $stm-2.5.2.1-inplace$Control.Sequential.STM:0
+
+    $strict-0.5-662abcbe2ab6a7471daa8a13513200c3026a20a84f08dc6b4f1cc515d4548059$Data.Strict:0
+    $strict-0.5-662abcbe2ab6a7471daa8a13513200c3026a20a84f08dc6b4f1cc515d4548059$Data.Strict.Classes:0
+    $strict-0.5-662abcbe2ab6a7471daa8a13513200c3026a20a84f08dc6b4f1cc515d4548059$Data.Strict.Either:0
+    $strict-0.5-662abcbe2ab6a7471daa8a13513200c3026a20a84f08dc6b4f1cc515d4548059$Data.Strict.Maybe:0
+    $strict-0.5-662abcbe2ab6a7471daa8a13513200c3026a20a84f08dc6b4f1cc515d4548059$Data.Strict.These:0
+    $strict-0.5-662abcbe2ab6a7471daa8a13513200c3026a20a84f08dc6b4f1cc515d4548059$Data.Strict.Tuple:0
+    $strict-0.5-662abcbe2ab6a7471daa8a13513200c3026a20a84f08dc6b4f1cc515d4548059$System.IO.Strict:0
+
+    $tagged-0.8.8-cb2b541f5f5e97b0235b268fb896d2d09379d351c133f1e08eabcd7cac935337$Data.Proxy.TH:0
+    $tagged-0.8.8-cb2b541f5f5e97b0235b268fb896d2d09379d351c133f1e08eabcd7cac935337$Data.Tagged:0
+
+    $template-haskell$Language.Haskell.TH:0
+    $template-haskell$Language.Haskell.TH.CodeDo:0
+    $template-haskell$Language.Haskell.TH.LanguageExtensions:0
+    $template-haskell$Language.Haskell.TH.Lib:0
+    $template-haskell$Language.Haskell.TH.Lib.Internal:0
+    $template-haskell$Language.Haskell.TH.Lib.Map:0
+    $template-haskell$Language.Haskell.TH.Ppr:0
+    $template-haskell$Language.Haskell.TH.PprLib:0
+    $template-haskell$Language.Haskell.TH.Quote:0
+    $template-haskell$Language.Haskell.TH.Syntax:0
+    $template-haskell$System.FilePath:  0
+    $template-haskell$System.FilePath.Posix:0
+    $template-haskell$System.FilePath.Windows:0
+
+    $text-2.1-dd8721b40cd177ce0854e14b8e9ebaaf89fed846e5ddd4dd6d7e96f3044ae0a9$Data.Text:0
+    $text-2.1-dd8721b40cd177ce0854e14b8e9ebaaf89fed846e5ddd4dd6d7e96f3044ae0a9$Data.Text.Array:419
+    $text-2.1-dd8721b40cd177ce0854e14b8e9ebaaf89fed846e5ddd4dd6d7e96f3044ae0a9$Data.Text.Encoding:0
+    $text-2.1-dd8721b40cd177ce0854e14b8e9ebaaf89fed846e5ddd4dd6d7e96f3044ae0a9$Data.Text.Encoding.Error:0
+    $text-2.1-dd8721b40cd177ce0854e14b8e9ebaaf89fed846e5ddd4dd6d7e96f3044ae0a9$Data.Text.Foreign:0
+    $text-2.1-dd8721b40cd177ce0854e14b8e9ebaaf89fed846e5ddd4dd6d7e96f3044ae0a9$Data.Text.IO:0
+    $text-2.1-dd8721b40cd177ce0854e14b8e9ebaaf89fed846e5ddd4dd6d7e96f3044ae0a9$Data.Text.IO.Utf8:0
+    $text-2.1-dd8721b40cd177ce0854e14b8e9ebaaf89fed846e5ddd4dd6d7e96f3044ae0a9$Data.Text.Internal:12302
+    $text-2.1-dd8721b40cd177ce0854e14b8e9ebaaf89fed846e5ddd4dd6d7e96f3044ae0a9$Data.Text.Internal.Builder:3087
+    $text-2.1-dd8721b40cd177ce0854e14b8e9ebaaf89fed846e5ddd4dd6d7e96f3044ae0a9$Data.Text.Internal.Builder.Functions:0
+    $text-2.1-dd8721b40cd177ce0854e14b8e9ebaaf89fed846e5ddd4dd6d7e96f3044ae0a9$Data.Text.Internal.Builder.Int.Digits:0
+    $text-2.1-dd8721b40cd177ce0854e14b8e9ebaaf89fed846e5ddd4dd6d7e96f3044ae0a9$Data.Text.Internal.Builder.RealFloat.Functions:0
+    $text-2.1-dd8721b40cd177ce0854e14b8e9ebaaf89fed846e5ddd4dd6d7e96f3044ae0a9$Data.Text.Internal.ByteStringCompat:0
+    $text-2.1-dd8721b40cd177ce0854e14b8e9ebaaf89fed846e5ddd4dd6d7e96f3044ae0a9$Data.Text.Internal.Encoding:0
+    $text-2.1-dd8721b40cd177ce0854e14b8e9ebaaf89fed846e5ddd4dd6d7e96f3044ae0a9$Data.Text.Internal.Encoding.Fusion:0
+    $text-2.1-dd8721b40cd177ce0854e14b8e9ebaaf89fed846e5ddd4dd6d7e96f3044ae0a9$Data.Text.Internal.Encoding.Fusion.Common:0
+    $text-2.1-dd8721b40cd177ce0854e14b8e9ebaaf89fed846e5ddd4dd6d7e96f3044ae0a9$Data.Text.Internal.Encoding.Utf16:0
+    $text-2.1-dd8721b40cd177ce0854e14b8e9ebaaf89fed846e5ddd4dd6d7e96f3044ae0a9$Data.Text.Internal.Encoding.Utf32:0
+    $text-2.1-dd8721b40cd177ce0854e14b8e9ebaaf89fed846e5ddd4dd6d7e96f3044ae0a9$Data.Text.Internal.Encoding.Utf8:0
+    $text-2.1-dd8721b40cd177ce0854e14b8e9ebaaf89fed846e5ddd4dd6d7e96f3044ae0a9$Data.Text.Internal.Fusion:0
+    $text-2.1-dd8721b40cd177ce0854e14b8e9ebaaf89fed846e5ddd4dd6d7e96f3044ae0a9$Data.Text.Internal.Fusion.CaseMapping:0
+    $text-2.1-dd8721b40cd177ce0854e14b8e9ebaaf89fed846e5ddd4dd6d7e96f3044ae0a9$Data.Text.Internal.Fusion.Common:0
+    $text-2.1-dd8721b40cd177ce0854e14b8e9ebaaf89fed846e5ddd4dd6d7e96f3044ae0a9$Data.Text.Internal.Fusion.Size:0
+    $text-2.1-dd8721b40cd177ce0854e14b8e9ebaaf89fed846e5ddd4dd6d7e96f3044ae0a9$Data.Text.Internal.Fusion.Types:0
+    $text-2.1-dd8721b40cd177ce0854e14b8e9ebaaf89fed846e5ddd4dd6d7e96f3044ae0a9$Data.Text.Internal.IO:0
+    $text-2.1-dd8721b40cd177ce0854e14b8e9ebaaf89fed846e5ddd4dd6d7e96f3044ae0a9$Data.Text.Internal.Lazy:1452
+    $text-2.1-dd8721b40cd177ce0854e14b8e9ebaaf89fed846e5ddd4dd6d7e96f3044ae0a9$Data.Text.Internal.Lazy.Encoding.Fusion:0
+    $text-2.1-dd8721b40cd177ce0854e14b8e9ebaaf89fed846e5ddd4dd6d7e96f3044ae0a9$Data.Text.Internal.Lazy.Fusion:0
+    $text-2.1-dd8721b40cd177ce0854e14b8e9ebaaf89fed846e5ddd4dd6d7e96f3044ae0a9$Data.Text.Internal.Lazy.Search:0
+    $text-2.1-dd8721b40cd177ce0854e14b8e9ebaaf89fed846e5ddd4dd6d7e96f3044ae0a9$Data.Text.Internal.Measure:0
+    $text-2.1-dd8721b40cd177ce0854e14b8e9ebaaf89fed846e5ddd4dd6d7e96f3044ae0a9$Data.Text.Internal.PrimCompat:0
+    $text-2.1-dd8721b40cd177ce0854e14b8e9ebaaf89fed846e5ddd4dd6d7e96f3044ae0a9$Data.Text.Internal.Private:0
+    $text-2.1-dd8721b40cd177ce0854e14b8e9ebaaf89fed846e5ddd4dd6d7e96f3044ae0a9$Data.Text.Internal.Read:0
+    $text-2.1-dd8721b40cd177ce0854e14b8e9ebaaf89fed846e5ddd4dd6d7e96f3044ae0a9$Data.Text.Internal.Reverse:0
+    $text-2.1-dd8721b40cd177ce0854e14b8e9ebaaf89fed846e5ddd4dd6d7e96f3044ae0a9$Data.Text.Internal.Search:0
+    $text-2.1-dd8721b40cd177ce0854e14b8e9ebaaf89fed846e5ddd4dd6d7e96f3044ae0a9$Data.Text.Internal.StrictBuilder:0
+    $text-2.1-dd8721b40cd177ce0854e14b8e9ebaaf89fed846e5ddd4dd6d7e96f3044ae0a9$Data.Text.Internal.Transformation:0
+    $text-2.1-dd8721b40cd177ce0854e14b8e9ebaaf89fed846e5ddd4dd6d7e96f3044ae0a9$Data.Text.Internal.Unsafe:0
+    $text-2.1-dd8721b40cd177ce0854e14b8e9ebaaf89fed846e5ddd4dd6d7e96f3044ae0a9$Data.Text.Internal.Unsafe.Char:0
+    $text-2.1-dd8721b40cd177ce0854e14b8e9ebaaf89fed846e5ddd4dd6d7e96f3044ae0a9$Data.Text.Internal.Validate:0
+    $text-2.1-dd8721b40cd177ce0854e14b8e9ebaaf89fed846e5ddd4dd6d7e96f3044ae0a9$Data.Text.Lazy:1554
+    $text-2.1-dd8721b40cd177ce0854e14b8e9ebaaf89fed846e5ddd4dd6d7e96f3044ae0a9$Data.Text.Lazy.Builder:0
+    $text-2.1-dd8721b40cd177ce0854e14b8e9ebaaf89fed846e5ddd4dd6d7e96f3044ae0a9$Data.Text.Lazy.Builder.Int:89298
+    $text-2.1-dd8721b40cd177ce0854e14b8e9ebaaf89fed846e5ddd4dd6d7e96f3044ae0a9$Data.Text.Lazy.Builder.RealFloat:492
+    $text-2.1-dd8721b40cd177ce0854e14b8e9ebaaf89fed846e5ddd4dd6d7e96f3044ae0a9$Data.Text.Lazy.Encoding:2705
+    $text-2.1-dd8721b40cd177ce0854e14b8e9ebaaf89fed846e5ddd4dd6d7e96f3044ae0a9$Data.Text.Lazy.IO:0
+    $text-2.1-dd8721b40cd177ce0854e14b8e9ebaaf89fed846e5ddd4dd6d7e96f3044ae0a9$Data.Text.Lazy.Internal:0
+    $text-2.1-dd8721b40cd177ce0854e14b8e9ebaaf89fed846e5ddd4dd6d7e96f3044ae0a9$Data.Text.Lazy.Read:0
+    $text-2.1-dd8721b40cd177ce0854e14b8e9ebaaf89fed846e5ddd4dd6d7e96f3044ae0a9$Data.Text.Read:0
+    $text-2.1-dd8721b40cd177ce0854e14b8e9ebaaf89fed846e5ddd4dd6d7e96f3044ae0a9$Data.Text.Show:755
+    $text-2.1-dd8721b40cd177ce0854e14b8e9ebaaf89fed846e5ddd4dd6d7e96f3044ae0a9$Data.Text.Unsafe:0
+
+    $text-iso8601-0.1-4992d17577596b9ac561b2ae97beaed79712cb9b7d03d32b9ebab8198b99dce6$Data.Time.FromText:0
+    $text-iso8601-0.1-4992d17577596b9ac561b2ae97beaed79712cb9b7d03d32b9ebab8198b99dce6$Data.Time.ToText:0
+
+    $text-short-0.1.5-5848b90b7633b3816808c83d65c4889144824925e867324c8dda2751a2a5821f$Data.Text.Short:0
+    $text-short-0.1.5-5848b90b7633b3816808c83d65c4889144824925e867324c8dda2751a2a5821f$Data.Text.Short.Internal:0
+    $text-short-0.1.5-5848b90b7633b3816808c83d65c4889144824925e867324c8dda2751a2a5821f$Data.Text.Short.Partial:0
+    $text-short-0.1.5-5848b90b7633b3816808c83d65c4889144824925e867324c8dda2751a2a5821f$Data.Text.Short.Unsafe:0
+    $text-short-0.1.5-5848b90b7633b3816808c83d65c4889144824925e867324c8dda2751a2a5821f$PrimOps:0
+
+    $th-abstraction-0.6.0.0-7d0ddabadca34b5cfe5c92fda9ac8f3b8fd9e914a5a2c8d7b7bfde768a2f5888$Language.Haskell.TH.Datatype:0
+    $th-abstraction-0.6.0.0-7d0ddabadca34b5cfe5c92fda9ac8f3b8fd9e914a5a2c8d7b7bfde768a2f5888$Language.Haskell.TH.Datatype.Internal:0
+    $th-abstraction-0.6.0.0-7d0ddabadca34b5cfe5c92fda9ac8f3b8fd9e914a5a2c8d7b7bfde768a2f5888$Language.Haskell.TH.Datatype.TyVarBndr:0
+
+    $th-compat-0.1.4-f88c266c210d8bdc2607b1d6ca7390fc38205c3cb07e0d88a45ee43e4284e7b6$Language.Haskell.TH.Syntax.Compat:0
+
+    $these-1.2-b9d62f4e8b6857f4088e371ac11188a238a97afe622af18cfdff6c7b066c7133$Data.Functor.These:0
+    $these-1.2-b9d62f4e8b6857f4088e371ac11188a238a97afe622af18cfdff6c7b066c7133$Data.These:0
+    $these-1.2-b9d62f4e8b6857f4088e371ac11188a238a97afe622af18cfdff6c7b066c7133$Data.These.Combinators:0
+
+    $time-1.12.2-inplace$Data.Format:   0
+    $time-1.12.2-inplace$Data.Time:     0
+    $time-1.12.2-inplace$Data.Time.Calendar:0
+    $time-1.12.2-inplace$Data.Time.Calendar.CalendarDiffDays:0
+    $time-1.12.2-inplace$Data.Time.Calendar.Days:0
+    $time-1.12.2-inplace$Data.Time.Calendar.Easter:0
+    $time-1.12.2-inplace$Data.Time.Calendar.Gregorian:0
+    $time-1.12.2-inplace$Data.Time.Calendar.Julian:0
+    $time-1.12.2-inplace$Data.Time.Calendar.JulianYearDay:0
+    $time-1.12.2-inplace$Data.Time.Calendar.Month:0
+    $time-1.12.2-inplace$Data.Time.Calendar.MonthDay:0
+    $time-1.12.2-inplace$Data.Time.Calendar.OrdinalDate:0
+    $time-1.12.2-inplace$Data.Time.Calendar.Private:0
+    $time-1.12.2-inplace$Data.Time.Calendar.Quarter:0
+    $time-1.12.2-inplace$Data.Time.Calendar.Types:0
+    $time-1.12.2-inplace$Data.Time.Calendar.Week:0
+    $time-1.12.2-inplace$Data.Time.Calendar.WeekDate:0
+    $time-1.12.2-inplace$Data.Time.Clock:0
+    $time-1.12.2-inplace$Data.Time.Clock.Internal.AbsoluteTime:0
+    $time-1.12.2-inplace$Data.Time.Clock.Internal.CTimespec:0
+    $time-1.12.2-inplace$Data.Time.Clock.Internal.CTimeval:0
+    $time-1.12.2-inplace$Data.Time.Clock.Internal.DiffTime:0
+    $time-1.12.2-inplace$Data.Time.Clock.Internal.NominalDiffTime:0
+    $time-1.12.2-inplace$Data.Time.Clock.Internal.POSIXTime:0
+    $time-1.12.2-inplace$Data.Time.Clock.Internal.SystemTime:0
+    $time-1.12.2-inplace$Data.Time.Clock.Internal.UTCDiff:0
+    $time-1.12.2-inplace$Data.Time.Clock.Internal.UTCTime:0
+    $time-1.12.2-inplace$Data.Time.Clock.Internal.UniversalTime:0
+    $time-1.12.2-inplace$Data.Time.Clock.POSIX:0
+    $time-1.12.2-inplace$Data.Time.Clock.System:0
+    $time-1.12.2-inplace$Data.Time.Clock.TAI:0
+    $time-1.12.2-inplace$Data.Time.Format:0
+    $time-1.12.2-inplace$Data.Time.Format.Format.Class:0
+    $time-1.12.2-inplace$Data.Time.Format.Format.Instances:0
+    $time-1.12.2-inplace$Data.Time.Format.ISO8601:0
+    $time-1.12.2-inplace$Data.Time.Format.Internal:0
+    $time-1.12.2-inplace$Data.Time.Format.Locale:0
+    $time-1.12.2-inplace$Data.Time.Format.Parse:0
+    $time-1.12.2-inplace$Data.Time.Format.Parse.Class:0
+    $time-1.12.2-inplace$Data.Time.Format.Parse.Instances:0
+    $time-1.12.2-inplace$Data.Time.LocalTime:0
+    $time-1.12.2-inplace$Data.Time.LocalTime.Internal.CalendarDiffTime:0
+    $time-1.12.2-inplace$Data.Time.LocalTime.Internal.LocalTime:0
+    $time-1.12.2-inplace$Data.Time.LocalTime.Internal.TimeOfDay:0
+    $time-1.12.2-inplace$Data.Time.LocalTime.Internal.TimeZone:0
+    $time-1.12.2-inplace$Data.Time.LocalTime.Internal.ZonedTime:0
+
+    $time-compat-1.9.6.1-dc49b14b4941e049efd10fe14f6dc77c4f093a4110dd2afa2f21ebee518a0e4f$Data.Format:0
+    $time-compat-1.9.6.1-dc49b14b4941e049efd10fe14f6dc77c4f093a4110dd2afa2f21ebee518a0e4f$Data.Time.Calendar.Compat:0
+    $time-compat-1.9.6.1-dc49b14b4941e049efd10fe14f6dc77c4f093a4110dd2afa2f21ebee518a0e4f$Data.Time.Calendar.Easter.Compat:0
+    $time-compat-1.9.6.1-dc49b14b4941e049efd10fe14f6dc77c4f093a4110dd2afa2f21ebee518a0e4f$Data.Time.Calendar.Julian.Compat:0
+    $time-compat-1.9.6.1-dc49b14b4941e049efd10fe14f6dc77c4f093a4110dd2afa2f21ebee518a0e4f$Data.Time.Calendar.Month.Compat:0
+    $time-compat-1.9.6.1-dc49b14b4941e049efd10fe14f6dc77c4f093a4110dd2afa2f21ebee518a0e4f$Data.Time.Calendar.MonthDay.Compat:0
+    $time-compat-1.9.6.1-dc49b14b4941e049efd10fe14f6dc77c4f093a4110dd2afa2f21ebee518a0e4f$Data.Time.Calendar.OrdinalDate.Compat:0
+    $time-compat-1.9.6.1-dc49b14b4941e049efd10fe14f6dc77c4f093a4110dd2afa2f21ebee518a0e4f$Data.Time.Calendar.Private:0
+    $time-compat-1.9.6.1-dc49b14b4941e049efd10fe14f6dc77c4f093a4110dd2afa2f21ebee518a0e4f$Data.Time.Calendar.Quarter.Compat:0
+    $time-compat-1.9.6.1-dc49b14b4941e049efd10fe14f6dc77c4f093a4110dd2afa2f21ebee518a0e4f$Data.Time.Calendar.Types:0
+    $time-compat-1.9.6.1-dc49b14b4941e049efd10fe14f6dc77c4f093a4110dd2afa2f21ebee518a0e4f$Data.Time.Calendar.WeekDate.Compat:0
+    $time-compat-1.9.6.1-dc49b14b4941e049efd10fe14f6dc77c4f093a4110dd2afa2f21ebee518a0e4f$Data.Time.Clock.Compat:0
+    $time-compat-1.9.6.1-dc49b14b4941e049efd10fe14f6dc77c4f093a4110dd2afa2f21ebee518a0e4f$Data.Time.Clock.POSIX.Compat:0
+    $time-compat-1.9.6.1-dc49b14b4941e049efd10fe14f6dc77c4f093a4110dd2afa2f21ebee518a0e4f$Data.Time.Clock.System.Compat:0
+    $time-compat-1.9.6.1-dc49b14b4941e049efd10fe14f6dc77c4f093a4110dd2afa2f21ebee518a0e4f$Data.Time.Clock.TAI.Compat:0
+    $time-compat-1.9.6.1-dc49b14b4941e049efd10fe14f6dc77c4f093a4110dd2afa2f21ebee518a0e4f$Data.Time.Compat:0
+    $time-compat-1.9.6.1-dc49b14b4941e049efd10fe14f6dc77c4f093a4110dd2afa2f21ebee518a0e4f$Data.Time.Format.Compat:0
+    $time-compat-1.9.6.1-dc49b14b4941e049efd10fe14f6dc77c4f093a4110dd2afa2f21ebee518a0e4f$Data.Time.Format.ISO8601.Compat:0
+    $time-compat-1.9.6.1-dc49b14b4941e049efd10fe14f6dc77c4f093a4110dd2afa2f21ebee518a0e4f$Data.Time.LocalTime.Compat:0
+    $time-compat-1.9.6.1-dc49b14b4941e049efd10fe14f6dc77c4f093a4110dd2afa2f21ebee518a0e4f$Data.Time.Orphans:0
+
+    $transformers-0.6.1.0-inplace$Control.Applicative.Backwards:0
+    $transformers-0.6.1.0-inplace$Control.Applicative.Lift:0
+    $transformers-0.6.1.0-inplace$Control.Monad.Signatures:0
+    $transformers-0.6.1.0-inplace$Control.Monad.Trans.Accum:0
+    $transformers-0.6.1.0-inplace$Control.Monad.Trans.Class:0
+    $transformers-0.6.1.0-inplace$Control.Monad.Trans.Cont:0
+    $transformers-0.6.1.0-inplace$Control.Monad.Trans.Except:0
+    $transformers-0.6.1.0-inplace$Control.Monad.Trans.Identity:0
+    $transformers-0.6.1.0-inplace$Control.Monad.Trans.Maybe:0
+    $transformers-0.6.1.0-inplace$Control.Monad.Trans.RWS:0
+    $transformers-0.6.1.0-inplace$Control.Monad.Trans.RWS.CPS:0
+    $transformers-0.6.1.0-inplace$Control.Monad.Trans.RWS.Lazy:0
+    $transformers-0.6.1.0-inplace$Control.Monad.Trans.RWS.Strict:0
+    $transformers-0.6.1.0-inplace$Control.Monad.Trans.Reader:0
+    $transformers-0.6.1.0-inplace$Control.Monad.Trans.Select:0
+    $transformers-0.6.1.0-inplace$Control.Monad.Trans.State:0
+    $transformers-0.6.1.0-inplace$Control.Monad.Trans.State.Lazy:0
+    $transformers-0.6.1.0-inplace$Control.Monad.Trans.State.Strict:0
+    $transformers-0.6.1.0-inplace$Control.Monad.Trans.Writer:0
+    $transformers-0.6.1.0-inplace$Control.Monad.Trans.Writer.CPS:0
+    $transformers-0.6.1.0-inplace$Control.Monad.Trans.Writer.Lazy:0
+    $transformers-0.6.1.0-inplace$Control.Monad.Trans.Writer.Strict:0
+    $transformers-0.6.1.0-inplace$Data.Functor.Constant:0
+    $transformers-0.6.1.0-inplace$Data.Functor.Reverse:0
+
+    $transformers-compat-0.7.2-0fae934482966e43e7f6c17b322dee2f2bd428c0aeaeeeb304f2f30744f07eeb$Control.Monad.Trans.Instances:0
+    $transformers-compat-0.7.2-0fae934482966e43e7f6c17b322dee2f2bd428c0aeaeeeb304f2f30744f07eeb$Data.Functor.Classes.Generic:0
+    $transformers-compat-0.7.2-0fae934482966e43e7f6c17b322dee2f2bd428c0aeaeeeb304f2f30744f07eeb$Data.Functor.Classes.Generic.Internal:0
+    $transformers-compat-0.7.2-0fae934482966e43e7f6c17b322dee2f2bd428c0aeaeeeb304f2f30744f07eeb$Paths_transformers_compat:0
+
+    $unix-2.8.5.0-d3e845b219bc41d80375efff320d8b1d9086ff4ae6c9c39b3e9448b0f34133ee$System.Posix:0
+    $unix-2.8.5.0-d3e845b219bc41d80375efff320d8b1d9086ff4ae6c9c39b3e9448b0f34133ee$System.Posix.ByteString:0
+    $unix-2.8.5.0-d3e845b219bc41d80375efff320d8b1d9086ff4ae6c9c39b3e9448b0f34133ee$System.Posix.ByteString.FilePath:0
+    $unix-2.8.5.0-d3e845b219bc41d80375efff320d8b1d9086ff4ae6c9c39b3e9448b0f34133ee$System.Posix.Directory:0
+    $unix-2.8.5.0-d3e845b219bc41d80375efff320d8b1d9086ff4ae6c9c39b3e9448b0f34133ee$System.Posix.Directory.ByteString:0
+    $unix-2.8.5.0-d3e845b219bc41d80375efff320d8b1d9086ff4ae6c9c39b3e9448b0f34133ee$System.Posix.Directory.Common:0
+    $unix-2.8.5.0-d3e845b219bc41d80375efff320d8b1d9086ff4ae6c9c39b3e9448b0f34133ee$System.Posix.Directory.Fd:0
+    $unix-2.8.5.0-d3e845b219bc41d80375efff320d8b1d9086ff4ae6c9c39b3e9448b0f34133ee$System.Posix.Directory.Internals:0
+    $unix-2.8.5.0-d3e845b219bc41d80375efff320d8b1d9086ff4ae6c9c39b3e9448b0f34133ee$System.Posix.Directory.PosixPath:0
+    $unix-2.8.5.0-d3e845b219bc41d80375efff320d8b1d9086ff4ae6c9c39b3e9448b0f34133ee$System.Posix.DynamicLinker:0
+    $unix-2.8.5.0-d3e845b219bc41d80375efff320d8b1d9086ff4ae6c9c39b3e9448b0f34133ee$System.Posix.DynamicLinker.ByteString:0
+    $unix-2.8.5.0-d3e845b219bc41d80375efff320d8b1d9086ff4ae6c9c39b3e9448b0f34133ee$System.Posix.DynamicLinker.Common:0
+    $unix-2.8.5.0-d3e845b219bc41d80375efff320d8b1d9086ff4ae6c9c39b3e9448b0f34133ee$System.Posix.DynamicLinker.Module:0
+    $unix-2.8.5.0-d3e845b219bc41d80375efff320d8b1d9086ff4ae6c9c39b3e9448b0f34133ee$System.Posix.DynamicLinker.Module.ByteString:0
+    $unix-2.8.5.0-d3e845b219bc41d80375efff320d8b1d9086ff4ae6c9c39b3e9448b0f34133ee$System.Posix.DynamicLinker.Prim:0
+    $unix-2.8.5.0-d3e845b219bc41d80375efff320d8b1d9086ff4ae6c9c39b3e9448b0f34133ee$System.Posix.Env:0
+    $unix-2.8.5.0-d3e845b219bc41d80375efff320d8b1d9086ff4ae6c9c39b3e9448b0f34133ee$System.Posix.Env.ByteString:0
+    $unix-2.8.5.0-d3e845b219bc41d80375efff320d8b1d9086ff4ae6c9c39b3e9448b0f34133ee$System.Posix.Env.Internal:0
+    $unix-2.8.5.0-d3e845b219bc41d80375efff320d8b1d9086ff4ae6c9c39b3e9448b0f34133ee$System.Posix.Env.PosixString:0
+    $unix-2.8.5.0-d3e845b219bc41d80375efff320d8b1d9086ff4ae6c9c39b3e9448b0f34133ee$System.Posix.Error:0
+    $unix-2.8.5.0-d3e845b219bc41d80375efff320d8b1d9086ff4ae6c9c39b3e9448b0f34133ee$System.Posix.Fcntl:0
+    $unix-2.8.5.0-d3e845b219bc41d80375efff320d8b1d9086ff4ae6c9c39b3e9448b0f34133ee$System.Posix.Files:0
+    $unix-2.8.5.0-d3e845b219bc41d80375efff320d8b1d9086ff4ae6c9c39b3e9448b0f34133ee$System.Posix.Files.ByteString:0
+    $unix-2.8.5.0-d3e845b219bc41d80375efff320d8b1d9086ff4ae6c9c39b3e9448b0f34133ee$System.Posix.Files.Common:0
+    $unix-2.8.5.0-d3e845b219bc41d80375efff320d8b1d9086ff4ae6c9c39b3e9448b0f34133ee$System.Posix.Files.PosixString:0
+    $unix-2.8.5.0-d3e845b219bc41d80375efff320d8b1d9086ff4ae6c9c39b3e9448b0f34133ee$System.Posix.IO:0
+    $unix-2.8.5.0-d3e845b219bc41d80375efff320d8b1d9086ff4ae6c9c39b3e9448b0f34133ee$System.Posix.IO.ByteString:0
+    $unix-2.8.5.0-d3e845b219bc41d80375efff320d8b1d9086ff4ae6c9c39b3e9448b0f34133ee$System.Posix.IO.Common:0
+    $unix-2.8.5.0-d3e845b219bc41d80375efff320d8b1d9086ff4ae6c9c39b3e9448b0f34133ee$System.Posix.IO.PosixString:0
+    $unix-2.8.5.0-d3e845b219bc41d80375efff320d8b1d9086ff4ae6c9c39b3e9448b0f34133ee$System.Posix.PosixPath.FilePath:0
+    $unix-2.8.5.0-d3e845b219bc41d80375efff320d8b1d9086ff4ae6c9c39b3e9448b0f34133ee$System.Posix.PosixString:0
+    $unix-2.8.5.0-d3e845b219bc41d80375efff320d8b1d9086ff4ae6c9c39b3e9448b0f34133ee$System.Posix.Process:0
+    $unix-2.8.5.0-d3e845b219bc41d80375efff320d8b1d9086ff4ae6c9c39b3e9448b0f34133ee$System.Posix.Process.ByteString:0
+    $unix-2.8.5.0-d3e845b219bc41d80375efff320d8b1d9086ff4ae6c9c39b3e9448b0f34133ee$System.Posix.Process.Common:0
+    $unix-2.8.5.0-d3e845b219bc41d80375efff320d8b1d9086ff4ae6c9c39b3e9448b0f34133ee$System.Posix.Process.Internals:0
+    $unix-2.8.5.0-d3e845b219bc41d80375efff320d8b1d9086ff4ae6c9c39b3e9448b0f34133ee$System.Posix.Process.PosixString:0
+    $unix-2.8.5.0-d3e845b219bc41d80375efff320d8b1d9086ff4ae6c9c39b3e9448b0f34133ee$System.Posix.Resource:0
+    $unix-2.8.5.0-d3e845b219bc41d80375efff320d8b1d9086ff4ae6c9c39b3e9448b0f34133ee$System.Posix.Semaphore:0
+    $unix-2.8.5.0-d3e845b219bc41d80375efff320d8b1d9086ff4ae6c9c39b3e9448b0f34133ee$System.Posix.SharedMem:0
+    $unix-2.8.5.0-d3e845b219bc41d80375efff320d8b1d9086ff4ae6c9c39b3e9448b0f34133ee$System.Posix.Signals:0
+    $unix-2.8.5.0-d3e845b219bc41d80375efff320d8b1d9086ff4ae6c9c39b3e9448b0f34133ee$System.Posix.Signals.Exts:0
+    $unix-2.8.5.0-d3e845b219bc41d80375efff320d8b1d9086ff4ae6c9c39b3e9448b0f34133ee$System.Posix.Temp:0
+    $unix-2.8.5.0-d3e845b219bc41d80375efff320d8b1d9086ff4ae6c9c39b3e9448b0f34133ee$System.Posix.Temp.ByteString:0
+    $unix-2.8.5.0-d3e845b219bc41d80375efff320d8b1d9086ff4ae6c9c39b3e9448b0f34133ee$System.Posix.Temp.PosixString:0
+    $unix-2.8.5.0-d3e845b219bc41d80375efff320d8b1d9086ff4ae6c9c39b3e9448b0f34133ee$System.Posix.Terminal:0
+    $unix-2.8.5.0-d3e845b219bc41d80375efff320d8b1d9086ff4ae6c9c39b3e9448b0f34133ee$System.Posix.Terminal.ByteString:0
+    $unix-2.8.5.0-d3e845b219bc41d80375efff320d8b1d9086ff4ae6c9c39b3e9448b0f34133ee$System.Posix.Terminal.Common:0
+    $unix-2.8.5.0-d3e845b219bc41d80375efff320d8b1d9086ff4ae6c9c39b3e9448b0f34133ee$System.Posix.Terminal.PosixString:0
+    $unix-2.8.5.0-d3e845b219bc41d80375efff320d8b1d9086ff4ae6c9c39b3e9448b0f34133ee$System.Posix.Time:0
+    $unix-2.8.5.0-d3e845b219bc41d80375efff320d8b1d9086ff4ae6c9c39b3e9448b0f34133ee$System.Posix.Unistd:0
+    $unix-2.8.5.0-d3e845b219bc41d80375efff320d8b1d9086ff4ae6c9c39b3e9448b0f34133ee$System.Posix.User:0
+    $unix-2.8.5.0-d3e845b219bc41d80375efff320d8b1d9086ff4ae6c9c39b3e9448b0f34133ee$System.Posix.User.ByteString:0
+    $unix-2.8.5.0-d3e845b219bc41d80375efff320d8b1d9086ff4ae6c9c39b3e9448b0f34133ee$System.Posix.User.Common:0
+
+    $unordered-containers-0.2.20-2b2da50dcac3eb4c8bacf609c43b51912f984ad1f3d108142f55781dd6e5e737$Data.HashMap.Internal:6643
+    $unordered-containers-0.2.20-2b2da50dcac3eb4c8bacf609c43b51912f984ad1f3d108142f55781dd6e5e737$Data.HashMap.Internal.Array:1614
+    $unordered-containers-0.2.20-2b2da50dcac3eb4c8bacf609c43b51912f984ad1f3d108142f55781dd6e5e737$Data.HashMap.Internal.Debug:0
+    $unordered-containers-0.2.20-2b2da50dcac3eb4c8bacf609c43b51912f984ad1f3d108142f55781dd6e5e737$Data.HashMap.Internal.List:0
+    $unordered-containers-0.2.20-2b2da50dcac3eb4c8bacf609c43b51912f984ad1f3d108142f55781dd6e5e737$Data.HashMap.Internal.Strict:0
+    $unordered-containers-0.2.20-2b2da50dcac3eb4c8bacf609c43b51912f984ad1f3d108142f55781dd6e5e737$Data.HashMap.Lazy:0
+    $unordered-containers-0.2.20-2b2da50dcac3eb4c8bacf609c43b51912f984ad1f3d108142f55781dd6e5e737$Data.HashMap.Strict:0
+    $unordered-containers-0.2.20-2b2da50dcac3eb4c8bacf609c43b51912f984ad1f3d108142f55781dd6e5e737$Data.HashSet:0
+    $unordered-containers-0.2.20-2b2da50dcac3eb4c8bacf609c43b51912f984ad1f3d108142f55781dd6e5e737$Data.HashSet.Internal:0
+
+    $uuid-types-1.0.5.1-99ea7b1cc62b3d14e980e61ad62957313a9b0c0c681a296efeda52f5ce4c08b0$Data.UUID.Types:0
+    $uuid-types-1.0.5.1-99ea7b1cc62b3d14e980e61ad62957313a9b0c0c681a296efeda52f5ce4c08b0$Data.UUID.Types.Internal:0
+    $uuid-types-1.0.5.1-99ea7b1cc62b3d14e980e61ad62957313a9b0c0c681a296efeda52f5ce4c08b0$Data.UUID.Types.Internal.Builder:0
+
+    $vector-0.13.1.0-d4a74cbf0351d74582f893ddc6bb2a0d4254eff1cc791052bb06d922e49c3fc8$Data.Vector:1553
+    $vector-0.13.1.0-d4a74cbf0351d74582f893ddc6bb2a0d4254eff1cc791052bb06d922e49c3fc8$Data.Vector.Fusion.Bundle:0
+    $vector-0.13.1.0-d4a74cbf0351d74582f893ddc6bb2a0d4254eff1cc791052bb06d922e49c3fc8$Data.Vector.Fusion.Bundle.Monadic:0
+    $vector-0.13.1.0-d4a74cbf0351d74582f893ddc6bb2a0d4254eff1cc791052bb06d922e49c3fc8$Data.Vector.Fusion.Bundle.Size:0
+    $vector-0.13.1.0-d4a74cbf0351d74582f893ddc6bb2a0d4254eff1cc791052bb06d922e49c3fc8$Data.Vector.Fusion.Stream.Monadic:0
+    $vector-0.13.1.0-d4a74cbf0351d74582f893ddc6bb2a0d4254eff1cc791052bb06d922e49c3fc8$Data.Vector.Fusion.Util:0
+    $vector-0.13.1.0-d4a74cbf0351d74582f893ddc6bb2a0d4254eff1cc791052bb06d922e49c3fc8$Data.Vector.Generic:0
+    $vector-0.13.1.0-d4a74cbf0351d74582f893ddc6bb2a0d4254eff1cc791052bb06d922e49c3fc8$Data.Vector.Generic.Base:0
+    $vector-0.13.1.0-d4a74cbf0351d74582f893ddc6bb2a0d4254eff1cc791052bb06d922e49c3fc8$Data.Vector.Generic.Mutable:0
+    $vector-0.13.1.0-d4a74cbf0351d74582f893ddc6bb2a0d4254eff1cc791052bb06d922e49c3fc8$Data.Vector.Generic.Mutable.Base:0
+    $vector-0.13.1.0-d4a74cbf0351d74582f893ddc6bb2a0d4254eff1cc791052bb06d922e49c3fc8$Data.Vector.Generic.New:0
+    $vector-0.13.1.0-d4a74cbf0351d74582f893ddc6bb2a0d4254eff1cc791052bb06d922e49c3fc8$Data.Vector.Internal.Check:0
+    $vector-0.13.1.0-d4a74cbf0351d74582f893ddc6bb2a0d4254eff1cc791052bb06d922e49c3fc8$Data.Vector.Mutable:3429
+    $vector-0.13.1.0-d4a74cbf0351d74582f893ddc6bb2a0d4254eff1cc791052bb06d922e49c3fc8$Data.Vector.Primitive:0
+    $vector-0.13.1.0-d4a74cbf0351d74582f893ddc6bb2a0d4254eff1cc791052bb06d922e49c3fc8$Data.Vector.Primitive.Mutable:0
+    $vector-0.13.1.0-d4a74cbf0351d74582f893ddc6bb2a0d4254eff1cc791052bb06d922e49c3fc8$Data.Vector.Storable:0
+    $vector-0.13.1.0-d4a74cbf0351d74582f893ddc6bb2a0d4254eff1cc791052bb06d922e49c3fc8$Data.Vector.Storable.Internal:0
+    $vector-0.13.1.0-d4a74cbf0351d74582f893ddc6bb2a0d4254eff1cc791052bb06d922e49c3fc8$Data.Vector.Storable.Mutable:0
+    $vector-0.13.1.0-d4a74cbf0351d74582f893ddc6bb2a0d4254eff1cc791052bb06d922e49c3fc8$Data.Vector.Unboxed:0
+    $vector-0.13.1.0-d4a74cbf0351d74582f893ddc6bb2a0d4254eff1cc791052bb06d922e49c3fc8$Data.Vector.Unboxed.Base:0
+    $vector-0.13.1.0-d4a74cbf0351d74582f893ddc6bb2a0d4254eff1cc791052bb06d922e49c3fc8$Data.Vector.Unboxed.Mutable:0
+
+    $vector-stream-0.1.0.1-fad61182f39ee954b74d66ddc0d6ee87ed950a14301c306fc52ac36d3c82c984$Data.Stream.Monadic:0
+
+    $witherable-0.4.2-7ceb8bf14717e3e3a217deec733b4d04939253b39189a25479c28b979e2c5e44$Data.Witherable:0
+    $witherable-0.4.2-7ceb8bf14717e3e3a217deec733b4d04939253b39189a25479c28b979e2c5e44$Witherable:0
+
+
+
