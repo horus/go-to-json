@@ -47,7 +47,7 @@ instance Show GoStructDef where
   show (GoStructDef []) = "struct {}"
   show (GoStructDef defs) = "struct {\n" ++ concatMap (\line -> "    " ++ show line ++ "\n") defs ++ "}"
 
-data JSONTags = KeyRename String | KeyOmitEmpty | KeyIgnore | KeyAsString | KeyUnknown String deriving (Show, Eq)
+data JSONTags = FieldKeyRename String | OmitEmptyField | FieldIgnored | FieldAsString | UnrecognizedOpt String deriving (Eq)
 
 data GoStructLine = GoStructLine String GoTypes [JSONTags] | GoEmbedStruct String [JSONTags] -- Id type tags
 
@@ -149,44 +149,45 @@ goStructLine = do
   try
     ( do
         typ <- hspace1 *> goTypeLit
-        tag <- (hspace1 *> goStructTags) <|> pure []
+        tag <- option [] (hspace1 *> goStructTags)
         return $ GoStructLine ident typ tag
     )
     <|> do
-      tag <- (hspace1 *> goStructTags) <|> pure []
+      tag <- option [] (hspace1 *> goStructTags)
       return $ GoEmbedStruct ident tag
 
 goStructTags :: Parser [JSONTags]
 goStructTags = between (char '`') (char '`') jsonTags
 
 jsonTags :: Parser [JSONTags]
-jsonTags = jsonTags' <|> (anySingle *> jsonTags)
+jsonTags = anySingle `skipManyTill` jsonTags'
+  where
+    jsonTags' :: Parser [JSONTags]
+    jsonTags' = string "json:" *> between (char '"') (char '"') optionalJsonTags
+      where
+        optionalJsonTags = liftA2 (:) jsonKeyName jsonOpt
 
-jsonTags' :: Parser [JSONTags]
-jsonTags' = do
-  string "json:"
-  between (char '"') (char '"') $ do
-    p1 <- jsonKeyName <|> pure []
-    p2 <- jsonOpt <|> pure []
-    return $ p1 ++ p2
-
-jsonKeyName :: Parser [JSONTags]
+jsonKeyName :: Parser JSONTags
 jsonKeyName =
   many (satisfy isValidTag) >>= \case
-    "" -> pure []
-    "-" -> (notFollowedBy (char ',') $> [KeyIgnore]) <|> pure [KeyRename "-"]
-    n -> pure [KeyRename n]
+    "" -> pure (FieldKeyRename "")
+    "-" -> option (FieldKeyRename "-") keyIgnore
+    n -> pure (FieldKeyRename n)
   where
     isValidTag c = isAlphaNum c || elem @[] c "!#$%&()*+-./:;<=>?@[]^_{|}~ "
+    keyIgnore = notFollowedBy (char ',') $> FieldIgnored
 
 jsonOpt :: Parser [JSONTags]
-jsonOpt = char ',' *> (opts `sepEndBy` char ',')
+jsonOpt = optionalCommas *> (opts `sepEndBy` someCommas)
   where
+    comma = char ','
+    optionalCommas = skipMany comma
+    someCommas = skipSome comma
     opts =
       choice
-        [ string "omitempty" $> KeyOmitEmpty,
-          string "string" $> KeyAsString,
-          KeyUnknown <$> some alphaNumChar
+        [ string "omitempty" $> OmitEmptyField,
+          string "string" $> FieldAsString,
+          UnrecognizedOpt <$> some alphaNumChar
         ]
 
 genExampleValue :: HM.HashMap String GoStructDef -> GoTypes -> Either String A.Value
@@ -330,7 +331,7 @@ jsonize'' env = fmap object . pairize env
 pairize environ = foldlM (go environ) []
   where
     go env ps (GoEmbedStruct tv tags)
-      | KeyIgnore `elem` tags = return ps
+      | FieldIgnored `elem` tags = return ps
       | otherwise =
           case HM.lookup tv env of
             Just (GoStructDef defs) -> do
@@ -340,9 +341,9 @@ pairize environ = foldlM (go environ) []
                 else return $! (A.fromString (head ident') .= object ps') : ps
             Nothing -> Left $! "undefined or invalid: " ++ tv
       where
-        ident' = [n | KeyRename n <- tags]
+        ident' = [n | FieldKeyRename n <- tags]
     go env ps (GoStructLine ident t tags)
-      | KeyIgnore `elem` tags = example >> return ps
+      | FieldIgnored `elem` tags = example >> return ps
       | notExported && not (null tags) = Left $! "struct field " ++ ident ++ " has json tag but is not exported"
       | notExported = example >> return ps
       | otherwise = do
@@ -350,9 +351,9 @@ pairize environ = foldlM (go environ) []
           return $! (A.fromString ident' .= eg) : ps
       where
         notExported = not $ isUpper $ head ident
-        ident' = head $ [n | KeyRename n <- tags] <|> [ident]
+        ident' = head $ [n | FieldKeyRename n <- tags] <|> [ident]
         example = case t of
-          GoBasic b | KeyAsString `elem` tags -> pure $ String $ T.pack $ genSimple' b
+          GoBasic b | FieldAsString `elem` tags -> pure $ String $ T.pack $ genSimple' b
           -- json tag "string" expecting: string, floating point, integer, or boolean types
           -- other types ignore it, just proceed as usual
           _ -> genExampleValue env t
