@@ -7308,6 +7308,11 @@ function h$clock_gettime(when, p_d, p_o) {
 function h$CLOCK_REALTIME() { return 0; }
 
 
+function a() {
+    console.log('hello');
+}
+
+
 function h$js_futimes(fd,atime,mtime) {
   if (!h$isNode()) {
     throw "h$js_futimes unsupported";
@@ -7347,12 +7352,6 @@ function h$js_lutimes(path,path_offset,atime,mtime) {
     return -1;
   }
   return 0;
-}
-
-
-
-function a() {
-    console.log('hello');
 }
 
 

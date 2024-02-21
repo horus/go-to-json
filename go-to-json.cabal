@@ -34,9 +34,9 @@ library
       aeson
     , aeson-pretty
     , base
-    , bytestring
+    , bytestring >= 0.12.1.0
     , megaparsec
-    , text
+    , text >= 2.1.1
     , unordered-containers
     , vector
   default-language: Haskell2010
@@ -52,10 +52,10 @@ executable go-to-json-exe
       aeson
     , attoparsec
     , base
-    , bytestring
+    , bytestring >= 0.12.1.0
     , go-to-json
     , megaparsec
-    , text
+    , text >= 2.1.1
     , unordered-containers
     , vector
   default-language: Haskell2010

@@ -2,12 +2,3 @@ packages: *.cabal
 with-compiler: /home/ghc/_build/stage1/bin/javascript-unknown-ghcjs-ghc
 with-hc-pkg: /home/ghc/_build/stage1/bin/javascript-unknown-ghcjs-ghc-pkg
 flags: +pure-haskell
-
-source-repository-package
-  type: git
-  location: https://github.com/hsyl20/bytestring.git
-  tag: a106fcca28033216643e5fbf937dd9607f4ec315
-source-repository-package
-  type: git
-  location: https://github.com/haskell/text.git
-  tag: 8b71e5dd858c94f307659e538adceb104b2cd7cd
